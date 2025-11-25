@@ -1,0 +1,167 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.toolbar {
+  background-color: rgba(26, 18, 58, 0.7);
+  color: #f0f0ff;
+}
+
+.logo-title-container {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+
+  .logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+
+  .title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* AVATAR + USER */
+.user-profile {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+.user-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #f5f5f5;
+}
+
+.mat-sidenav-container {
+  height: 100vh;
+  background-image: url('/assets/images/background.svg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* SIDENAV */
+.sidenav-container {
+  height: 100vh;
+}
+
+.sidenav {
+  width: 250px;
+  background-color: rgba(26, 18, 58, 0.7);
+  height: 100%;
+  overflow: hidden;
+}
+
+/* CONTENEUR FLEX QUI GÈRE TOUT */
+.sidenav-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Le menu du haut prend tout l'espace disponible */
+.menu-top {
+  flex: 1;
+}
+
+/* Le bouton logout est poussé en bas */
+.menu-bottom {
+  margin-top: auto;
+  padding-bottom: 16px;
+}
+
+.menu-bottom, .menu-top, .menu-item {
+  :hover {
+    background-color: #564b89;
+  }
+}
+
+/* Assure que l'icône et le texte restent sur la même ligne et soient centrés */
+.menu-item .mdc-list-item__graphic,
+.menu-item mat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  margin-right: 12px;
+  flex: 0 0 auto;
+  color: #f5f5f5;
+}
+.menu-item span {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #f5f5f5;
+}
+
+/* CONTENU */
+.main-content {
+  height: auto;
+}
+
+/* BOUTON SYNCHRONISATION */
+/* Desktop only : visible à partir de 600px */
+.mobile-only {
+  display: none;
+}
+
+.desktop-only {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+
+  /* Dégradé violet moderne */
+  background: linear-gradient(135deg, #7A6FF0, #362b80);
+  color: #f5f5f5 !important;
+
+  border-radius: 12px;
+  text-transform: none;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+
+  /* Effet moderne */
+  box-shadow: 0 4px 12px rgba(108, 93, 211, 0.35);
+  backdrop-filter: blur(4px);
+  transition: all 0.25s ease;
+}
+
+.desktop-only:hover {
+  box-shadow: 0 6px 16px rgba(108, 93, 211, 0.45);
+  transform: translateY(-1px);
+}
+
+.desktop-only:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 6px rgba(108, 93, 211, 0.25);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: inline-flex;
+  }
+}

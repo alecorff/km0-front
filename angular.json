@@ -50,7 +50,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "@angular/material/prebuilt-themes/deeppurple-amber.css",
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -85,10 +86,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "strava-dashboard:build:production"
+              "buildTarget": "strava-dashboard:build:production"
             },
             "development": {
-              "browserTarget": "strava-dashboard:build:development"
+              "buildTarget": "strava-dashboard:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -96,7 +97,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "strava-dashboard:build"
+            "buildTarget": "strava-dashboard:build"
           }
         },
         "test": {
@@ -112,7 +113,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "@angular/material/prebuilt-themes/deeppurple-amber.css",
+              "src/styles.scss"
             ],
             "scripts": []
           }

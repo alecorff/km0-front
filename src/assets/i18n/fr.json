@@ -1,0 +1,32 @@
+{
+    "i18n": {
+        "page": {
+            "menu": {
+                "title": "Kilomètre zéro",
+                "items": {
+                    "home": "Accueil",
+                    "stats": "Statistiques",
+                    "logout": "Déconnexion"
+                },
+                "sync": "Synchroniser" 
+            },
+            "home": {
+                "training": {
+
+                },
+                "noTraining": {
+                    "title": "Créer votre plan d'entraînement",
+                    "subtitle": "Commencez une nouvelle préparation personnalisée pour atteindre votre prochain objectif.",
+                    "action": "Démarrer un nouveau plan d'entrainement"
+                },
+                "carousel": {
+
+                },
+                "noCarousel": {
+                    "title": "Aucun plan terminé pour le moment",
+                    "subtitle": "Vos anciens plans d'entraînement apparaîtront ici."
+                }
+            }
+        }
+    }
+}

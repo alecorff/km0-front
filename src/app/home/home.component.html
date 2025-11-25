@@ -1,0 +1,107 @@
+<!-- PLAN D'ENTRAINEMENT ACTUEL -->
+<div class="current-prepa-card" (click)="goToCurrentPrepa()">
+    <div *ngIf="currentPrepa; else noCurrentTraining">
+        <div class="prepa-header">
+            <span class="prepa-title">Plan d'entrainement: {{ currentPrepa.name }}</span>
+            <span class="prepa-date">Date de course: {{ currentPrepa.date | date:'longDate' }}</span>
+        </div>
+
+        <!-- Prochaine séance -->
+        <div class="next-session">
+            <mat-icon>directions_run</mat-icon>
+            <span>Prochaine séance : {{ nextSession.day }} - {{ nextSession.label }}</span>
+        </div>
+
+        <!-- Avancement des semaines -->
+        <div class="weeks-progress">
+            <div *ngFor="let w of weeksArray; index as i" class="week-block"
+                [class.week-done]="i < currentPrepa.weeksDone">
+            </div>
+        </div>
+        <div class="weeks-label">
+            {{ currentPrepa.weeksDone }} / {{ currentPrepa.totalWeeks }} semaines complétées
+        </div>
+    </div>
+
+    <!-- CREER UN PLAN D'ENTRAINEMENT -->
+    <ng-template #noCurrentTraining>
+        <div class="empty-state">
+            <div class="empty-icon">
+                 <img [src]="'assets/images/add-circle-icon-200.svg'" />
+            </div>
+
+            <div class="empty-title">
+                {{ 'i18n.page.home.noTraining.title' | translate }}
+            </div>
+
+            <div class="empty-subtitle">
+                {{ 'i18n.page.home.noTraining.subtitle' | translate }}
+            </div>
+
+            <button mat-raised-button class="empty-action">
+                {{ 'i18n.page.home.noTraining.action' | translate }}
+            </button>
+        </div>
+    </ng-template>
+</div>
+
+<!-- ANCIENS PLANS D'ENTRAINEMENT -->
+<!-- Message par défaut si pas encore de plans -->
+<div *ngIf="pastPrepas.length === 0; else carouselBlock" class="no-past-prepas">
+    <img class="no-icon" [src]="'assets/images/history-icon-200.svg'" />
+    <div class="no-title">{{ 'i18n.page.home.noCarousel.title' | translate }}</div>
+    <div class="no-subtitle">{{ 'i18n.page.home.noCarousel.subtitle' | translate }}</div>
+</div>
+
+<!-- Carousel -->
+<ng-template #carouselBlock>
+    <div class="past-prepas-section">
+        <h2 class="section-title">Vos accomplissements</h2>
+
+        <div class="carousel-container">
+            <button class="carousel-arrow left" (click)="prevSlide()">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+
+            <div class="carousel-wrapper">
+                <div class="carousel" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+
+                    <div class="carousel-item" *ngFor="let p of pastPrepas">
+                        <div class="carousel-card">
+                            <!-- <div class="carousel-name">{{ p.name }}</div> -->
+                            <div class="carousel-name">
+                                <img class="carousel-flag" [src]="'assets/images/flags/' + p.country + '.png'" />
+                                {{ p.name }}
+                            </div>
+                            <div class="carousel-date">
+                                Date : {{ p.endDate | date:'longDate' }}
+                            </div>
+
+                            <div class="carousel-meta">
+                                <div *ngIf="p.distance">
+                                    <mat-icon>straighten</mat-icon> {{ p.distance }} km
+                                </div>
+                                <div *ngIf="p.elevation">
+                                    <mat-icon>terrain</mat-icon> {{ p.elevation }} m D+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <button class="carousel-arrow right" (click)="nextSlide()">
+                <mat-icon>chevron_right</mat-icon>
+            </button>
+        </div>
+
+        <!-- petits points sous le carousel -->
+        <div class="carousel-dots">
+            <div *ngFor="let p of pastPrepas; let i = index" class="dot" [class.active]="i === currentIndex"
+                (click)="goToSlide(i)">
+            </div>
+        </div>
+
+    </div>
+</ng-template>

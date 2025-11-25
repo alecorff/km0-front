@@ -1,0 +1,7 @@
+<div *ngIf="token">
+  <h2>Login Successful!</h2>
+  <p>Your token is: <strong>{{ token }}</strong></p>
+</div>
+<div *ngIf="!token">
+  <p>No token found.</p>
+</div>

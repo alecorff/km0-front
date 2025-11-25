@@ -1,0 +1,62 @@
+<mat-sidenav-container class="sidenav-container">
+  <!-- Toolbar -->
+  <mat-toolbar class="toolbar">
+    <button mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <div class="logo-title-container">
+      <img src="assets/images/logo-light.png" class="logo" />
+      <span class="title">{{ 'i18n.page.menu.title' | translate }}</span>
+    </div>
+
+    <span class="spacer"></span>
+
+     <!-- Version desktop : vrai bouton -->
+    <button mat-raised-button class="desktop-only" matTooltip="Dernière synchro à 3h12">
+      <mat-icon>cloud_upload</mat-icon>
+      {{ 'i18n.page.menu.sync' | translate }}
+    </button>
+
+    <!-- Version mobile : juste l’icône -->
+    <button mat-icon-button class="mobile-only">
+      <mat-icon>cloud_upload</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <!-- Menu latéral -->
+  <mat-sidenav #sidenav mode="over" class="sidenav" [opened]="false">
+    <div class="sidenav-content">
+      <!-- Avatar -->
+      <div class="user-profile">
+        <img src="assets/images/avatar-exemple.jpg" class="avatar" />
+        <span class="user-name">Alexis Le Corff</span>
+      </div>
+
+      <!-- Menu du haut -->
+      <mat-nav-list class="menu-top">
+        <a mat-list-item href="#" class="menu-item">
+          <mat-icon>home</mat-icon>
+          <span>{{ 'i18n.page.menu.items.home' | translate }}</span>
+        </a>
+        <a mat-list-item href="#" class="menu-item">
+          <mat-icon>bar_chart</mat-icon>
+          <span>{{ 'i18n.page.menu.items.stats' | translate }}</span>
+        </a>
+      </mat-nav-list>
+
+      <!-- Déconnexion en bas -->
+      <mat-nav-list class="menu-bottom">
+        <a mat-list-item href="#" class="menu-item logout-item">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>{{ 'i18n.page.menu.items.logout' | translate }}</span>
+        </a>
+      </mat-nav-list>
+    </div>
+  </mat-sidenav>
+
+
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</mat-sidenav-container>
