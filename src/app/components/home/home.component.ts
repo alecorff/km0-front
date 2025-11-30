@@ -4,6 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -44,8 +45,14 @@ export class HomeComponent {
     { name: "Ultra Trail Mont-Blanc", endDate: new Date("2027-08-31"), country: "FR", distance: 172, elevation: 10000 }
   ];
 
-  goToCurrentPrepa() {
+  constructor(private router: Router) { }
 
+  goToCurrentPrepa() {
+    this.router.navigate([`/plan`]);
+  }
+
+  createPlan() {
+    
   }
 
   nextSlide() {

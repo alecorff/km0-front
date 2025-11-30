@@ -6,6 +6,7 @@
                 "items": {
                     "home": "Accueil",
                     "stats": "Statistiques",
+                    "search": "Recherche",
                     "logout": "Déconnexion"
                 },
                 "sync": "Synchroniser" 
@@ -26,6 +27,9 @@
                     "title": "Aucun plan terminé pour le moment",
                     "subtitle": "Vos anciens plans d'entraînement apparaîtront ici."
                 }
+            },
+            "plan": {
+                
             }
         }
     }

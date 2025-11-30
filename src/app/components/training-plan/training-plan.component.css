@@ -1,0 +1,341 @@
+.current-prepa-card {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 30px 16px;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ----- Ligne 1 : Infos principales ----- */
+.prepa-header-line {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.prepa-info-bubble {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+
+    padding: 18px 32px;
+    border-radius: 18px;
+
+    transition: 0.25s ease;
+}
+
+.prepa-info-bubble:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #f2f1ff;
+    font-size: 1.05rem;
+    font-weight: 400;
+}
+
+.info-item mat-icon {
+    font-size: 22px !important;
+    width: 22px !important;
+    height: 22px !important;
+    color: #b7b5ff;
+}
+
+.separator {
+    width: 1px;
+    height: 26px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 1px;
+}
+
+
+/* ----- Ligne 2 : Stats ----- */
+
+.prepa-stats-row {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    margin-top: 10px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    flex: 1;
+    min-width: 100px;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #c3c3e8;
+}
+
+/* CALENDRIER */
+.calendar-container {
+    padding: 20px;
+    color: #f4f4ff;
+}
+
+/* ===== ACTIONS ===== */
+.section-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0 20px 0;
+}
+
+.button-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+
+  /* Dégradé violet moderne */
+  background: linear-gradient(135deg, #7A6FF0, #362b80);
+  color: #f5f5f5 !important;
+
+  border-radius: 12px;
+  text-transform: none;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+
+  /* Effet moderne */
+  box-shadow: 0 4px 12px rgba(108, 93, 211, 0.35);
+  backdrop-filter: blur(4px);
+  transition: all 0.25s ease;
+}
+
+.button-actions:hover {
+  box-shadow: 0 6px 16px rgba(108, 93, 211, 0.45);
+  transform: translateY(-1px);
+}
+
+.button-actions:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 6px rgba(108, 93, 211, 0.25);
+}
+
+/* ===== HEADER ===== */
+.section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+    color: #f5f5f5;
+    text-align: center;
+}
+
+/* ===== MOIS ===== */
+.month-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    backdrop-filter: blur(6px);
+    padding: 20px;
+    margin: 30px 0 12px;
+}
+
+.month-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.month-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #e4e3fa;
+    display: flex;
+    align-items: center;
+}
+
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #c9c8f5;
+}
+
+/* ===== GRID DU MOIS ===== */
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.day-cell {
+    height: 42px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 10px;
+    cursor: pointer;
+
+    transition: background 0.15s ease;
+}
+
+.day-cell:hover {
+    background: rgba(255, 255, 255, 0.10);
+}
+
+.day-cell.disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.day-cell.today {
+    border: 1px solid #a899ff;
+    font-weight: 600;
+}
+
+.day-cell.selected {
+    background: #6c5dd3;
+    color: white;
+    font-weight: 600;
+}
+
+/* ===== SEMAINE ===== */
+.week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 14px;
+}
+
+.week-day-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 14px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.week-day-card:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.wd-header {
+    margin-bottom: 8px;
+}
+
+.wd-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.wd-number {
+    font-size: 0.8rem;
+    color: #c3c2e5;
+}
+
+.session-label {
+    font-size: 0.75rem;
+    color: #bcbcf3;
+}
+
+.session-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+.empty-msg {
+    color: #b7b6d8;
+    font-size: 0.78rem;
+    font-style: italic;
+    margin-top: 8px;
+}
+
+/* ----- Responsive mobile ----- */
+@media (max-width: 500px) {
+
+    /* Bubble réduite */
+    .prepa-info-bubble {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px 14px;
+        padding: 10px 14px;
+    }
+
+    .separator {
+        display: none;
+    }
+
+    .info-item {
+        font-size: 0.8rem;
+        gap: 6px;
+    }
+
+    .info-item mat-icon {
+        font-size: 16px !important;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .prepa-stats-row {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    /* CALENDRIER */
+    .week-cards {
+        display: flex;
+        gap: 14px;
+        margin-bottom: 30px;
+
+        /* permet le scroll horizontal en mobile */
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 10px;
+
+        /* évite que les éléments se compressent */
+        flex-wrap: nowrap;
+
+        /* masque la scrollbar sur certains navigateurs */
+        /* Firefox */
+        scrollbar-width: none;
+    }
+
+    /* Chrome / Safari */
+    .week-cards::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Chaque card garde une largeur minimale pour bien s’afficher dans le scroll */
+    .week-card {
+        min-width: 130px;
+        flex: 0 0 auto;
+    }
+}

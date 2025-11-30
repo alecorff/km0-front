@@ -1,0 +1,137 @@
+<!-- RECAPITULATIF -->
+<div class="current-prepa-card">
+    <!-- Infos principales -->
+    <div class="prepa-header-line">
+        <div class="prepa-info-bubble">
+
+            <div class="info-item">
+                <mat-icon>flag</mat-icon>
+                <span>{{ currentPrepa.name }}</span>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="info-item">
+                <mat-icon>event</mat-icon>
+                <span>{{ currentPrepa.date | date:'longDate' }}</span>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="info-item">
+                <mat-icon>straighten</mat-icon>
+                <span>{{ currentPrepa.distance }} km</span>
+            </div>
+
+            <div class="separator" *ngIf="currentPrepa.elevation"></div>
+
+            <div class="info-item" *ngIf="currentPrepa.elevation">
+                <mat-icon>terrain</mat-icon>
+                <span>{{ currentPrepa.elevation }} m D+</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="prepa-stats-row">
+        <div class="stat-item">
+            <div class="stat-value">{{ currentPrepa.sessionsDone }}</div>
+            <div class="stat-label">Séances complétées</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-value">{{ currentPrepa.totalDistance }} km</div>
+            <div class="stat-label">Distance parcourue</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-value">{{ currentPrepa.totalElevation }} m D+</div>
+            <div class="stat-label">Dénivelé total</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-value">{{ currentPrepa.totalTime }}</div>
+            <div class="stat-label">Temps d'activité</div>
+        </div>
+    </div>
+</div>
+
+<div class="section-actions">
+            <button mat-raised-button class="button-actions">
+                <mat-icon>search</mat-icon>
+                Recherche
+            </button>
+             <button mat-raised-button class="button-actions">
+                <mat-icon>bar_chart</mat-icon>
+                Statistiques
+            </button> 
+        </div>
+
+<!-- CALENDRIER -->
+<div class="calendar-container">
+    <h2 class="section-title">Plan d'entraînement</h2>
+    
+    <!-- ===== SEMAINE SÉLECTIONNÉE ===== -->
+    <div *ngIf="selectedWeek.length" class="week-cards">
+        <div class="week-grid">
+            <div 
+                class="week-day-card"
+                *ngFor="let d of selectedWeek"
+                (click)="openDay(d)"
+            >
+                <div class="wd-header">
+                    <div class="wd-name">{{ d.date | date:'EEEE' }}</div>
+                    <div class="wd-number">{{ d.date | date:'d MMM' }}</div>
+                </div>
+
+                <div class="wd-content">
+                    <div *ngIf="d.session; else noSession">
+                        <div class="session-label">Séance :</div>
+                        <div class="session-name">{{ d.session.name }}</div>
+                    </div>
+
+                    <ng-template #noSession>
+                        <div class="empty-msg">Aucune séance</div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MOIS COURANT ===== -->
+    <div class="month-card">
+        <div class="month-header">
+            <button class="nav-btn" (click)="previousMonth()">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+
+            <div class="month-title">
+                {{ selectedMonth | date:'MMMM y' }}
+            </div>
+
+            <button class="nav-btn" (click)="nextMonth()">
+                <mat-icon>chevron_right</mat-icon>
+            </button>
+        </div>
+
+        <!-- JOURS DE LA SEMAINE -->
+        <div class="weekdays">
+            <div *ngFor="let wd of weekDays">{{ wd }}</div>
+        </div>
+
+        <!-- GRID DU MOIS -->
+        <div class="month-grid">
+            <div 
+                *ngFor="let day of monthDays"
+                class="day-cell"
+                [class.disabled]="!day.inMonth"
+                [class.today]="day.isToday"
+                [class.selected]="isSelectedDate(day.date)"
+                (click)="selectDate(day.date)"
+            >
+                {{ day.date.getDate() }}
+            </div>
+        </div>
+    </div>
+</div>

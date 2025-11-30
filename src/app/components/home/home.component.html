@@ -1,6 +1,6 @@
 <!-- PLAN D'ENTRAINEMENT ACTUEL -->
-<div class="current-prepa-card" (click)="goToCurrentPrepa()">
-    <div *ngIf="currentPrepa; else noCurrentTraining">
+<div class="current-prepa-card">
+    <div *ngIf="currentPrepa; else noCurrentTraining" (click)="goToCurrentPrepa()">
         <div class="prepa-header">
             <span class="prepa-title">Plan d'entrainement: {{ currentPrepa.name }}</span>
             <span class="prepa-date">Date de course: {{ currentPrepa.date | date:'longDate' }}</span>
@@ -38,7 +38,7 @@
                 {{ 'i18n.page.home.noTraining.subtitle' | translate }}
             </div>
 
-            <button mat-raised-button class="empty-action">
+            <button mat-raised-button class="empty-action" (click)="createPlan()">
                 {{ 'i18n.page.home.noTraining.action' | translate }}
             </button>
         </div>
