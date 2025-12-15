@@ -1,0 +1,130 @@
+.dialog-container {
+  width: 400px;
+  padding: 24px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  background: #1b1432;
+}
+
+.dialog-title {
+
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 10px;  
+  color: var(--text-primary, #f5f5f5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  mat-icon {
+    font-size: 22px;
+    color: #f5f5f5;
+  }
+}
+
+.dialog-message {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--text-secondary, #f5f5f5);
+}
+
+.main-message {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.subtitle-message {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.cancel-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #d0d0d0;
+  padding: 10px 22px;
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  backdrop-filter: blur(6px);
+  transition: 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #f5f5f5;
+}
+
+.confirm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+
+  background: linear-gradient(135deg, #7A6FF0, #362b80);
+  color: #f5f5f5 !important;
+
+  border-radius: 12px;
+  text-transform: none;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+
+  box-shadow: 0 4px 12px rgba(108, 93, 211, 0.35);
+  backdrop-filter: blur(4px);
+  transition: all 0.25s ease;
+}
+
+/* Mobile */
+@media (max-width: 420px) {
+  .dialog-container {
+    width: 70vw;
+    padding: 18px;
+    border-radius: 16px;
+    gap: 16px;
+  }
+
+  .dialog-title {
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+
+    mat-icon {
+      font-size: 20px;
+    }
+  }
+
+  .dialog-message {
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+
+  .dialog-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+    margin-top: 0;
+  }
+
+  .cancel-btn,
+  .confirm-btn {
+    width: 100%; 
+    justify-content: center;
+    padding: 10px 0;
+    font-size: 0.95rem;
+  }
+
+  .confirm-btn {
+    padding: 12px 0;
+  }
+}

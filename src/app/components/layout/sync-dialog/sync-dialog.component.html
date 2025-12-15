@@ -1,0 +1,25 @@
+<div class="dialog-container">
+
+  <div class="dialog-title">
+    <mat-icon>cloud_upload</mat-icon>
+    {{ 'i18n.page.menu.sync_dialog.title' | translate }}
+  </div>
+
+  <div class="dialog-message">
+    <div *ngIf="data.lastsync; else firstSynchro">
+      <span class="main-message">{{ 'i18n.page.menu.sync_dialog.content' | translate:{date: formattedDate, hour: formattedHour} }}</span><br />
+      <span class="subtitle-message">{{ 'i18n.page.menu.sync_dialog.confirmMessage' | translate }}</span>
+    </div>
+    <ng-template #firstSynchro>
+      <span class="main-message">{{ 'i18n.page.menu.sync_dialog.firstSynchro' | translate }}</span><br />
+      <span class="subtitle-message">{{ 'i18n.page.menu.sync_dialog.confirmFirstSynchro' | translate }}</span>
+    </ng-template>
+  </div>
+
+
+  <div class="dialog-actions">
+    <button mat-button class="cancel-btn" (click)="onCancel()">{{ 'i18n.page.menu.sync_dialog.cancel' | translate }}</button>
+    <button mat-button class="confirm-btn" (click)="onConfirm()">{{ 'i18n.page.menu.sync_dialog.confirm' | translate }}</button>
+  </div>
+
+</div>

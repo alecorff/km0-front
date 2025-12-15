@@ -2,14 +2,14 @@
 <div class="current-prepa-card">
     <div *ngIf="currentPrepa; else noCurrentTraining" (click)="goToCurrentPrepa()">
         <div class="prepa-header">
-            <span class="prepa-title">Plan d'entrainement: {{ currentPrepa.name }}</span>
-            <span class="prepa-date">Date de course: {{ currentPrepa.date | date:'longDate' }}</span>
+            <span class="prepa-title">{{ 'i18n.page.home.training.plan' | translate }}: {{ currentPrepa.name }}</span>
+            <span class="prepa-date">{{ 'i18n.page.home.training.date' | translate }}: {{ currentPrepa.endDate | date:'longDate' }}</span>
         </div>
 
         <!-- Prochaine séance -->
         <div class="next-session">
             <mat-icon>directions_run</mat-icon>
-            <span>Prochaine séance : {{ nextSession.day }} - {{ nextSession.label }}</span>
+            <span>{{ 'i18n.page.home.training.nextSession' | translate }}: {{ nextSession.day }} - {{ nextSession.label }}</span>
         </div>
 
         <!-- Avancement des semaines -->
@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="weeks-label">
-            {{ currentPrepa.weeksDone }} / {{ currentPrepa.totalWeeks }} semaines complétées
+            {{ currentPrepa.weeksDone }} / {{ currentPrepa.totalWeeks }} {{ 'i18n.page.home.training.weeksCompleted' | translate }}
         </div>
     </div>
 
@@ -56,7 +56,7 @@
 <!-- Carousel -->
 <ng-template #carouselBlock>
     <div class="past-prepas-section">
-        <h2 class="section-title">Vos accomplissements</h2>
+        <h2 class="section-title">{{ 'i18n.page.home.carousel.title' | translate }}</h2>
 
         <div class="carousel-container">
             <button class="carousel-arrow left" (click)="prevSlide()">
@@ -68,22 +68,26 @@
 
                     <div class="carousel-item" *ngFor="let p of pastPrepas">
                         <div class="carousel-card">
-                            <!-- <div class="carousel-name">{{ p.name }}</div> -->
                             <div class="carousel-name">
-                                <img class="carousel-flag" [src]="'assets/images/flags/' + p.country + '.png'" />
+                                <img *ngIf="p.location" class="carousel-flag" [src]="'assets/images/flag/' + p.location + '.png'" />
                                 {{ p.name }}
                             </div>
                             <div class="carousel-date">
-                                Date : {{ p.endDate | date:'longDate' }}
+                                {{ 'i18n.page.home.carousel.date' | translate }}: {{ p.endDate | date:'longDate' }}
                             </div>
 
                             <div class="carousel-meta">
-                                <div *ngIf="p.distance">
-                                    <mat-icon>straighten</mat-icon> {{ p.distance }} km
-                                </div>
-                                <div *ngIf="p.elevation">
-                                    <mat-icon>terrain</mat-icon> {{ p.elevation }} m D+
-                                </div>
+                                <ng-container *ngIf="p.type === 'FITNESS'; else race">
+                                    <mat-icon>electric_bolt</mat-icon> {{ p.fitnessGoal }}
+                                </ng-container>
+                                <ng-template #race>
+                                    <div *ngIf="p.distanceKm">
+                                        <mat-icon>straighten</mat-icon> {{ p.distanceKm }} {{ 'i18n.page.home.carousel.km' | translate }}
+                                    </div>
+                                    <div *ngIf="p.elevationGain">
+                                        <mat-icon>terrain</mat-icon> {{ p.elevationGain }} {{ 'i18n.page.home.carousel.elevation' | translate }}
+                                    </div>
+                                </ng-template>
                             </div>
                         </div>
                     </div>

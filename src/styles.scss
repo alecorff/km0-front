@@ -23,3 +23,90 @@ html, body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+// Style des dialogs
+.mat-mdc-dialog-surface {
+  border-radius: 18px !important;
+  background: #1b1432 !important;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.4);
+  padding: 0 !important;
+}
+
+
+// Style des snackbar
+.mat-mdc-snack-bar-container.app-snackbar {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.mat-mdc-snack-bar-container.app-snackbar
+.mdc-snackbar__surface {
+  background: rgba(27, 20, 50, 0.95);
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+
+  padding: 14px 18px;
+  min-width: unset;
+  max-width: none !important;
+  width: 600px;
+}
+
+.mat-mdc-snack-bar-container.app-snackbar
+.mdc-snackbar__label {
+  color: #f5f5f5;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.mat-mdc-snack-bar-container .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
+  color: #a89dff !important;
+}
+
+.mat-mdc-snack-bar-container.app-snackbar
+.mdc-snackbar__action {
+  color: #a89dff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-left: 12px;
+
+  border-radius: 8px;
+  padding: 6px 10px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mat-mdc-snack-bar-container.app-snackbar
+.mdc-snackbar__action:hover {
+  background: rgba(168, 157, 255, 0.15);
+  color: #c8c3ff;
+}
+
+
+// SCROLLBAR
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-corner {
+    display: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(122, 111, 240, 0.2);
+    border: 2pt solid transparent;
+    border-radius: 3pt;
+    background-clip: content-box;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, .2);
+    border: 3pt solid transparent;
+    background-clip: content-box;
+}

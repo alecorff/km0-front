@@ -1,0 +1,121 @@
+<h2 mat-dialog-title class="title">{{ 'i18n.page.home.create_dialog.title' | translate }}</h2>
+<mat-divider></mat-divider>
+
+<form [formGroup]="form" mat-dialog-content class="form-content">
+  <!-- Nom -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>{{ 'i18n.page.home.create_dialog.fields.name' | translate }}</mat-label>
+    <input matInput formControlName="name" />
+    <mat-error *ngIf="form.get('name')?.hasError('required')">
+      {{ 'i18n.page.home.create_dialog.errorMessage.field' | translate }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Type -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>{{ 'i18n.page.home.create_dialog.fields.type' | translate }}</mat-label>
+    <mat-select formControlName="type">
+      <mat-option *ngFor="let type of trainingTypes" [value]="type.value">
+        {{ type.label }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('type')?.hasError('required')">
+      {{ 'i18n.page.home.create_dialog.errorMessage.field' | translate }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- COURSE / TRAIL -->
+  <ng-container *ngIf="form.get('type')?.value === 'RACE' || form.get('type')?.value === 'TRAIL'">
+
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'i18n.page.home.create_dialog.fields.distanceKm' | translate }}</mat-label>
+        <input matInput formControlName="distanceKm">
+        <mat-error *ngIf="form.get('distanceKm')?.hasError('required')">
+            {{ 'i18n.page.home.create_dialog.errorMessage.field' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <ng-container *ngIf="form.get('type')?.value === 'TRAIL'">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'i18n.page.home.create_dialog.fields.elevationGain' | translate }}</mat-label>
+          <input matInput formControlName="elevationGain">
+          <mat-error *ngIf="form.get('elevationGain')?.hasError('required')">
+            {{ 'i18n.page.home.create_dialog.errorMessage.field' | translate }}
+          </mat-error>
+        </mat-form-field>
+      </ng-container>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'i18n.page.home.create_dialog.fields.goal' | translate }}</mat-label>
+        <input matInput formControlName="goal">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'i18n.page.home.create_dialog.fields.location' | translate }}</mat-label>
+
+        <mat-select formControlName="country">
+
+            <mat-select-trigger>
+            <ng-container *ngIf="form.get('country')?.value as selected">
+                <div class="country-option">
+                <img [src]="'assets/images/flag/' + selected + '.png'" alt="" />
+                <span>{{ Country[selected] }}</span>
+                </div>
+            </ng-container>
+            </mat-select-trigger>
+
+            <mat-option *ngFor="let country of countries" [value]="country.code">
+            <div class="country-option">
+                <img [src]="country.flag" alt="" />
+                <span>{{ country.label }}</span>
+            </div>
+            </mat-option>
+
+        </mat-select>
+        </mat-form-field>
+    </div>
+  </ng-container>
+
+  <!-- REMISE EN FORME -->
+  <ng-container *ngIf="form.get('type')?.value === 'FITNESS'">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'i18n.page.home.create_dialog.fields.fitnessGoal' | translate }}</mat-label>
+      <mat-select formControlName="fitnessGoal">
+        <mat-option *ngFor="let goal of fitnessGoals" [value]="goal">
+          {{ goal }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="form.get('fitnessGoal')?.hasError('required')">
+        {{ 'i18n.page.home.create_dialog.errorMessage.field' | translate }}
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+
+  <!-- Dates -->
+  <div class="row">
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'i18n.page.home.create_dialog.fields.date' | translate }}</mat-label>
+
+        <mat-date-range-input [rangePicker]="rangePicker">
+            <input matStartDate formControlName="startDate" placeholder="Début">
+            <input matEndDate formControlName="endDate" placeholder="Fin">
+        </mat-date-range-input>
+
+        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+        <mat-date-range-picker #rangePicker></mat-date-range-picker>
+
+        <mat-error *ngIf="form.get('startDate')?.hasError('required') || form.get('endDate')?.hasError('required')">
+            {{ 'i18n.page.home.create_dialog.errorMessage.date' | translate }}
+        </mat-error>
+        </mat-form-field>
+  </div>
+</form>
+
+<mat-dialog-actions class="submit-action">
+  <button mat-raised-button class="button-actions" [disabled]="form.invalid" (click)="submit()">
+    {{ 'i18n.page.home.create_dialog.actions.submit' | translate }}
+  </button>
+</mat-dialog-actions>

@@ -9,11 +9,27 @@
                     "search": "Recherche",
                     "logout": "Déconnexion"
                 },
-                "sync": "Synchroniser" 
+                "sync": "Synchroniser",
+                "sync_dialog": {
+                    "title": "Synchronisation",
+                    "content": "Dernière synchronisation le {{date}} à {{hour}}.",
+                    "confirmMessage": "Voulez-vous lancer une nouvelle synchronisation ?",
+                    "firstSynchro": "Vous n'avez encore jamais synchronisé vos activités.",
+                    "confirmFirstSynchro": "Souhaitez-vous lancer votre première synchronisation ?",
+                    "cancel": "Annuler",
+                    "confirm": "Confirmer"
+                },
+                "sync_message": {
+                    "success": "Synchronisation des activités réussie.",
+                    "action": "Fermer"
+                } 
             },
             "home": {
                 "training": {
-
+                    "plan": "Plan d'entraînement",
+                    "date": "Date de course",
+                    "nextSession": "Prochaine séance",
+                    "weeksCompleted": "semaines complétées"
                 },
                 "noTraining": {
                     "title": "Créer votre plan d'entraînement",
@@ -21,11 +37,50 @@
                     "action": "Démarrer un nouveau plan d'entrainement"
                 },
                 "carousel": {
-
+                    "title": "Vos accomplissements",
+                    "date": "Date",
+                    "km": "km",
+                    "elevation": "m D+"
                 },
                 "noCarousel": {
                     "title": "Aucun plan terminé pour le moment",
                     "subtitle": "Vos anciens plans d'entraînement apparaîtront ici."
+                },
+                "create_dialog": {
+                    "title": "Nouveau plan d'entrainement",
+                    "fields": {
+                        "name": "Nom du plan d'entrainement",
+                        "type": "Type de préparation",
+                        "distanceKm": "Distance (km)",
+                        "elevationGain": "Dénivelé positif (m)",
+                        "goal": "Objectif",
+                        "location": "Lieu",
+                        "fitnessGoal": "Objectif principal",
+                        "date": "Période de préparation",
+                        "trainingTypes": {
+                            "race": "Course",
+                            "trail": "Trail",
+                            "fitness": "Remise en forme",
+                            "other": "Autre"
+                        },
+                        "fitnessGoals": {
+                            "resumeActivity": "Reprendre une activité",
+                            "improveEndurance": "Améliorer l'endurance",
+                            "stayActive": "Bouger régulièrement",
+                            "loseWeight": "Perdre du poids"
+                        }
+                    },
+                    "successMessage": {
+                        "success": "Le plan d'entrainement vient d'être créé.",
+                        "action": "Fermer"
+                    },
+                    "errorMessage": {
+                        "field": "Champ obligatoire",
+                        "date": "Période obligatoire"
+                    },
+                    "actions": {
+                        "submit": "Créer"
+                    }
                 }
             },
             "plan": {

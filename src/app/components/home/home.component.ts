@@ -1,10 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, LOCALE_ID, OnInit } from '@angular/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { CreatePlanDialogComponent } from './creation-plan-dialog/creation-plan-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TrainingPlanService } from 'src/app/services/training-plan.service';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+import { GlobalService } from 'src/app/services/global.service';
+
+registerLocaleData(localeFr);
 
 @Component({
   selector: 'app-home',
@@ -16,43 +25,102 @@ import { Router } from '@angular/router';
     MatIconModule,
     MatButtonModule
   ],
+  providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
-  currentPrepa = {
-    name: 'Marathon de Paris',
-    date: new Date('2025-04-13'),
-    totalWeeks: 12,
-    weeksDone: 2,
-  };
+  currentPrepa: any = null;
+  weeksArray: any[] = [];
+  pastPrepas: any[] = [];
+
+  currentIndex = 0;
 
   nextSession = {
     day: 'Mardi',
     label: "100' EF"
   };
 
-  weeksArray = Array.from({ length: this.currentPrepa.totalWeeks });
+  constructor(
+    private trainingPlanService: TrainingPlanService,
+    private translateService: TranslateService,
+    private globalService: GlobalService,
+    private router: Router,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) { }
 
-  currentIndex = 0;
-  pastPrepas = [
-    { name: "Ultra Marin - Le Raid", endDate: new Date("2024-06-26"), country: "FR", distance: 177, elevation: 2500 },
-    { name: "Marathon Nantes", endDate: new Date("2025-04-27"), country: "FR", distance: 42.2 },
-    { name: "Diagonale des Fous", endDate: new Date("2025-10-16"), country: "RE", distance: 165, elevation: 9500 },
-    { name: "Ultra Trail Australia - UTA50", endDate: new Date("2026-05-16"), country: "AU", distance: 50, elevation: 2500 },
-    { name: "Belle-Île en Trail", endDate: new Date("2026-09-19"), country: "FR", distance: 85 },
-    { name: "Ultra Trail Mont-Blanc", endDate: new Date("2027-08-31"), country: "FR", distance: 172, elevation: 10000 }
-  ];
+  ngOnInit() {
+    // get all prepas
+    this.trainingPlanService.getAllPlans().subscribe(result => {
+      this.globalService.startLoading();
+      const today = new Date();
 
-  constructor(private router: Router) { }
+      const plans = result;
+      plans.forEach(plan => {
+        const start = new Date(plan.startDate);
+        const end = new Date(plan.endDate);
+
+        const isCurrent = today >= start && today <= end;
+        if (isCurrent) {
+          this.currentPrepa = plan;
+          
+          // calcul de l'avancement
+          this.computeWeeks(plan);
+
+          this.weeksArray = Array.from({ length: this.currentPrepa?.totalWeeks });
+        } else {
+          this.pastPrepas.push(plan);
+        }
+      });
+      this.globalService.stopLoading();
+    });
+  }
 
   goToCurrentPrepa() {
     this.router.navigate([`/plan`]);
   }
 
   createPlan() {
-    
+    const dialogRef = this.dialog.open(CreatePlanDialogComponent, {
+      data: {
+      },
+      disableClose: false,
+      panelClass: 'primary-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.globalService.startLoading();
+        // ajout du plan d'entrainement
+        const start = new Date(result.startDate);
+        const end = new Date(result.endDate);
+        const today = new Date();
+        const isCurrent = today >= start && today <= end;
+        if (isCurrent) {
+          this.currentPrepa = result;
+          this.computeWeeks(this.currentPrepa);
+          this.weeksArray = Array.from({ length: this.currentPrepa?.totalWeeks });
+        } else {
+          this.pastPrepas.push(result);
+        }
+        
+        // success message
+        this.snackBar.open(
+          this.translateService.instant('i18n.page.home.create_dialog.successMessage.success'),
+          this.translateService.instant('i18n.page.home.create_dialog.successMessage.action'),
+          {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['app-snackbar']
+          }
+        );
+
+        this.globalService.stopLoading();
+      }
+    });
   }
 
   nextSlide() {
@@ -71,4 +139,38 @@ export class HomeComponent {
     this.currentIndex = i;
   }
 
+  private computeWeeks(plan: any): void {
+    const startDate = new Date(plan.startDate);
+    const endDate = new Date(plan.endDate);
+    const today = new Date();
+
+    const startWeek = this.getStartOfWeek(startDate);
+    const endWeek = this.getStartOfWeek(endDate);
+    const todayWeek = this.getStartOfWeek(today);
+
+    const MS_PER_WEEK = 1000 * 60 * 60 * 24 * 7;
+
+    // total de semaines calendaires
+    const totalWeeks =
+      Math.floor((endWeek.getTime() - startWeek.getTime()) / MS_PER_WEEK) + 1;
+
+    // semaines écoulées
+    let weeksDone =
+      Math.floor((todayWeek.getTime() - startWeek.getTime()) / MS_PER_WEEK) + 1;
+
+    // bornes
+    weeksDone = Math.max(0, Math.min(weeksDone, totalWeeks));
+
+    plan.totalWeeks = totalWeeks;
+    plan.weeksDone = weeksDone;
+  }
+
+  private getStartOfWeek(date: Date): Date {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
+    d.setDate(d.getDate() + diff);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
 }

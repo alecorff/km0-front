@@ -1,0 +1,169 @@
+.title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+    color: #f0f0ff;
+}
+
+mat-divider {
+    border-top-color: #f0f0ff;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+
+    .mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
+        color: #f2f1ff !important;
+    }
+
+    .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input,
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input {
+        caret-color: #8b7cff !important;
+        color: #f2f1ff !important;
+    }
+
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
+        border-color: #8b7cff !important;
+    }
+
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+    .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+        border-color: #3b3561 !important;
+    }
+
+    .mat-mdc-select-arrow,
+    .mat-mdc-select,
+    .mat-datepicker-toggle {
+        color: #f2f1ff !important;
+    }
+
+    .mat-date-range-input-separator {
+        font-size: 0.8em;
+        font-weight: 300;
+        color: #f2f1ff !important;
+    }
+
+    .mat-date-range-input-wrapper {
+        input::placeholder {
+            font-size: 0.8em;
+            font-weight: 300;
+            color: #f2f1ff !important;
+        }
+    }
+}
+
+/* MAT-DATE-RANGE */
+::ng-deep .mat-calendar-body-selected {
+    background-color: #8b7cff !important;
+    color: #f2f1ff !important;
+}
+
+::ng-deep .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    background-color: #8b7cff !important;
+    color: #f2f1ff !important;
+}
+
+::ng-deep .mat-calendar-body-in-range::before {
+    background: #3b3561 !important;
+    filter: brightness(3);
+}
+
+::ng-deep .cdk-program-focused .mat-calendar-body-active>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    background: #8b7cff !important;
+    border-color: #8b7cff !important;
+    color: #f2f1ff !important;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    gap: 16px;
+
+    mat-form-field {
+        flex: 1;
+    }
+}
+
+/* ===== SELECT COUNTRY ===== */
+.country-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+  }
+}
+
+/* ===== SUBMIT ACTION ===== */
+.submit-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0 20px 0;
+}
+
+.button-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+
+    /* Dégradé violet moderne */
+    background: linear-gradient(135deg, #7A6FF0, #362b80);
+    color: #f5f5f5 !important;
+
+    border-radius: 12px;
+    text-transform: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+
+    /* Effet moderne */
+    box-shadow: 0 4px 12px rgba(108, 93, 211, 0.35);
+    backdrop-filter: blur(4px);
+    transition: all 0.25s ease;
+}
+
+.button-actions:hover {
+    box-shadow: 0 6px 16px rgba(108, 93, 211, 0.45);
+    transform: translateY(-1px);
+}
+
+.button-actions:active {
+    transform: translateY(1px);
+    box-shadow: 0 3px 6px rgba(108, 93, 211, 0.25);
+}
+
+.button-actions:disabled,
+.button-actions.mat-mdc-button-disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+
+    background: linear-gradient(
+        135deg,
+        rgba(122, 111, 240, 0.35),
+        rgba(54, 43, 128, 0.35)
+    );
+
+    color: rgba(245, 245, 245, 0.45) !important;
+
+    box-shadow: none;
+    backdrop-filter: blur(1px);
+
+    transform: none;
+    opacity: 1;
+}

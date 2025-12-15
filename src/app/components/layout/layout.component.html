@@ -13,13 +13,13 @@
     <span class="spacer"></span>
 
      <!-- Version desktop : vrai bouton -->
-    <button mat-raised-button class="desktop-only" matTooltip="Dernière synchro à 3h12">
+    <button mat-raised-button class="desktop-only" (click)="sync()">
       <mat-icon>cloud_upload</mat-icon>
       {{ 'i18n.page.menu.sync' | translate }}
     </button>
 
     <!-- Version mobile : juste l’icône -->
-    <button mat-icon-button class="mobile-only">
+    <button mat-icon-button class="mobile-only" (click)="sync()">
       <mat-icon>cloud_upload</mat-icon>
     </button>
   </mat-toolbar>
@@ -29,8 +29,8 @@
     <div class="sidenav-content">
       <!-- Avatar -->
       <div class="user-profile">
-        <img src="assets/images/avatar-exemple.jpg" class="avatar" />
-        <span class="user-name">Alexis Le Corff</span>
+        <img [src]="user?.avatar" class="avatar" />
+        <span class="user-name">{{ getDisplayName() }}</span>
       </div>
 
       <!-- Menu du haut -->
@@ -61,6 +61,7 @@
 
 
   <div class="main-content">
+    <app-loader *ngIf="isLoading"></app-loader>    
     <router-outlet></router-outlet>
   </div>
 </mat-sidenav-container>
