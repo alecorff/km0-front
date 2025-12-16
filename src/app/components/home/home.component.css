@@ -176,6 +176,8 @@
     gap: 18px;
 
     transition: 0.25s ease;
+
+    margin-top: 10px;
 }
 
 .carousel-card:hover {

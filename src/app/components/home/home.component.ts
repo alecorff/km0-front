@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, LOCALE_ID, OnInit } from '@angular/core';
+import { AfterViewInit, Component, LOCALE_ID } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,7 +29,7 @@ registerLocaleData(localeFr);
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements AfterViewInit {
 
   currentPrepa: any = null;
   weeksArray: any[] = [];
@@ -42,6 +42,8 @@ export class HomeComponent implements OnInit {
     label: "100' EF"
   };
 
+  isLoading: boolean = false;
+
   constructor(
     private trainingPlanService: TrainingPlanService,
     private translateService: TranslateService,
@@ -51,35 +53,51 @@ export class HomeComponent implements OnInit {
     private snackBar: MatSnackBar
   ) { }
 
-  ngOnInit() {
-    // get all prepas
-    this.trainingPlanService.getAllPlans().subscribe(result => {
-      this.globalService.startLoading();
-      const today = new Date();
-
-      const plans = result;
-      plans.forEach(plan => {
-        const start = new Date(plan.startDate);
-        const end = new Date(plan.endDate);
-
-        const isCurrent = today >= start && today <= end;
-        if (isCurrent) {
-          this.currentPrepa = plan;
-          
-          // calcul de l'avancement
-          this.computeWeeks(plan);
-
-          this.weeksArray = Array.from({ length: this.currentPrepa?.totalWeeks });
-        } else {
-          this.pastPrepas.push(plan);
-        }
-      });
-      this.globalService.stopLoading();
+  ngAfterViewInit() {
+    // décale le chargement au cycle suivant
+    Promise.resolve().then(() => {
+      this.loadPlans();
     });
   }
 
+  private loadPlans() {
+    this.isLoading = true;
+    this.globalService.startLoading();
+
+    // get all plans
+    this.trainingPlanService.getAllPlans().subscribe({
+      next: (plans) => {
+        const today = new Date();
+
+        this.currentPrepa = null;
+        this.pastPrepas = [];
+
+        plans.forEach(plan => {
+          const start = new Date(plan.startDate);
+          const end = new Date(plan.endDate);
+
+          const isCurrent = today >= start && today <= end;
+          if (isCurrent) {
+            this.currentPrepa = plan;
+
+            // calcul de l'avancement
+            this.computeWeeks(plan);
+            this.weeksArray = Array.from({ length: plan.totalWeeks });
+          } else {
+            this.pastPrepas.push(plan);
+          }
+        });
+      },
+      complete: () => {
+        this.isLoading = false;
+        this.globalService.stopLoading();
+      }
+    });
+  }
+
+
   goToCurrentPrepa() {
-    this.router.navigate([`/plan`]);
+    this.router.navigate([`/plan/${this.currentPrepa.planId}`]);
   }
 
   createPlan() {
@@ -105,7 +123,7 @@ export class HomeComponent implements OnInit {
         } else {
           this.pastPrepas.push(result);
         }
-        
+
         // success message
         this.snackBar.open(
           this.translateService.instant('i18n.page.home.create_dialog.successMessage.success'),

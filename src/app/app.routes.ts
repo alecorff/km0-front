@@ -15,7 +15,7 @@ export const routes: Routes = [
         component: HomeComponent
       },
       {
-        path: 'plan',
+        path: 'plan/:id',
         component: TrainingPlanComponent
       }
     ]  
