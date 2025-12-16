@@ -11,5 +11,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'strava-dashboard';
+  title = 'kilometre-zero';
 }

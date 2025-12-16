@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "strava-dashboard": {
+    "kilometre-zero": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:class": {
@@ -38,7 +38,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/strava-dashboard",
+            "outputPath": "dist/kilometre-zero",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -86,10 +86,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "strava-dashboard:build:production"
+              "buildTarget": "kilometre-zero:build:production"
             },
             "development": {
-              "buildTarget": "strava-dashboard:build:development"
+              "buildTarget": "kilometre-zero:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -97,7 +97,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "strava-dashboard:build"
+            "buildTarget": "kilometre-zero:build"
           }
         },
         "test": {
