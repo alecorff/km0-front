@@ -178,6 +178,11 @@
     align-items: center;
 }
 
+.nav-btn.hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -211,6 +216,7 @@
 }
 
 .day-cell.disabled {
+    pointer-events: none;
     opacity: 0.35;
     cursor: default;
 }
@@ -246,6 +252,11 @@
     background: rgba(255, 255, 255, 0.12);
 }
 
+.week-day-card.today-card {
+  border: 2px solid #a899ff;
+  box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.15);
+}
+
 .wd-header {
     margin-bottom: 8px;
 }
@@ -260,15 +271,19 @@
     color: #c3c2e5;
 }
 
-.session-label {
-    font-size: 0.75rem;
-    color: #bcbcf3;
+.wd-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
 }
 
-.session-name {
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-top: 4px;
+.activity-icon {
+  width: 32px;
+  height: 32px;
+  display: block;
+  
+  color: #b7b5ff;
 }
 
 .empty-msg {

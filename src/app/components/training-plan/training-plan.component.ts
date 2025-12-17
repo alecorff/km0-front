@@ -1,14 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, LOCALE_ID, OnInit } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+import { ActivatedRoute } from '@angular/router';
+import { TrainingPlanService } from 'src/app/services/training-plan.service';
+import { ActivityService } from 'src/app/services/activity.service';
+import { UrlWithStringQuery } from 'node:url';
+
+registerLocaleData(localeFr);
 
 interface CalendarDay {
   date: Date;
   inMonth: boolean;
   isToday: boolean;
-  session?: any;
+  activity?: any;
+  icon?: any;
 }
 
 @Component({
@@ -20,26 +29,20 @@ interface CalendarDay {
     MatIconModule,
     MatButtonModule
   ],
+  providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
   templateUrl: './training-plan.component.html',
   styleUrl: './training-plan.component.css'
 })
 export class TrainingPlanComponent implements OnInit {
 
-  currentPrepa = {
-    name: 'Marathon de Paris',
-    date: new Date('2025-04-13'),
-    distance: 42,
-    elevation: 200,
-    totalDistance: 239,
-    totalElevation: 3289,
-    sessionsDone: 19,
-    totalTime: '19h42',
-  };
+  currentPlan: any = null;
 
-  nextSession = {
-    day: 'Mardi',
-    label: "100' EF"
-  };
+  activities: any[] = [];
+  plannedActivities: any[] = [];
+
+  totalDistance: any;
+  totalElevation: any;
+  totalTime: any;
 
   selectedMonth = new Date();
   selectedDate: Date | null = null;
@@ -49,10 +52,80 @@ export class TrainingPlanComponent implements OnInit {
   monthDays: CalendarDay[] = [];
   selectedWeek: CalendarDay[] = [];
 
+  constructor(
+    private route: ActivatedRoute,
+    private trainingPlanService: TrainingPlanService,
+    private activityService: ActivityService
+  ) { }
+
   ngOnInit() {
+    const planId = this.route.snapshot.paramMap.get('id');
+    if (planId) {
+      this.trainingPlanService.getPlanById(planId).subscribe(plan => {
+        this.currentPlan = plan;
+
+        this.loadActivitiesForPlan();
+      });
+    }
+
     this.generateMonth();
     this.selectedDate = new Date();
     this.extractWeek(this.selectedDate);
+  }
+
+  /**
+   * Permet de récupérer les activités Strava liées à ce plan d'entrainement
+   */
+  loadActivitiesForPlan() {
+    if (!this.currentPlan) {
+      return;
+    }
+
+    this.activityService.getActivitiesForPlanPeriod(this.currentPlan.startDate).subscribe(activities => {
+      this.activities = activities;
+
+      this.totalDistance = activities.reduce((sum, a) => sum + (a.distance ?? 0), 0);
+
+      if (this.currentPlan.type === 'TRAIL') {
+        this.totalElevation = activities.reduce((sum, a) => sum + (a.totalElevationGain ?? 0), 0);
+      }
+      
+      const totalTimeSeconds = activities.reduce((sum, a) => sum + (a.movingTime ?? 0), 0);
+      this.totalTime = this.formatSeconds(totalTimeSeconds);
+
+      this.attachActivitiesToWeek();
+    });
+  }
+
+  /**
+   * Permet de convertir le temps total d'activité en secondes en HH:mm:ss
+   */
+  private formatSeconds(totalSeconds: number): string {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    return `${hours.toString().padStart(2, '0')}:` +
+          `${minutes.toString().padStart(2, '0')}:` +
+          `${seconds.toString().padStart(2, '0')}`;
+  }
+
+  /**
+   * Ajouter les activités réelles à la semaine en cours
+   */
+  private attachActivitiesToWeek() {
+    if (!this.activities?.length) {
+      return;
+    }
+
+    this.selectedWeek.forEach(day => {
+      const activity = this.activities.find(a => {
+        const activityDate = new Date(a.startDateLocal);
+        return activityDate.toDateString() === day.date.toDateString();
+      });
+
+      day.activity = activity;
+    });
   }
 
   /* ===== GÉNÉRATION DU MOIS ===== */
@@ -73,7 +146,8 @@ export class TrainingPlanComponent implements OnInit {
       this.monthDays.push({
         date: d,
         inMonth: d.getMonth() === month,
-        isToday: this.isToday(d)
+        isToday: this.isToday(d),
+        icon: this.getDayIcon(d)
       });
     }
   }
@@ -99,13 +173,17 @@ export class TrainingPlanComponent implements OnInit {
 
   /* ===== SÉLECTION DE DATE ===== */
   selectDate(d: Date) {
+    if (this.isOutsidePlan(d)) {
+      return;
+    }
+
     this.selectedDate = new Date(d);
     this.extractWeek(d);
   }
 
   isSelectedDate(d: Date) {
     return this.selectedDate &&
-           d.toDateString() === this.selectedDate.toDateString();
+      d.toDateString() === this.selectedDate.toDateString();
   }
 
   /* ===== EXTRAIRE LA SEMAINE ===== */
@@ -126,6 +204,7 @@ export class TrainingPlanComponent implements OnInit {
         isToday: this.isToday(d)
       });
     }
+    this.attachActivitiesToWeek();
   }
 
   /* ===== NAVIGATION MOIS ===== */
@@ -138,6 +217,29 @@ export class TrainingPlanComponent implements OnInit {
     this.generateMonth();
   }
 
+  canGoToNextMonth(): boolean {
+    if (!this.currentPlan.startDate) {
+      return true;
+    }
+
+    // Mois courant + 1
+    const nextMonth = new Date(
+      this.selectedMonth.getFullYear(),
+      this.selectedMonth.getMonth() + 1,
+      1
+    );
+
+    // Début du mois du plan
+    const end = new Date(this.currentPlan.endDate);
+    const endMonth = new Date(
+      end.getFullYear(),
+      end.getMonth(),
+      1
+    );
+
+    return nextMonth <= endMonth;
+  }
+
   previousMonth() {
     this.selectedMonth = new Date(
       this.selectedMonth.getFullYear(),
@@ -147,9 +249,58 @@ export class TrainingPlanComponent implements OnInit {
     this.generateMonth();
   }
 
+  canGoToPreviousMonth(): boolean {
+    if (!this.currentPlan.startDate) {
+      return true;
+    }
+
+    // Mois courant - 1
+    const prevMonth = new Date(
+      this.selectedMonth.getFullYear(),
+      this.selectedMonth.getMonth() - 1,
+      1
+    );
+
+    // Début du mois du plan
+    const start = new Date(this.currentPlan.startDate);
+    const startMonth = new Date(
+      start.getFullYear(),
+      start.getMonth(),
+      1
+    );
+
+    return prevMonth >= startMonth;
+  }
+
   isToday(date: Date) {
     const today = new Date();
     return date.toDateString() === today.toDateString();
+  }
+
+  isOutsidePlan(date: Date): boolean {
+    if (!this.currentPlan) {
+      return false;
+    }
+
+    const d = new Date(date);
+    const start = new Date(this.currentPlan.startDate);
+    const end = new Date(this.currentPlan.endDate);
+    
+    if (d.getFullYear() < start.getFullYear() ||
+        (d.getFullYear() === start.getFullYear() && d.getMonth() < start.getMonth()) ||
+        (d.getFullYear() === start.getFullYear() && d.getMonth() === start.getMonth() && d.getDate() < start.getDate())
+    ) {
+      return true;
+    }
+
+    if (d.getFullYear() > end.getFullYear() ||
+        (d.getFullYear() === end.getFullYear() && d.getMonth() > end.getMonth()) ||
+        (d.getFullYear() === end.getFullYear() && d.getMonth() === end.getMonth() && d.getDate() > end.getDate())
+    ) {
+      return true;
+    }
+
+    return false;
   }
 
   /* ===== OUVRIR UN JOUR (affichage séance future / passée) ===== */
@@ -159,6 +310,58 @@ export class TrainingPlanComponent implements OnInit {
     // ici tu ouvriras un dialog
     // si date > today → création future
     // si date < today → afficher séance passée
+  }
+
+  /**
+   * Méthode pour savoir si le jour courant est spécial
+   */
+  getDayIcon(date: Date): string {
+
+    // Séance réelle
+    const activity = this.getActivityForDate(date);
+    if (activity) {
+      return activity.type === 'TRAIL' ? 'TRAIL' : 'RUN';
+    }
+
+    // Séance planifiée
+    if (this.hasPlannedSession(date)) {
+      return 'PLANNED';
+    }
+
+    // Jour de course
+    if (this.isRaceDay(date)) {
+      return 'RACE';
+    }
+
+    // Jour de départ
+    if (this.isStartDay(date)) {
+      return 'START';
+    }
+
+    return 'NONE';
+  }
+
+  isStartDay(date: Date): boolean {
+    if (!this.currentPlan?.startDate) return false;
+    return date.toDateString() === new Date(this.currentPlan.startDate).toDateString();
+  }
+
+  isRaceDay(date: Date): boolean {
+    if (!this.currentPlan?.endDate) return false;
+    return date.toDateString() === new Date(this.currentPlan.endDate).toDateString();
+  }
+
+  getActivityForDate(date: Date) {
+    return this.activities.find(a =>
+      new Date(a.date).toDateString() === date.toDateString()
+    );
+  }
+
+  hasPlannedSession(date: Date): boolean {
+    // return this.plannedSessions.some(p =>
+    //   new Date(p.date).toDateString() === date.toDateString()
+    // );
+    return false
   }
 
 }

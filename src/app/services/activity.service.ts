@@ -26,4 +26,17 @@ export class ActivityService {
         params: params
     });
   }
+
+  getActivitiesForPlanPeriod(startDate: Date): Observable<any[]> {
+    const jwt = localStorage.getItem('jwt') ?? "";
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${jwt}`);
+
+    let params = new HttpParams();
+    params = params.set('startDate', startDate.toString());
+
+    return this.http.get<any[]>(`${this.baseUrl}/getActivitiesForPlanPeriod`, {
+        headers: headers, 
+        params: params
+    });
+  }
 }

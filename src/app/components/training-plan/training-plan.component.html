@@ -6,52 +6,56 @@
 
             <div class="info-item">
                 <mat-icon>flag</mat-icon>
-                <span>{{ currentPrepa.name }}</span>
+                <span>{{ currentPlan.name }}</span>
             </div>
 
             <div class="separator"></div>
 
             <div class="info-item">
                 <mat-icon>event</mat-icon>
-                <span>{{ currentPrepa.date | date:'longDate' }}</span>
+                <span>{{ currentPlan.endDate | date:'longDate' }}</span>
             </div>
 
             <div class="separator"></div>
 
             <div class="info-item">
                 <mat-icon>straighten</mat-icon>
-                <span>{{ currentPrepa.distance }} km</span>
+                <span>{{ currentPlan.distanceKm }} km</span>
             </div>
 
-            <div class="separator" *ngIf="currentPrepa.elevation"></div>
-
-            <div class="info-item" *ngIf="currentPrepa.elevation">
+            <div class="separator" *ngIf="currentPlan.elevation"></div>
+            <div class="info-item"*ngIf="currentPlan.elevation">
                 <mat-icon>terrain</mat-icon>
-                <span>{{ currentPrepa.elevation }} m D+</span>
+                <span>{{ currentPlan.elevationGain }} m D+</span>
             </div>
 
+            <div class="separator" *ngIf="currentPlan.goal"></div>
+            <div class="info-item"*ngIf="currentPlan.goal">
+                <mat-icon>radar</mat-icon>
+                <span>{{ currentPlan.goal }}</span>
+            </div>
         </div>
     </div>
 
     <!-- Stats -->
     <div class="prepa-stats-row">
         <div class="stat-item">
-            <div class="stat-value">{{ currentPrepa.sessionsDone }}</div>
+            <div class="stat-value">{{ activities.length }}</div>
             <div class="stat-label">Séances complétées</div>
         </div>
 
         <div class="stat-item">
-            <div class="stat-value">{{ currentPrepa.totalDistance }} km</div>
+            <div class="stat-value">{{ totalDistance }} km</div>
             <div class="stat-label">Distance parcourue</div>
         </div>
 
-        <div class="stat-item">
-            <div class="stat-value">{{ currentPrepa.totalElevation }} m D+</div>
+        <div class="stat-item" *ngIf="currentPlan.type === 'TRAIL'">
+            <div class="stat-value">{{ totalElevation }} m D+</div>
             <div class="stat-label">Dénivelé total</div>
         </div>
 
         <div class="stat-item">
-            <div class="stat-value">{{ currentPrepa.totalTime }}</div>
+            <div class="stat-value">{{ totalTime }}</div>
             <div class="stat-label">Temps d'activité</div>
         </div>
     </div>
@@ -75,26 +79,26 @@
     <!-- ===== SEMAINE SÉLECTIONNÉE ===== -->
     <div *ngIf="selectedWeek.length" class="week-cards">
         <div class="week-grid">
-            <div 
-                class="week-day-card"
-                *ngFor="let d of selectedWeek"
-                (click)="openDay(d)"
-            >
+            <div  class="week-day-card" [class.today-card]="d.isToday" *ngFor="let d of selectedWeek" (click)="openDay(d)">
                 <div class="wd-header">
                     <div class="wd-name">{{ d.date | date:'EEEE' }}</div>
                     <div class="wd-number">{{ d.date | date:'d MMM' }}</div>
                 </div>
 
-                <div class="wd-content">
-                    <div *ngIf="d.session; else noSession">
-                        <div class="session-label">Séance :</div>
-                        <div class="session-name">{{ d.session.name }}</div>
-                    </div>
-
-                    <ng-template #noSession>
-                        <div class="empty-msg">Aucune séance</div>
+                <div class="wd-content" *ngIf="d.activity; else noActivity">
+                    <svg *ngIf="d.activity?.sportType === 'TrailRun'; else raceIcon" class="activity-icon" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M8.688 0C8.025 0 7.38.215 6.85.613l-3.32 2.49-2.845.948A1 1 0 000 5c0 1.579.197 2.772.567 3.734.376.978.907 1.654 1.476 2.223.305.305.6.567.886.82.785.697 1.5 1.33 2.159 2.634 1.032 2.57 2.37 4.748 4.446 6.27.15.11.303.217.46.319h-2.58l-2.707-2.707a1 1 0 00-1.414 0L3 18.586l-1.5-1.5L.086 18.5l2.207 2.207a1 1 0 001.414 0L4 20.414l2.293 2.293A1 1 0 007 23h11c2.128 0 3.587-.553 4.549-1.411a4.378 4.378 0 001.408-2.628c.152-.987-.389-1.787-.967-2.25l-3.892-3.114a1 1 0 01-.329-.477l-3.094-9.726A2 2 0 0013.769 2h-1.436a2 2 0 00-1.2.4l-.57.428-.516-1.803A1.413 1.413 0 008.688 0zM18 21c-3.356 0-5.629-.718-7.284-1.931-1.663-1.22-2.823-3.028-3.788-5.44a1.012 1.012 0 00-.034-.076c-.853-1.708-1.947-2.673-2.79-3.417-.24-.212-.46-.405-.647-.593-.431-.431-.775-.88-1.024-1.527-.21-.545-.367-1.271-.417-2.3l1.323-.442L5 7.351v1.706l.333.299c1.11.992 2.452 2.512 3.933 4.839 1.356 2.132 3.156 3.553 5.26 4.685l.222.12h7.156c-.105.36-.307.758-.687 1.096-.5.446-1.435.904-3.217.904zM5.175 4.368L8.05 2.213c.069-.051.143-.094.221-.127l1.168 4.086L12.333 4h1.436l.954 3H10v1.934l3.11 3.391-.724 1.014L13.454 15h4.21c.06.055.12.108.184.16L20.15 17h-4.893c-1.793-.996-3.223-2.182-4.303-3.88C9.526 10.88 8.188 9.295 7 8.172V6.65zM15.36 9l.039.122-1.1 1.54L12.774 9zm.796 2.502L16.632 13h-1.546z" />
+                    </svg>
+                    <ng-template #raceIcon>
+                        <svg class="activity-icon" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M8.688 0C8.025 0 7.38.215 6.85.613l-3.32 2.49-2.845.948A1 1 0 000 5c0 1.579.197 2.772.567 3.734.376.978.907 1.654 1.476 2.223.305.305.6.567.886.82.785.697 1.5 1.33 2.159 2.634 1.032 2.57 2.37 4.748 4.446 6.27C11.629 22.218 14.356 23 18 23c2.128 0 3.587-.553 4.549-1.411a4.378 4.378 0 001.408-2.628c.152-.987-.389-1.787-.967-2.25l-3.892-3.114a1 1 0 01-.329-.477l-3.094-9.726A2 2 0 0013.769 2h-1.436a2 2 0 00-1.2.4l-.57.428-.516-1.803A1.413 1.413 0 008.688 0zM8.05 2.213c.069-.051.143-.094.221-.127l1.168 4.086L12.333 4h1.436l.954 3H12v2h3.36l.318 1H13v2h3.314l.55 1.726a3 3 0 00.984 1.433l3.106 2.485c-.77.19-1.778.356-2.954.356-1.97 0-3.178-.431-4.046-1.087-.895-.677-1.546-1.675-2.251-3.056-.224-.437-.45-.907-.688-1.403C9.875 10.08 8.444 7.1 5.531 4.102zM3.743 5.14c2.902 2.858 4.254 5.664 5.441 8.126.25.517.49 1.018.738 1.502.732 1.432 1.55 2.777 2.827 3.74C14.053 19.495 15.72 20 18 20c1.492 0 2.754-.23 3.684-.479a2.285 2.285 0 01-.467.575c-.5.446-1.435.904-3.217.904-3.356 0-5.629-.718-7.284-1.931-1.663-1.22-2.823-3.028-3.788-5.44a1.012 1.012 0 00-.034-.076c-.853-1.708-1.947-2.673-2.79-3.417a14.61 14.61 0 01-.647-.593c-.431-.431-.775-.88-1.024-1.527-.21-.545-.367-1.271-.417-2.3z" />
+                        </svg>
                     </ng-template>
+
                 </div>
+                <ng-template #noActivity>
+                    <div class="empty-msg">Aucune séance</div>
+                </ng-template>
             </div>
         </div>
     </div>
@@ -102,7 +106,7 @@
     <!-- ===== MOIS COURANT ===== -->
     <div class="month-card">
         <div class="month-header">
-            <button class="nav-btn" (click)="previousMonth()">
+            <button class="nav-btn" (click)="previousMonth()" [class.hidden]="!canGoToPreviousMonth()">
                 <mat-icon>chevron_left</mat-icon>
             </button>
 
@@ -110,7 +114,7 @@
                 {{ selectedMonth | date:'MMMM y' }}
             </div>
 
-            <button class="nav-btn" (click)="nextMonth()">
+            <button class="nav-btn" (click)="nextMonth()" [class.hidden]="!canGoToNextMonth()">
                 <mat-icon>chevron_right</mat-icon>
             </button>
         </div>
@@ -125,12 +129,38 @@
             <div 
                 *ngFor="let day of monthDays"
                 class="day-cell"
-                [class.disabled]="!day.inMonth"
+                [class.disabled]="!day.inMonth || isOutsidePlan(day.date)"
                 [class.today]="day.isToday"
                 [class.selected]="isSelectedDate(day.date)"
                 (click)="selectDate(day.date)"
             >
-                {{ day.date.getDate() }}
+                <ng-container [ngSwitch]="day.icon">
+                    <!-- Course -->
+                    <img *ngSwitchCase="'RUN'" src="assets/images/run-icon.svg" />
+
+                    <!-- Trail -->
+                    <img *ngSwitchCase="'TRAIL'" src="assets/images/trail-icon.svg" />
+
+                    <!-- Planifiée -->
+                    <mat-icon *ngSwitchCase="'PLANNED'">
+                        event
+                    </mat-icon>
+
+                    <!-- Jour de course -->
+                    <mat-icon *ngSwitchCase="'RACE'">
+                        sports_score
+                    </mat-icon>
+
+                    <!-- Jour de départ -->
+                    <mat-icon *ngSwitchCase="'START'">
+                        rocket_launch
+                    </mat-icon>
+
+                    <!-- Fallback -->
+                    <span *ngSwitchDefault>
+                        {{ day.date.getDate() }}
+                    </span>
+                </ng-container>
             </div>
         </div>
     </div>
