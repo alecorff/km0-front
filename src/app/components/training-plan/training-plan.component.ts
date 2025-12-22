@@ -341,7 +341,8 @@ export class TrainingPlanComponent implements OnInit {
       this.dialog.open(ActivityDialogComponent, {
         data: day.activity,
         width: '100%',
-        maxWidth: '400px'
+        maxWidth: '600px',
+        height: '600px'
       });
     } else if (day.date >= new Date()) {
       // futur → planification
