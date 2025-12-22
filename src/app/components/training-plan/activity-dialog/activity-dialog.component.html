@@ -11,45 +11,59 @@
   <!-- Contenu réel -->
   <div class="content">
 
-    <h2 mat-dialog-title class="title">{{ data.name }}</h2>
+    <h2 mat-dialog-title class="title">{{ currentActivity.name }}</h2>
 
-    <h3 class="subtitle">
+    <h3 class="subtitle" *ngIf="country">
       <img class="flag" [src]="'assets/images/flag/' + country + '.png'" />
       <span>{{ city }}</span>
       <span>•</span>
       <span>
-        {{ data.startDateLocal | date:'dd MMM yyyy' }},
-        {{ data.startDateLocal | date:'HH:mm' }}
+        {{ currentActivity.startDateLocal | date:'dd MMM yyyy' }},
+        {{ currentActivity.startDateLocal | date:'HH:mm' }}
       </span>
     </h3>
 
     <div class="center-content">
       <div class="distance">
-        {{ data.distance }} km
+        {{ currentActivity.distance }} km
       </div>
 
       <div class="meta-line">
-        {{ formatTime(data.movingTime) }} • {{ data.totalElevationGain }} m D+
+        {{ formatTime(currentActivity.movingTime) }} • {{ currentActivity.totalElevationGain }} m D+
       </div>
 
       <div class="stats-grid">
         <div class="stat-card" *ngIf="data.averageSpeed">
-          <mat-icon>speed</mat-icon>{{ data.averageSpeed }}
+          <mat-icon>speed</mat-icon>{{ currentActivity.averageSpeed }}
         </div>
 
         <div class="stat-card" *ngIf="data.averageHeartrate">
-          <mat-icon>favorite</mat-icon>{{ data.averageHeartrate }} bpm
+          <mat-icon>favorite</mat-icon>{{ currentActivity.averageHeartrate }} bpm
         </div>
       </div>
 
       <div class="chip" *ngIf="data.sessionType">
-        {{ data.sessionType }}
+        {{ currentActivity.sessionType }}
       </div>
     </div>
 
     <div class="footer">
       <button mat-raised-button class="button-actions" (click)="openStrava()">
       <img src="assets/images/strava.svg" class="strava-logo" /> Voir sur Strava
+      </button>
+    </div>
+
+    <div class="footer nav-footer" *ngIf="activities.length > 1">
+      <button mat-icon-button (click)="previous()" [disabled]="currentIndex === 0">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <span class="nav-counter">
+        {{ currentIndex + 1 }} / {{ activities.length }}
+      </span>
+
+      <button mat-icon-button (click)="next()" [disabled]="currentIndex === activities.length - 1">
+        <mat-icon>chevron_right</mat-icon>
       </button>
     </div>
 

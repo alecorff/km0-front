@@ -26,21 +26,58 @@ export class ActivityDialogComponent implements AfterViewInit {
   @ViewChild('canvas', { static: true })
   canvasRef!: ElementRef<HTMLCanvasElement>;
 
+  activities: any[] = [];
+  currentIndex = 0;
+  currentActivity!: any;
+
   city: string = '';
   country: string = '';
+
+  isLoading: boolean = false;
 
   constructor(
     private globalService: GlobalService,
     public dialogRef: MatDialogRef<ActivityDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) {
+    this.activities = Array.isArray(data) ? data : [data];
+
+    this.activities.sort(
+      (a, b) =>
+        new Date(a.startDateLocal).getTime() -
+        new Date(b.startDateLocal).getTime()
+    );
+
+    this.currentIndex = 0;
+    this.currentActivity = this.activities[this.currentIndex];
+  }
 
   ngAfterViewInit() {
-    if (this.data.polyline) {
-      this.drawPolyline(this.data.polyline);
+    this.loadActivity();
+  }
+
+  next() {
+    if (this.currentIndex < this.activities.length - 1) {
+      this.currentIndex++;
+      this.currentActivity = this.activities[this.currentIndex];
+      this.loadActivity();
+    }
+  }
+
+  previous() {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+      this.currentActivity = this.activities[this.currentIndex];
+      this.loadActivity();
+    }
+  }
+
+  private loadActivity() {
+    if (this.currentActivity.polyline) {
+      this.drawPolyline(this.currentActivity.polyline);
     }
 
-    this.globalService.getCity(this.data.startLatitude, this.data.startLongitude).subscribe(res => {
+    this.globalService.getCity(this.currentActivity.startLatitude, this.currentActivity.startLongitude).subscribe(res => {
       this.city = res.address.city || res.address.town || res.address.village || res.address.hamlet;
       this.country = res.address.country_code.toUpperCase();
     });
@@ -54,7 +91,7 @@ export class ActivityDialogComponent implements AfterViewInit {
   }
 
   openStrava() {
-    window.open(`https://www.strava.com/activities/${this.data.activityId}`, '_blank');
+    window.open(`https://www.strava.com/activities/${this.currentActivity.activityId}`, '_blank');
   }
 
   drawPolyline(encoded: string) {
@@ -140,6 +177,4 @@ export class ActivityDialogComponent implements AfterViewInit {
 
     return coordinates;
   }
-
-
 }
