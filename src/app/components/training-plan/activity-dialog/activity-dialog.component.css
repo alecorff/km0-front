@@ -41,7 +41,7 @@
   z-index: 2;
   padding: 16px;
 
-  flex: 1; /* 🔥 clé absolue */
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
@@ -211,4 +211,11 @@
 
 .nav-footer button:not(:disabled):hover mat-icon {
   color: #b7b5ff;
+}
+
+@media (max-width: 400px) {
+  .bg-map canvas {
+    width: 360px;
+    height: 360px;
+  }
 }

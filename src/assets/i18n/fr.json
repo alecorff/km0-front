@@ -85,6 +85,14 @@
             },
             "plan": {
                 
+            },
+            "activity_dialog": {
+                "metrics": {
+                    "distance": "km",
+                    "elevation": "m D+",
+                    "heartrate": "bpm"
+                },
+                "open_on_strava": "Voir sur Strava"
             }
         }
     }

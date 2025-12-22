@@ -25,11 +25,11 @@
 
     <div class="center-content">
       <div class="distance">
-        {{ currentActivity.distance }} km
+        {{ currentActivity.distance }} {{ 'i18n.page.activity_dialog.metrics.distance' | translate }}
       </div>
 
       <div class="meta-line">
-        {{ formatTime(currentActivity.movingTime) }} • {{ currentActivity.totalElevationGain }} m D+
+        {{ formatTime(currentActivity.movingTime) }} • {{ currentActivity.totalElevationGain }} {{ 'i18n.page.activity_dialog.metrics.elevation' | translate }}
       </div>
 
       <div class="stats-grid">
@@ -38,7 +38,7 @@
         </div>
 
         <div class="stat-card" *ngIf="data.averageHeartrate">
-          <mat-icon>favorite</mat-icon>{{ currentActivity.averageHeartrate }} bpm
+          <mat-icon>favorite</mat-icon>{{ currentActivity.averageHeartrate }} {{ 'i18n.page.activity_dialog.metrics.heartrate' | translate }}
         </div>
       </div>
 
@@ -49,7 +49,8 @@
 
     <div class="footer">
       <button mat-raised-button class="button-actions" (click)="openStrava()">
-      <img src="assets/images/strava.svg" class="strava-logo" /> Voir sur Strava
+      <img src="assets/images/strava.svg" class="strava-logo" /> 
+      {{ 'i18n.page.activity_dialog.open_on_strava' | translate }}
       </button>
     </div>
 
