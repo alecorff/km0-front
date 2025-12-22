@@ -41,7 +41,7 @@ export class LayoutComponent implements OnInit {
 
   user: User | null = null;
 
-  isLoading: boolean = false;
+  loading$ = this.globalService.loading$;
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
@@ -53,7 +53,6 @@ export class LayoutComponent implements OnInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) { 
-    this.globalService.loading$.subscribe(val => this.isLoading = val);
   }
 
   ngOnInit() {
@@ -78,7 +77,7 @@ export class LayoutComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
-        this.isLoading = true;
+        this.globalService.startLoading();
         this.activityService.syncActivities(this.user?.lastSync).subscribe(result => {
           // On met à jour la date de dernière synchronisation
           if (this.user) {
@@ -97,7 +96,7 @@ export class LayoutComponent implements OnInit {
             }
           );
 
-          this.isLoading = false;
+          this.globalService.stopLoading();
         })
       }
     });

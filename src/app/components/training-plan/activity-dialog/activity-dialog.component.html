@@ -1,0 +1,37 @@
+<div class="activity-dialog">
+  <h2 mat-dialog-title class="title">{{ data.name }}</h2>
+  <h3 class="subtitle subtitle-line">
+    <img class="flag" [src]="'assets/images/flag/' + country + '.png'" />
+    <span>{{ city }}</span>
+    <span>•</span>
+    <span>
+      {{ data.startDateLocal | date:'dd MMM yyyy' }}, {{ data.startDateLocal | date:'HH:mm' }}
+    </span>
+  </h3>
+  <mat-divider></mat-divider>
+
+  <!-- Carte / Polyline -->
+  <div class="map-container">
+    <canvas #canvas width="300" height="300"></canvas>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-row">
+      <div class="stat"><mat-icon>straighten</mat-icon>{{ data.distance }} km</div>
+      <div class="stat"><mat-icon>terrain</mat-icon>{{ data.totalElevationGain }} m D+</div>
+      <div class="stat" *ngIf="data.averageHeartrate"><mat-icon>favorite</mat-icon>{{ data.averageHeartrate }} bpm</div>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><mat-icon>timer</mat-icon>{{ formatTime(data.movingTime) }}</div>
+      <div class="stat" *ngIf="data.averageSpeed"><mat-icon>speed</mat-icon>{{ data.averageSpeed }}</div>
+    </div>
+    <div class="stat-row" *ngIf="data.sessionType">
+      <div class="stat">{{ data.sessionType }}</div>
+    </div>
+  </div>
+
+  <button mat-raised-button class="button-actions" (click)="openStrava()">
+     <img src="assets/images/strava.svg" class="strava-logo" /> Voir sur Strava
+  </button>
+</div>

@@ -61,7 +61,7 @@
 
 
   <div class="main-content">
-    <app-loader *ngIf="isLoading"></app-loader>    
+    <app-loader *ngIf="loading$ | async"></app-loader>   
     <router-outlet></router-outlet>
   </div>
 </mat-sidenav-container>

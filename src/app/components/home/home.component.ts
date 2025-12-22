@@ -174,7 +174,7 @@ export class HomeComponent implements AfterViewInit {
 
     // semaines écoulées
     let weeksDone =
-      Math.floor((todayWeek.getTime() - startWeek.getTime()) / MS_PER_WEEK) + 1;
+      Math.floor((todayWeek.getTime() - startWeek.getTime()) / MS_PER_WEEK);
 
     // bornes
     weeksDone = Math.max(0, Math.min(weeksDone, totalWeeks));
