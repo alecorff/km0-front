@@ -105,6 +105,9 @@ export class HomeComponent implements AfterViewInit {
       data: {
       },
       disableClose: false,
+      width: '100%',
+      maxWidth: '600px',
+      height: '600px',
       panelClass: 'primary-dialog'
     });
 

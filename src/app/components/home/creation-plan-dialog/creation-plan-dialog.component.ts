@@ -10,7 +10,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
-import { Country } from 'src/app/enum/country';
+import { Country } from 'src/app/enum/enum';
 import { TrainingPlanService } from 'src/app/services/training-plan.service';
 
 @Component({
@@ -41,7 +41,7 @@ export class CreatePlanDialogComponent implements OnInit {
   form!: FormGroup;
 
   trainingTypes = [
-    { value: 'RACE', label: this.translateService.instant('i18n.page.home.create_dialog.fields.trainingTypes.race') },
+    { value: 'RUNNING', label: this.translateService.instant('i18n.page.home.create_dialog.fields.trainingTypes.running') },
     { value: 'TRAIL', label: this.translateService.instant('i18n.page.home.create_dialog.fields.trainingTypes.trail') },
     { value: 'FITNESS', label: this.translateService.instant('i18n.page.home.create_dialog.fields.trainingTypes.fitness') },
     { value: 'OTHER', label: this.translateService.instant('i18n.page.home.create_dialog.fields.trainingTypes.other') }
@@ -96,7 +96,7 @@ export class CreatePlanDialogComponent implements OnInit {
     this.form.get('type')!.valueChanges.subscribe(type => {
       this.resetConditionalFields();
 
-      if (type === 'RACE' || type === 'TRAIL') {
+      if (type === 'RUNNING' || type === 'TRAIL') {
         this.form.get('distanceKm')!.setValidators([Validators.required, Validators.min(1)]);
       }
 
@@ -145,7 +145,7 @@ export class CreatePlanDialogComponent implements OnInit {
       fitnessGoal: value.fitnessGoal ?? null,
 
       distanceKm:
-        value.type === 'RACE' || value.type === 'TRAIL'
+        value.type === 'RUNNING' || value.type === 'TRAIL'
           ? value.distanceKm
           : null,
 

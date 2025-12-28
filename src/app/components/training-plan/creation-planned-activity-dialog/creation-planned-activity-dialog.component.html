@@ -1,0 +1,126 @@
+<h2 mat-dialog-title class="title">{{ 'i18n.page.plan.create_planned_activity_dialog.title' | translate }}</h2>
+<mat-divider></mat-divider>
+
+<form [formGroup]="form" mat-dialog-content class="form-content">
+  <!-- Titre -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>{{ 'i18n.page.plan.create_planned_activity_dialog.fields.name' | translate }}</mat-label>
+    <input matInput formControlName="name">
+    <mat-error *ngIf="form.get('name')?.hasError('required')">
+      {{ 'i18n.page.plan.create_planned_activity_dialog.errorMessage.field' | translate }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Date -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>{{ 'i18n.page.plan.create_planned_activity_dialog.fields.date' | translate }}</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="date" [min]="today" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="form.get('date')?.hasError('required')">
+      {{ 'i18n.page.plan.create_planned_activity_dialog.errorMessage.date' | translate }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Session type -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>{{ 'i18n.page.plan.create_planned_activity_dialog.fields.type' | translate }}</mat-label>
+
+    <mat-select formControlName="sessionType">
+      <ng-container *ngFor="let category of categories">
+        <mat-optgroup
+          [label]="'i18n.page.plan.create_planned_activity_dialog.session_category.' + category | translate">
+          <mat-option *ngFor="let session of filteredSessionTypes[category]" [value]="session.code">
+            {{ session.label }}
+          </mat-option>
+        </mat-optgroup>
+      </ng-container>
+    </mat-select>
+
+    <mat-error *ngIf="form.get('sessionType')?.hasError('required')">
+      {{ 'i18n.page.home.create_dialog.errorMessage.field' | translate }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Case à cocher -->
+  <mat-checkbox class="custom-checkbox" formControlName="defineContent">
+    Définir le contenu de la séance (optionnel)
+  </mat-checkbox>
+
+  <!-- Champs optionnels -->
+  <div class="planned-content" *ngIf="form.get('defineContent')?.value">
+    <span class="step-title">Etapes</span>
+    <div class="training-steps" cdkDropList (cdkDropListDropped)="drop($any($event))">
+      <div class="training-step" *ngFor="let step of stepGroups; let i = index" [formGroup]="step" cdkDrag>
+        <!-- Contenu -->
+        <div class="step-content">
+          <!-- Ligne infos -->
+          <div class="step-info">
+
+            <!-- Type + mesure -->
+            <button mat-button class="step-type" [matMenuTriggerFor]="typeMenu">
+              {{ step.value.type === 'distance' ? 'Distance' : 'Temps' }} :
+              <span class="step-value">
+                <ng-container *ngIf="step.value.type === 'distance'; else timeValue">
+                  {{ step.value.distance | number:'1.2-2' || '—' }} km
+                </ng-container>
+                <ng-template #timeValue>
+                  {{ step.value.time | duration }}
+                </ng-template>
+              </span>
+              <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+
+            <mat-menu #typeMenu="matMenu">
+              <button mat-menu-item (click)="pickNumericValue(step, 'distance')">
+                Distance
+              </button>
+              <button mat-menu-item (click)="pickNumericValue(step, 'time')">
+                Temps
+              </button>
+            </mat-menu>
+
+            <!-- Intensité -->
+            <button mat-button class="step-intensity" (click)="pickNumericValue(step, 'pace')">
+              Allure : {{ step.value.pace | pace }} min/km
+              <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Drag -->
+        <div class="icon-actions">
+          <mat-icon class="drag-icon" cdkDragHandle>
+            reorder
+          </mat-icon>
+          <mat-icon (click)="removeStep(i)" class="remove">
+            delete
+          </mat-icon>
+        </div>
+
+
+      </div>
+
+      <!-- Actions -->
+      <div class="step-actions">
+        <button mat-stroked-button class="action-button" (click)="addStep()">
+          <mat-icon>add</mat-icon>
+          Ajouter une étape
+        </button>
+
+        <button mat-stroked-button class="action-button" (click)="addRepetition()">
+          <mat-icon>repeat</mat-icon>
+          Ajouter une répétition
+        </button>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+<mat-dialog-actions class="submit-action">
+  <button mat-raised-button class="button-actions" [disabled]="form.invalid" (click)="submit()">
+    {{ 'i18n.page.plan.create_planned_activity_dialog.actions.submit' | translate }}
+  </button>
+</mat-dialog-actions>

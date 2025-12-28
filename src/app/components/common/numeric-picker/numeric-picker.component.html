@@ -1,0 +1,18 @@
+<div class="picker-container">
+  <div class="picker-title">{{ 'i18n.page.numeric_picker.title.' + type | translate }}</div>
+  <div class="picker-columns">
+    <div class="column" *ngFor="let col of getColumns(); let i = index">
+      <button (click)="updateValue(col.value, col.step)">▲</button>
+      <div class="value">
+        {{ getValue(col.value) | number:'2.0' }}
+        <span *ngIf="col.separator && i < getColumns().length - 1">{{ col.separator }}</span>
+      </div>
+      <button (click)="updateValue(col.value, -col.step)">▼</button>
+      <div class="label">{{ col.label }}</div>
+    </div>
+  </div>
+
+  <button mat-raised-button class="button-actions" (click)=submit()>
+    {{ 'i18n.page.numeric_picker.action' | translate }}
+  </button>
+</div>

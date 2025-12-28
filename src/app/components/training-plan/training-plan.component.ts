@@ -13,6 +13,7 @@ import { BehaviorSubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityDialogComponent } from './activity-dialog/activity-dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
+import { CreationPlannedActivityDialogComponent } from './creation-planned-activity-dialog/creation-planned-activity-dialog.component';
 
 registerLocaleData(localeFr);
 
@@ -101,7 +102,7 @@ export class TrainingPlanComponent implements OnInit {
         if (this.currentPlan.type === 'TRAIL') {
           this.totalElevation = activities.reduce((sum, a) => sum + (a.totalElevationGain ?? 0), 0);
         }
-        
+
         const totalTimeSeconds = activities.reduce((sum, a) => sum + (a.movingTime ?? 0), 0);
         this.totalTime = this.formatSeconds(totalTimeSeconds);
 
@@ -128,8 +129,8 @@ export class TrainingPlanComponent implements OnInit {
     const seconds = totalSeconds % 60;
 
     return `${hours.toString().padStart(2, '0')}:` +
-          `${minutes.toString().padStart(2, '0')}:` +
-          `${seconds.toString().padStart(2, '0')}`;
+      `${minutes.toString().padStart(2, '0')}:` +
+      `${seconds.toString().padStart(2, '0')}`;
   }
 
   /**
@@ -314,17 +315,17 @@ export class TrainingPlanComponent implements OnInit {
     const d = new Date(date);
     const start = new Date(this.currentPlan.startDate);
     const end = new Date(this.currentPlan.endDate);
-    
+
     if (d.getFullYear() < start.getFullYear() ||
-        (d.getFullYear() === start.getFullYear() && d.getMonth() < start.getMonth()) ||
-        (d.getFullYear() === start.getFullYear() && d.getMonth() === start.getMonth() && d.getDate() < start.getDate())
+      (d.getFullYear() === start.getFullYear() && d.getMonth() < start.getMonth()) ||
+      (d.getFullYear() === start.getFullYear() && d.getMonth() === start.getMonth() && d.getDate() < start.getDate())
     ) {
       return true;
     }
 
     if (d.getFullYear() > end.getFullYear() ||
-        (d.getFullYear() === end.getFullYear() && d.getMonth() > end.getMonth()) ||
-        (d.getFullYear() === end.getFullYear() && d.getMonth() === end.getMonth() && d.getDate() > end.getDate())
+      (d.getFullYear() === end.getFullYear() && d.getMonth() > end.getMonth()) ||
+      (d.getFullYear() === end.getFullYear() && d.getMonth() === end.getMonth() && d.getDate() > end.getDate())
     ) {
       return true;
     }
@@ -411,6 +412,28 @@ export class TrainingPlanComponent implements OnInit {
     });
 
     return activitiesForDay.length > 1 ? activitiesForDay.length : null;
+  }
+
+  planSession() {
+    const dialogRef = this.dialog.open(CreationPlannedActivityDialogComponent, {
+      data: this.currentPlan,
+      disableClose: false,
+      width: '100%',
+      maxWidth: '600px',
+      height: '600px',
+      panelClass: 'primary-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.globalService.startLoading();
+        // eregistrement de la séance planifiée
+
+        // success message
+
+        this.globalService.stopLoading();
+      }
+    });
   }
 
 }

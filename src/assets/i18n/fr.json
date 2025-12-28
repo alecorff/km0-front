@@ -58,7 +58,7 @@
                         "fitnessGoal": "Objectif principal",
                         "date": "Période de préparation",
                         "trainingTypes": {
-                            "race": "Course",
+                            "running": "Course à pied",
                             "trail": "Trail",
                             "fitness": "Remise en forme",
                             "other": "Autre"
@@ -84,7 +84,28 @@
                 }
             },
             "plan": {
-                
+                "create_planned_activity_dialog": {
+                    "title": "Nouvelle séance",
+                    "fields": {
+                        "name": "Titre de la séance",
+                        "date": "Date de la séance",
+                        "type": "Type de séance"
+                    },
+                    "actions": {
+                        "submit": "Planifier"
+                    },
+                    "errorMessage": {
+                        "field": "Champ obligatoire",
+                        "date": "Date obligatoire"
+                    },
+                    "session_category": {
+                        "endurance": "Endurance",
+                        "intensite": "Intensité",
+                        "specific": "Allures spécifiques",
+                        "trail": "Trail",
+                        "renfo": "Renforcement"
+                    }
+                }
             },
             "activity_dialog": {
                 "metrics": {
@@ -93,6 +114,21 @@
                     "heartrate": "bpm"
                 },
                 "open_on_strava": "Voir sur Strava"
+            },
+            "numeric_picker": {
+                "title": {
+                    "distance": "Distance",
+                    "time": "Durée",
+                    "pace": "Allure"
+                },
+                "action": "Définir",
+                "metrics": {
+                    "kilometers": "km",
+                    "meters": "m",
+                    "hour": "h",
+                    "min": "m",
+                    "sec": "s"
+                }
             }
         }
     }

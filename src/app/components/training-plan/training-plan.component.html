@@ -78,6 +78,13 @@
         <h2 class="section-title">Plan d'entraînement</h2>
 
         <!-- ===== SEMAINE SÉLECTIONNÉE ===== -->
+        <div *ngIf="selectedWeek.length" class="week-header">
+            <button class="plan-session-link" (click)="planSession()">
+                <mat-icon>more_time</mat-icon>
+                <span>Planifier une séance</span>
+            </button>
+        </div>
+
         <div *ngIf="selectedWeek.length" class="week-cards">
             <div class="week-grid">
                 <div class="week-day-card" [class.today-card]="d.isToday" *ngFor="let d of selectedWeek"
@@ -90,18 +97,18 @@
                     <div class="wd-content" *ngIf="d.activity; else noActivity">
                         <ng-container *ngIf="d.activity.length > 1; else singleActivity">
                             <span matBadge="{{ d.activity.length }}" matBadgeOverlap="false" class="activity-badge week">
-                            <img *ngIf="d.activity[0].sportType === 'TrailRun'; else raceIcon"
+                            <img *ngIf="d.activity[0].sportType === 'TrailRun'; else runIcon"
                                 src="assets/images/trail-icon-48px.svg" />
-                            <ng-template #raceIcon>
+                            <ng-template #runIcon>
                                 <img src="assets/images/run-icon-48px.svg" />
                             </ng-template>
                             </span>
                         </ng-container>
 
                         <ng-template #singleActivity>
-                            <img *ngIf="d.activity.sportType === 'TrailRun'; else raceIcon"
+                            <img *ngIf="d.activity.sportType === 'TrailRun'; else runIcon"
                                 src="assets/images/trail-icon-48px.svg" />
-                            <ng-template #raceIcon>
+                            <ng-template #runIcon>
                             <img src="assets/images/run-icon-48px.svg" />
                             </ng-template>
                         </ng-template>

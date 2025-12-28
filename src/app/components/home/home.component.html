@@ -84,10 +84,10 @@
                                 </div>
 
                                 <div class="carousel-meta">
-                                    <ng-container *ngIf="p.type === 'FITNESS'; else race">
+                                    <ng-container *ngIf="p.type === 'FITNESS'; else running">
                                         <mat-icon>electric_bolt</mat-icon> {{ p.fitnessGoal }}
                                     </ng-container>
-                                    <ng-template #race>
+                                    <ng-template #running>
                                         <div *ngIf="p.distanceKm">
                                             <mat-icon>straighten</mat-icon> {{ p.distanceKm }} {{
                                             'i18n.page.home.carousel.km' | translate }}
