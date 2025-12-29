@@ -50,71 +50,125 @@
   <!-- Champs optionnels -->
   <div class="planned-content" *ngIf="form.get('defineContent')?.value">
     <span class="step-title">Etapes</span>
-    <div class="training-steps" cdkDropList (cdkDropListDropped)="drop($any($event))">
-      <div class="training-step" *ngFor="let step of stepGroups; let i = index" [formGroup]="step" cdkDrag>
-        <!-- Contenu -->
-        <div class="step-content">
-          <!-- Ligne infos -->
-          <div class="step-info">
 
-            <!-- Type + mesure -->
-            <button mat-button class="step-type" [matMenuTriggerFor]="typeMenu">
-              {{ step.value.type === 'distance' ? 'Distance' : 'Temps' }} :
-              <span class="step-value">
-                <ng-container *ngIf="step.value.type === 'distance'; else timeValue">
-                  {{ step.value.distance | number:'1.2-2' || '—' }} km
-                </ng-container>
-                <ng-template #timeValue>
-                  {{ step.value.time | duration }}
-                </ng-template>
-              </span>
+    <div class="training-steps" cdkDropList (cdkDropListDropped)="drop($any($event))">
+      <div *ngFor="let ctrl of steps.controls; let i = index" cdkDrag class="training-block">
+
+        <!-- ================= ÉTAPE SIMPLE ================= -->
+        <ng-container *ngIf="ctrl.value.kind === 'step'" [formGroup]="asFormGroup(ctrl)">
+
+          <div class="training-step">
+            <!-- Contenu -->
+            <div class="step-content">
+
+              <!-- Ligne infos -->
+              <div class="step-info">
+                <button mat-button class="step-type" [matMenuTriggerFor]="typeMenu">
+                  {{ ctrl.value.type === 'distance' ? 'Distance' : 'Temps' }} :
+                  <span class="step-value">
+                    <ng-container *ngIf="ctrl.value.type === 'distance'; else timeTpl">
+                      {{ ctrl.value.distance | number:'1.2-2' || '—' }} km
+                    </ng-container>
+                    <ng-template #timeTpl>
+                      {{ ctrl.value.time | duration }}
+                    </ng-template>
+                  </span>
+                  <mat-icon>arrow_drop_down</mat-icon>
+                </button>
+
+                <mat-menu #typeMenu="matMenu">
+                  <button mat-menu-item (click)="pickNumericValue(ctrl,'distance')">Distance</button>
+                  <button mat-menu-item (click)="pickNumericValue(ctrl,'time')">Temps</button>
+                </mat-menu>
+
+                <button mat-button (click)="pickNumericValue(ctrl,'pace')">
+                  Allure : {{ ctrl.value.pace | pace }} min/km
+                </button>
+              </div>
+            </div>
+
+            <div class="icon-actions">
+              <mat-icon class="drag-icon" cdkDragHandle>reorder</mat-icon>
+              <mat-icon class="remove" (click)="removeStep(i)">delete</mat-icon>
+            </div>
+          </div>
+
+        </ng-container>
+
+        <!-- ================= RÉPÉTITION ================= -->
+        <ng-container *ngIf="ctrl.value.kind === 'repeat'" [formGroup]="asFormGroup(ctrl)">
+          <div class="repetition-header" [formGroup]="asFormGroup(ctrl)">
+            <button mat-button class="repetition-count" [matMenuTriggerFor]="countMenu">
+              {{ ctrl.value.repetitionCount }}
               <mat-icon>arrow_drop_down</mat-icon>
             </button>
 
-            <mat-menu #typeMenu="matMenu">
-              <button mat-menu-item (click)="pickNumericValue(step, 'distance')">
-                Distance
-              </button>
-              <button mat-menu-item (click)="pickNumericValue(step, 'time')">
-                Temps
+            <span class="times-label">fois</span>
+            <mat-menu #countMenu="matMenu">
+              <button mat-menu-item *ngFor="let count of repetitionCounts" (click)="ctrl.get('repetitionCount')?.setValue(count)">
+                {{ count }}
               </button>
             </mat-menu>
 
-            <!-- Intensité -->
-            <button mat-button class="step-intensity" (click)="pickNumericValue(step, 'pace')">
-              Allure : {{ step.value.pace | pace }} min/km
-              <mat-icon>arrow_drop_down</mat-icon>
-            </button>
-
+            <mat-icon class="drag-icon" cdkDragHandle>reorder</mat-icon>
+            <mat-icon class="remove" (click)="removeStep(i)">delete</mat-icon>
           </div>
-        </div>
 
-        <!-- Drag -->
-        <div class="icon-actions">
-          <mat-icon class="drag-icon" cdkDragHandle>
-            reorder
-          </mat-icon>
-          <mat-icon (click)="removeStep(i)" class="remove">
-            delete
-          </mat-icon>
-        </div>
+          <div class="repetition-steps" formArrayName="steps">
+            <div *ngFor="let sub of getRepetitionStepGroups(ctrl); let j = index" [formGroup]="sub" class="training-step sub-step">
 
+              <div class="step-content">
+                <div class="step-info">
+                  <button mat-button class="step-type" [matMenuTriggerFor]="typeMenu">
+                    {{ sub.value.type === 'distance' ? 'Distance' : 'Temps' }} :
+                    <span class="step-value">
+                      <ng-container *ngIf="sub.value.type === 'distance'; else timeTpl">
+                        {{ sub.value.distance | number:'1.2-2' || '—' }} km
+                      </ng-container>
+                      <ng-template #timeTpl>
+                        {{ sub.value.time | duration }}
+                      </ng-template>
+                    </span>
+                    <mat-icon>arrow_drop_down</mat-icon>
+                  </button>
 
-      </div>
+                  <mat-menu #typeMenu="matMenu">
+                    <button mat-menu-item (click)="pickNumericValue(sub,'distance')">Distance</button>
+                    <button mat-menu-item (click)="pickNumericValue(sub,'time')">Temps</button>
+                  </mat-menu>
 
-      <!-- Actions -->
-      <div class="step-actions">
-        <button mat-stroked-button class="action-button" (click)="addStep()">
-          <mat-icon>add</mat-icon>
-          Ajouter une étape
-        </button>
+                  <button mat-button (click)="pickNumericValue(sub,'pace')">
+                    Allure : {{ sub.value.pace | pace }} min/km
+                  </button>
+                </div>
+              </div>
 
-        <button mat-stroked-button class="action-button" (click)="addRepetition()">
-          <mat-icon>repeat</mat-icon>
-          Ajouter une répétition
-        </button>
+              <div class="icon-actions">
+                <mat-icon class="drag-icon" cdkDragHandle>reorder</mat-icon>
+                <mat-icon class="remove" (click)="removeRepetitionStep(ctrl, j)">delete</mat-icon>
+              </div>
+
+            </div>
+          </div>
+
+        </ng-container>
+
       </div>
     </div>
+
+    <!-- ACTIONS -->
+    <div class="step-actions">
+      <button mat-stroked-button class="action-button" (click)="addStep()">
+        <mat-icon>add</mat-icon>
+        Ajouter une étape
+      </button>
+
+      <button mat-stroked-button class="action-button" (click)="addRepetition()">
+        <mat-icon>repeat</mat-icon>
+        Ajouter une répétition
+      </button>
+    </div>
+
   </div>
 
 </form>

@@ -18,6 +18,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { MatMenuModule } from '@angular/material/menu';
 import { DurationPipe } from '../../common/pipe/duration.pipe';
 import { PacePipe } from '../../common/pipe/pace.pipe';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -40,7 +41,8 @@ import { PacePipe } from '../../common/pipe/pace.pipe';
     MatMenuModule,
     NumericPickerComponent,
     DurationPipe,
-    PacePipe
+    PacePipe,
+    DragDropModule
   ],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'ja-JP' }, provideNativeDateAdapter()],
   templateUrl: './creation-planned-activity-dialog.component.html',
@@ -54,7 +56,7 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
   form!: FormGroup;
   today = new Date();
 
-  currentPlanType!:  'RUNNING' | 'TRAIL' | 'FITNESS' | 'OTHER';
+  currentPlanType!: 'RUNNING' | 'TRAIL' | 'FITNESS' | 'OTHER';
   filteredSessionTypes: Record<string, TrainingSessionType[]> = {};
 
   stepsForm!: FormArray;
@@ -63,133 +65,141 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
   plannedTime!: number;
   plannedPace!: number;
 
+  repetitionCounts = Array.from({ length: 50 }, (_, i) => i + 1);
+
   constructor(
-      private fb: FormBuilder, 
-      private dialogRef: MatDialogRef<CreationPlannedActivityDialogComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: any,
-      private dialog: MatDialog
-    ) { 
-      this.stepsForm = this.fb.array([this.createStep()]);
-    }
-  
-    ngOnInit(): void {
-      this._locale.set('fr');
-      this._adapter.setLocale(this._locale());
-  
-      this.form = this.fb.group({
-        name: ['', Validators.required],
-        date: ['', Validators.required],
-        sessionType: ['', Validators.required],
-        defineContent: [false],
-        plannedTime: [null],
-        plannedDistance: [null],
-        plannedPace: [null]
-      });
+    private fb: FormBuilder,
+    private dialogRef: MatDialogRef<CreationPlannedActivityDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialog: MatDialog
+  ) {
+    this.stepsForm = this.fb.array([this.createStep()]);
+  }
 
-      this.loadSessionTypes();
-    }
+  ngOnInit(): void {
+    this._locale.set('fr');
+    this._adapter.setLocale(this._locale());
 
-    /* -------------------- SESSION TYPES -------------------- */
-    loadSessionTypes() {
-      this.currentPlanType = this.data.type;
-      const sessions = TRAINING_SESSION_TYPES.filter(session =>
-        session.allowedPlans.includes(this.currentPlanType)
-      );
+    this.form = this.fb.group({
+      name: ['', Validators.required],
+      date: ['', Validators.required],
+      sessionType: ['', Validators.required],
+      defineContent: [false],
+      steps: this.fb.array([]),
+      plannedTime: [null],
+      plannedDistance: [null],
+      plannedPace: [null]
+    });
 
-      this.filteredSessionTypes = sessions.reduce((acc, session) => {
-        if (!acc[session.category]) {
-          acc[session.category] = [];
-        }
-        acc[session.category].push(session);
-        return acc;
-      }, {} as Record<string, typeof sessions>);
-    }
+    this.loadSessionTypes();
+    this.addStep();
+  }
 
-    get categories(): string[] {
-      return Object.keys(this.filteredSessionTypes);
-    }
+  /* -------------------- SESSION TYPES -------------------- */
+  loadSessionTypes() {
+    this.currentPlanType = this.data.type;
+    const sessions = TRAINING_SESSION_TYPES.filter(session =>
+      session.allowedPlans.includes(this.currentPlanType)
+    );
 
-    /* -------------------- STEPS -------------------- */
-    createStep(isRepetition = false, repetitionCount = 2): FormGroup {
-      return this.fb.group({
-        type: ['distance'],
-        distance: [''],
-        time: [''],
-        pace: [''],
-        isRepetition: [isRepetition],
-        repetitionCount: [repetitionCount]
-      });
-    }
-
-    get steps(): FormArray {
-      return this.stepsForm;
-    }
-
-    get stepGroups(): FormGroup[] {
-      return this.steps.controls as FormGroup[];
-    }
-
-
-    addStep(): void {
-      this.steps.push(this.createStep());
-    }
-
-    removeStep(index: number): void {
-      if (index < 0 || index >= this.steps.length) {
-        return;
+    this.filteredSessionTypes = sessions.reduce((acc, session) => {
+      if (!acc[session.category]) {
+        acc[session.category] = [];
       }
+      acc[session.category].push(session);
+      return acc;
+    }, {} as Record<string, typeof sessions>);
+  }
 
-      this.steps.removeAt(index);
+  get categories(): string[] {
+    return Object.keys(this.filteredSessionTypes);
+  }
+
+  /* -------------------- STEPS -------------------- */
+  get steps(): FormArray {
+    return this.form.get('steps') as FormArray;
+  }
+
+  createStep(): FormGroup {
+    return this.fb.group({
+      kind: ['step'],
+      type: ['distance'],
+      distance: [null],
+      time: [null],
+      pace: [null]
+    });
+  }
+
+  createRepetition(): FormGroup {
+    return this.fb.group({
+      kind: ['repeat'],
+      type: ['distance'],
+      repetitionCount: [2],
+      steps: this.fb.array([
+        this.createStep(),
+        this.createStep()
+      ])
+    });
+  }
+
+  addStep(): void {
+    this.steps.push(this.createStep());
+  }
+
+  addRepetition(): void {
+    this.steps.push(this.createRepetition());
+  }
+
+  removeStep(index: number): void {
+    this.steps.removeAt(index);
+  }
+
+  removeRepetitionStep(repeatCtrl: AbstractControl, stepIndex: number): void {
+    const steps = repeatCtrl.get('steps') as FormArray;
+    steps.removeAt(stepIndex);
+  }
+
+  drop(event: CdkDragDrop<FormGroup[]>): void {
+    moveItemInArray(this.steps.controls, event.previousIndex, event.currentIndex);
+  }
+
+  getRepetitionSteps(ctrl: AbstractControl): FormArray {
+    return ctrl.get('steps') as FormArray;
+  }
+
+  getRepetitionStepGroups(ctrl: AbstractControl): FormGroup[] {
+    const steps = ctrl.get('steps');
+    return steps instanceof FormArray
+      ? (steps.controls as FormGroup[])
+      : [];
+  }
+
+  asFormGroup(ctrl: AbstractControl): FormGroup {
+    return ctrl as FormGroup;
+  }
+
+  pickNumericValue(step: AbstractControl, type: 'distance' | 'time' | 'pace'): void {
+    const group = step as FormGroup;
+
+    if (type !== 'pace') {
+      group.get('type')?.setValue(type);
     }
 
-    // addRepetition(): void {
-    //   this.steps.push(this.createStep());
-    //   this.steps.push(this.createStep());
-    // }
+    const dialogRef = this.dialog.open(NumericPickerComponent, {
+      data: type
+    });
 
-    addRepetition(): void {
-      const repetitionGroup = this.fb.group({
-        repetitionCount: [2],
-        steps: this.fb.array([
-          this.createStep(true),
-          this.createStep(true)
-        ])
-      });
-
-      this.steps.push(repetitionGroup);
-    }
-
-    drop(event: CdkDragDrop<FormGroup[]>): void {
-      moveItemInArray(this.steps.controls, event.previousIndex, event.currentIndex);
-    }
-
-    pickNumericValue(step: any, type: string) {
-      if (type !== 'pace') {
-        step.get('type')?.setValue(type);
+    dialogRef.afterClosed().subscribe(value => {
+      if (value != null) {
+        group.get(type)?.setValue(value);
       }
-      
-      const dialogRef = this.dialog.open(NumericPickerComponent, {
-        data: type,
-        disableClose: false,
-        panelClass: 'primary-dialog'
-      });
+    });
+  }
 
-      dialogRef.afterClosed().subscribe((result) => {
-        if (result) {
-          if (type === "distance") {
-            step.get('distance')?.setValue(result);
-          } else if (type === "time") {
-            step.get('time')?.setValue(result);
-          } else if (type === "pace") {
-            step.get('pace')?.setValue(result);
-          }
-        }
-      });
-    }
 
-    /* -------------------- SUBMIT -------------------- */
-    submit() {
+  /* -------------------- SUBMIT -------------------- */
+  submit() {
 
-    }
+  }
 
 }
