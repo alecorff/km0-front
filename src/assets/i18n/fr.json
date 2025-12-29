@@ -89,7 +89,9 @@
                     "fields": {
                         "name": "Titre de la séance",
                         "date": "Date de la séance",
-                        "type": "Type de séance"
+                        "type": "Type de séance",
+                        "plannedDistance": "Distance estimée",
+                        "plannedTime": "Temps estimé"
                     },
                     "actions": {
                         "submit": "Planifier"

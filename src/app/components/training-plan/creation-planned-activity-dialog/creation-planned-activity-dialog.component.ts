@@ -61,10 +61,6 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
 
   stepsForm!: FormArray;
 
-  plannedDistance!: number;
-  plannedTime!: number;
-  plannedPace!: number;
-
   repetitionCounts = Array.from({ length: 50 }, (_, i) => i + 1);
 
   constructor(
@@ -159,9 +155,34 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
     steps.removeAt(stepIndex);
   }
 
-  drop(event: CdkDragDrop<FormGroup[]>): void {
-    moveItemInArray(this.steps.controls, event.previousIndex, event.currentIndex);
+  addStepToRepetition(repeatCtrl: AbstractControl): void {
+    const steps = repeatCtrl.get('steps') as FormArray;
+    steps.push(this.createStep());
   }
+
+  dropMain(event: CdkDragDrop<AbstractControl[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(this.steps.controls, event.previousIndex, event.currentIndex);
+      return;
+    }
+
+    const moved = event.previousContainer.data[event.previousIndex];
+    event.previousContainer.data.splice(event.previousIndex, 1);
+    this.steps.insert(event.currentIndex, moved);
+  }
+
+  dropIntoRepetition(repeatCtrl: AbstractControl, event: CdkDragDrop<AbstractControl[]>) {
+    const target = repeatCtrl.get('steps') as FormArray;
+    if (event.previousContainer === event.container) {
+      moveItemInArray(target.controls, event.previousIndex, event.currentIndex);
+      return;
+    }
+
+    const moved = event.previousContainer.data[event.previousIndex];
+    event.previousContainer.data.splice(event.previousIndex, 1);
+    target.insert(event.currentIndex, moved);
+  }
+
 
   getRepetitionSteps(ctrl: AbstractControl): FormArray {
     return ctrl.get('steps') as FormArray;

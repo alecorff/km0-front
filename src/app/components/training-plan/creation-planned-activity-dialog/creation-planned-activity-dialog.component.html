@@ -51,8 +51,8 @@
   <div class="planned-content" *ngIf="form.get('defineContent')?.value">
     <span class="step-title">Etapes</span>
 
-    <div class="training-steps" cdkDropList (cdkDropListDropped)="drop($any($event))">
-      <div *ngFor="let ctrl of steps.controls; let i = index" cdkDrag class="training-block">
+    <div class="training-steps" cdkDropList [cdkDropListData]="steps.controls" (cdkDropListDropped)="dropMain($any($event))">
+      <div *ngFor="let ctrl of steps.controls; let i = index" class="training-block" cdkDrag [cdkDragData]="ctrl">
 
         <!-- ================= ÉTAPE SIMPLE ================= -->
         <ng-container *ngIf="ctrl.value.kind === 'step'" [formGroup]="asFormGroup(ctrl)">
@@ -98,24 +98,29 @@
         <!-- ================= RÉPÉTITION ================= -->
         <ng-container *ngIf="ctrl.value.kind === 'repeat'" [formGroup]="asFormGroup(ctrl)">
           <div class="repetition-header" [formGroup]="asFormGroup(ctrl)">
-            <button mat-button class="repetition-count" [matMenuTriggerFor]="countMenu">
-              {{ ctrl.value.repetitionCount }}
-              <mat-icon>arrow_drop_down</mat-icon>
-            </button>
-
-            <span class="times-label">fois</span>
-            <mat-menu #countMenu="matMenu">
-              <button mat-menu-item *ngFor="let count of repetitionCounts" (click)="ctrl.get('repetitionCount')?.setValue(count)">
-                {{ count }}
+            <div class="repetition-info">
+              <button mat-button class="repetition-count" [matMenuTriggerFor]="countMenu">
+                {{ ctrl.value.repetitionCount }}
+                <mat-icon>arrow_drop_down</mat-icon>
               </button>
-            </mat-menu>
 
-            <mat-icon class="drag-icon" cdkDragHandle>reorder</mat-icon>
-            <mat-icon class="remove" (click)="removeStep(i)">delete</mat-icon>
+              <span class="times-label">fois</span>
+              <mat-menu #countMenu="matMenu">
+                <button mat-menu-item *ngFor="let count of repetitionCounts" (click)="ctrl.get('repetitionCount')?.setValue(count)">
+                  {{ count }}
+                </button>
+              </mat-menu>
+            </div>
+
+            <div class="repetition-actions">
+              <mat-icon class="pointer" (click)="addStepToRepetition(ctrl)">add</mat-icon>
+              <mat-icon class="move" cdkDragHandle>reorder</mat-icon>
+              <mat-icon class="pointer" (click)="removeStep(i)">delete</mat-icon>
+            </div>      
           </div>
 
-          <div class="repetition-steps" formArrayName="steps">
-            <div *ngFor="let sub of getRepetitionStepGroups(ctrl); let j = index" [formGroup]="sub" class="training-step sub-step">
+          <div class="repetition-steps" formArrayName="steps" cdkDropList [cdkDropListData]="getRepetitionSteps(ctrl).controls" (cdkDropListDropped)="dropIntoRepetition(ctrl, $event)">
+            <div *ngFor="let sub of getRepetitionStepGroups(ctrl); let j = index" [formGroup]="sub" class="training-step sub-step" cdkDrag [cdkDragData]="sub">
 
               <div class="step-content">
                 <div class="step-info">
@@ -169,8 +174,23 @@
       </button>
     </div>
 
-  </div>
+    <!-- APERÇU -->
+    <div class="planned-overview">
+      <span class="step-title">Aperçu</span>
 
+      <div class="inputs-row">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'i18n.page.plan.create_planned_activity_dialog.fields.plannedDistance' | translate }}</mat-label>
+          <input matInput readonly formControlName="plannedDistance">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'i18n.page.plan.create_planned_activity_dialog.fields.plannedTime' | translate }}</mat-label>
+          <input matInput readonly formControlName="plannedTime">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
 </form>
 
 <mat-dialog-actions class="submit-action">

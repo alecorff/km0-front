@@ -176,11 +176,6 @@ mat-divider {
   font-weight: 500;
 }
 
-.drag-icon {
-  cursor: move;
-  color: #777;
-}
-
 .icon-actions {
   display: flex;
   align-items: center;
@@ -188,6 +183,11 @@ mat-divider {
 
   .remove {
     cursor: pointer;
+  }
+
+  .drag-icon {
+    cursor: move;
+    color: #777;
   }
 }
 
@@ -212,26 +212,12 @@ mat-divider {
   color: #f2f1ff;
   font-size: 14px;
   font-weight: 500;
+}
 
-  .remove {
-    cursor: pointer;
-    opacity: 0.8;
-    margin-left: 8px;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-
-  .drag-icon {
-    cursor: move;
-    margin-left: auto;
-    opacity: 0.8;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
+.repetition-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .repetition-count {
@@ -250,6 +236,27 @@ mat-divider {
   font-size: 14px;
   margin-left: 8px;
 }
+
+.repetition-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.7;
+}
+
+.repetition-actions mat-icon {
+  transition: opacity 0.2s;
+}
+
+.repetition-actions mat-icon:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.repetition-actions .move:hover {
+  cursor: move;
+}
+
 
 /* Conteneur des étapes de répétition */
 .repetition-steps {
@@ -297,6 +304,25 @@ mat-divider {
   &:active {
     background-color: rgba(255, 255, 255, 0.15);
   }
+}
+
+/* ===== APERÇU ===== */
+.planned-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 50px;
+}
+
+.planned-overview .inputs-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.planned-overview .inputs-row mat-form-field {
+  flex: 1;
+  min-width: 120px;
 }
 
 
