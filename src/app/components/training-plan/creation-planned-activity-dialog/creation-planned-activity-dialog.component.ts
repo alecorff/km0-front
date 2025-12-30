@@ -89,6 +89,7 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
 
     this.loadSessionTypes();
     this.addStep();
+    this.watchStepsArray();
   }
 
   /* -------------------- SESSION TYPES -------------------- */
@@ -139,25 +140,36 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
   }
 
   addStep(): void {
-    this.steps.push(this.createStep());
+    const step = this.createStep();
+    this.steps.push(step);
+    this.watchStep(step);
+    this.triggerOverviewRecompute();
   }
 
   addRepetition(): void {
-    this.steps.push(this.createRepetition());
+    const repetition = this.createRepetition();
+    this.steps.push(repetition);
+    this.watchRepetition(repetition);
+    this.triggerOverviewRecompute();
+  }
+
+  addStepToRepetition(repeatCtrl: AbstractControl): void {
+    const steps = repeatCtrl.get('steps') as FormArray;
+    const step = this.createStep();
+    steps.push(step);
+    this.watchStep(step);
+    this.triggerOverviewRecompute();
   }
 
   removeStep(index: number): void {
     this.steps.removeAt(index);
+    this.triggerOverviewRecompute();
   }
 
   removeRepetitionStep(repeatCtrl: AbstractControl, stepIndex: number): void {
     const steps = repeatCtrl.get('steps') as FormArray;
     steps.removeAt(stepIndex);
-  }
-
-  addStepToRepetition(repeatCtrl: AbstractControl): void {
-    const steps = repeatCtrl.get('steps') as FormArray;
-    steps.push(this.createStep());
+    this.triggerOverviewRecompute();
   }
 
   dropMain(event: CdkDragDrop<AbstractControl[]>) {
@@ -216,6 +228,130 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
       }
     });
   }
+
+  /* -------------------- CALCUL DE L'APERÇU -------------------- */
+  private computeStep(step: FormGroup): { distance: number; time: number } | null {
+    const type = step.get('type')?.value;
+    const distance = step.get('distance')?.value;
+    const time = step.get('time')?.value;
+    const pace = step.get('pace')?.value;
+
+    if (!pace) {
+      return null;
+    }
+
+    // pace = minutes / km
+    if (type === 'distance' && distance != null) {
+      const computedTime = distance * pace;
+      return { distance, time: computedTime };
+    }
+
+    if (type === 'time' && time != null) {
+      const computedDistance = time / pace;
+      return { distance: computedDistance, time };
+    }
+
+    return null;
+  }
+
+  private computeRepetition(repeatCtrl: FormGroup): { distance: number; time: number } {
+    const repetitionCount = repeatCtrl.get('repetitionCount')?.value ?? 1;
+    const steps = repeatCtrl.get('steps') as FormArray;
+
+    let totalDistance = 0;
+    let totalTime = 0;
+
+    steps.controls.forEach(ctrl => {
+      const result = this.computeStep(ctrl as FormGroup);
+      if (result) {
+        totalDistance += result.distance;
+        totalTime += result.time;
+      }
+    });
+
+    return {
+      distance: totalDistance * repetitionCount,
+      time: totalTime * repetitionCount
+    };
+  }
+
+  private recomputeOverview(): void {
+    let totalDistance = 0;
+    let totalTime = 0;
+
+    this.steps.controls.forEach(ctrl => {
+      const group = ctrl as FormGroup;
+
+      if (group.get('kind')?.value === 'step') {
+        const result = this.computeStep(group);
+        if (result) {
+          totalDistance += result.distance;
+          totalTime += result.time;
+        }
+      }
+
+      if (group.get('kind')?.value === 'repeat') {
+        const result = this.computeRepetition(group);
+        totalDistance += result.distance;
+        totalTime += result.time;
+      }
+    });
+
+    this.form.patchValue(
+      {
+        plannedDistance: totalDistance > 0 ? +totalDistance.toFixed(2) : null,
+        plannedTime: totalTime > 0 ? Math.round(totalTime) : null
+      },
+      { emitEvent: false }
+    );
+  }
+
+  private triggerOverviewRecompute(): void {
+    console.log("test")
+    this.recomputeOverview();
+  }
+
+  // on s'abonne aux changements dans les étapes pour calculer la distance et le temps estimés
+  private watchStepsArray(): void {
+    this.steps.controls.forEach(ctrl => {
+      const group = ctrl as FormGroup;
+
+      if (group.get('kind')?.value === 'step') {
+        this.watchStep(group);
+      }
+
+      if (group.get('kind')?.value === 'repeat') {
+        this.watchRepetition(group);
+      }
+    });
+  }
+
+  private watchStep(step: FormGroup): void {
+    step.valueChanges.subscribe(() => {
+      this.triggerOverviewRecompute();
+    });
+  }
+
+  private watchRepetition(repeatCtrl: FormGroup): void {
+    const steps = repeatCtrl.get('steps') as FormArray;
+
+    // Changement du nombre de répétitions
+    repeatCtrl.get('repetitionCount')?.valueChanges.subscribe(() => {
+      this.triggerOverviewRecompute();
+    });
+
+    // Steps internes
+    steps.controls.forEach(ctrl => {
+      this.watchStep(ctrl as FormGroup);
+    });
+
+    // Ajout / suppression de sous-steps
+    // steps.valueChanges.subscribe(() => {
+    //   this.triggerOverviewRecompute();
+    // });
+  }
+
+
 
 
   /* -------------------- SUBMIT -------------------- */

@@ -44,12 +44,12 @@
 
   <!-- Case à cocher -->
   <mat-checkbox class="custom-checkbox" formControlName="defineContent">
-    Définir le contenu de la séance (optionnel)
+    {{ 'i18n.page.plan.create_planned_activity_dialog.steps.checkbox' | translate }}
   </mat-checkbox>
 
   <!-- Champs optionnels -->
   <div class="planned-content" *ngIf="form.get('defineContent')?.value">
-    <span class="step-title">Etapes</span>
+    <span class="step-title">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.title' | translate }}</span>
 
     <div class="training-steps" cdkDropList [cdkDropListData]="steps.controls" (cdkDropListDropped)="dropMain($any($event))">
       <div *ngFor="let ctrl of steps.controls; let i = index" class="training-block" cdkDrag [cdkDragData]="ctrl">
@@ -64,10 +64,10 @@
               <!-- Ligne infos -->
               <div class="step-info">
                 <button mat-button class="step-type" [matMenuTriggerFor]="typeMenu">
-                  {{ ctrl.value.type === 'distance' ? 'Distance' : 'Temps' }} :
+                  {{ (ctrl.value.type === 'distance' ? 'i18n.page.plan.create_planned_activity_dialog.steps.distance' : 'i18n.page.plan.create_planned_activity_dialog.steps.time') | translate }} :
                   <span class="step-value">
                     <ng-container *ngIf="ctrl.value.type === 'distance'; else timeTpl">
-                      {{ ctrl.value.distance | number:'1.2-2' || '—' }} km
+                      {{ ctrl.value.distance | number:'1.2-2' || '—' }} {{ 'i18n.page.plan.create_planned_activity_dialog.steps.metrics.km' | translate }}
                     </ng-container>
                     <ng-template #timeTpl>
                       {{ ctrl.value.time | duration }}
@@ -77,12 +77,12 @@
                 </button>
 
                 <mat-menu #typeMenu="matMenu">
-                  <button mat-menu-item (click)="pickNumericValue(ctrl,'distance')">Distance</button>
-                  <button mat-menu-item (click)="pickNumericValue(ctrl,'time')">Temps</button>
+                  <button mat-menu-item (click)="pickNumericValue(ctrl,'distance')">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.distance' | translate }}</button>
+                  <button mat-menu-item (click)="pickNumericValue(ctrl,'time')">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.time' | translate }}</button>
                 </mat-menu>
 
                 <button mat-button (click)="pickNumericValue(ctrl,'pace')">
-                  Allure : {{ ctrl.value.pace | pace }} min/km
+                  {{ 'i18n.page.plan.create_planned_activity_dialog.steps.pace' | translate }} : {{ ctrl.value.pace | pace }} {{ 'i18n.page.plan.create_planned_activity_dialog.steps.metrics.pace' | translate }}
                 </button>
               </div>
             </div>
@@ -104,7 +104,7 @@
                 <mat-icon>arrow_drop_down</mat-icon>
               </button>
 
-              <span class="times-label">fois</span>
+              <span class="times-label">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.times' | translate }}</span>
               <mat-menu #countMenu="matMenu">
                 <button mat-menu-item *ngFor="let count of repetitionCounts" (click)="ctrl.get('repetitionCount')?.setValue(count)">
                   {{ count }}
@@ -125,10 +125,10 @@
               <div class="step-content">
                 <div class="step-info">
                   <button mat-button class="step-type" [matMenuTriggerFor]="typeMenu">
-                    {{ sub.value.type === 'distance' ? 'Distance' : 'Temps' }} :
+                    {{ (sub.value.type === 'distance' ? 'i18n.page.plan.create_planned_activity_dialog.steps.distance' : 'i18n.page.plan.create_planned_activity_dialog.steps.time') | translate }} :
                     <span class="step-value">
                       <ng-container *ngIf="sub.value.type === 'distance'; else timeTpl">
-                        {{ sub.value.distance | number:'1.2-2' || '—' }} km
+                        {{ sub.value.distance | number:'1.2-2' || '—' }} {{ 'i18n.page.plan.create_planned_activity_dialog.steps.metrics.km' | translate }}
                       </ng-container>
                       <ng-template #timeTpl>
                         {{ sub.value.time | duration }}
@@ -138,12 +138,12 @@
                   </button>
 
                   <mat-menu #typeMenu="matMenu">
-                    <button mat-menu-item (click)="pickNumericValue(sub,'distance')">Distance</button>
-                    <button mat-menu-item (click)="pickNumericValue(sub,'time')">Temps</button>
+                    <button mat-menu-item (click)="pickNumericValue(sub,'distance')">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.distance' | translate }}</button>
+                    <button mat-menu-item (click)="pickNumericValue(sub,'time')">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.time' | translate }}</button>
                   </mat-menu>
 
                   <button mat-button (click)="pickNumericValue(sub,'pace')">
-                    Allure : {{ sub.value.pace | pace }} min/km
+                    {{ 'i18n.page.plan.create_planned_activity_dialog.steps.pace' | translate }} : {{ sub.value.pace | pace }} {{ 'i18n.page.plan.create_planned_activity_dialog.steps.metrics.pace' | translate }}
                   </button>
                 </div>
               </div>
@@ -165,31 +165,41 @@
     <div class="step-actions">
       <button mat-stroked-button class="action-button" (click)="addStep()">
         <mat-icon>add</mat-icon>
-        Ajouter une étape
+        {{ 'i18n.page.plan.create_planned_activity_dialog.steps.actions.addStep' | translate }}
       </button>
 
       <button mat-stroked-button class="action-button" (click)="addRepetition()">
         <mat-icon>repeat</mat-icon>
-        Ajouter une répétition
+        {{ 'i18n.page.plan.create_planned_activity_dialog.steps.actions.addRepetition' | translate }}
       </button>
     </div>
 
     <!-- APERÇU -->
     <div class="planned-overview">
-      <span class="step-title">Aperçu</span>
+      <span class="step-title">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.overview' | translate }}</span>
 
       <div class="inputs-row">
-        <mat-form-field appearance="outline">
-          <mat-label>{{ 'i18n.page.plan.create_planned_activity_dialog.fields.plannedDistance' | translate }}</mat-label>
-          <input matInput readonly formControlName="plannedDistance">
-        </mat-form-field>
+        <div class="readonly-field">
+          <span class="readonly-label">
+            {{ 'i18n.page.plan.create_planned_activity_dialog.fields.plannedDistance' | translate }}
+          </span>
+          <span class="readonly-value">
+            {{ form.get('plannedDistance')?.value | number:'1.2-2' }} km
+          </span>
+        </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>{{ 'i18n.page.plan.create_planned_activity_dialog.fields.plannedTime' | translate }}</mat-label>
-          <input matInput readonly formControlName="plannedTime">
-        </mat-form-field>
+        <div class="readonly-field">
+          <span class="readonly-label">
+            {{ 'i18n.page.plan.create_planned_activity_dialog.fields.plannedTime' | translate }}
+          </span>
+          <span class="readonly-value">
+            {{ form.get('plannedTime')?.value | duration }}
+          </span>
+        </div>
       </div>
     </div>
+
+
   </div>
 </form>
 

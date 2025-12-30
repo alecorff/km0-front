@@ -93,6 +93,23 @@
                         "plannedDistance": "Distance estimée",
                         "plannedTime": "Temps estimé"
                     },
+                    "steps": {
+                        "checkbox": "Définir le contenu de la séance (optionnel)",
+                        "title": "Etapes",
+                        "distance": "Distance",
+                        "time": "Temps",
+                        "pace": "Allure",
+                        "metrics": {
+                            "km": "km",
+                            "pace": "min/km"
+                        },
+                        "times": "fois",
+                        "actions": {
+                            "addStep": "Ajuter une étape",
+                            "addRepetition": "Ajouter une répétition"
+                        },
+                        "overview": "Aperçu"    
+                    },
                     "actions": {
                         "submit": "Planifier"
                     },

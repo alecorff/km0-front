@@ -320,10 +320,33 @@ mat-divider {
   flex-wrap: wrap;
 }
 
-.planned-overview .inputs-row mat-form-field {
+.readonly-field {
   flex: 1;
   min-width: 120px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  padding: 10px 12px;
+
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
 }
+
+.readonly-label {
+  font-size: 12px;
+  color: #f2f1ff;
+}
+
+.readonly-value {
+  font-size: 16px;
+  font-weight: 500;
+  color: #f2f1ff;
+}
+
+
 
 
 /* ===== SUBMIT ACTION ===== */
