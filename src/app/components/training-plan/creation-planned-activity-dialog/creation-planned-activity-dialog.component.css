@@ -349,3 +349,11 @@ mat-divider {
   transform: none;
   opacity: 1;
 }
+
+/* ===== MOBILE ===== */
+@media (max-width: 480px) {
+  .step-actions {
+    gap: 8px;
+    flex-direction: column;
+  }
+}

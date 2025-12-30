@@ -28,7 +28,7 @@
             </mat-menu>
 
             <!-- Bouton pace -->
-            <button mat-button (click)="onPick('pace')">
+            <button mat-button class="step-type" (click)="onPick('pace')">
                 {{ 'i18n.page.plan.create_planned_activity_dialog.steps.pace' | translate }} :
                 {{ step.value.pace | pace }} {{ 'i18n.page.plan.create_planned_activity_dialog.steps.metrics.pace' |
                 translate }}

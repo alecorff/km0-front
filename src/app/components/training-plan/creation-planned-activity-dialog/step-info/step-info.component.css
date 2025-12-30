@@ -55,3 +55,41 @@
     color: #777;
   }
 }
+
+/* ===== MOBILE ===== */
+@media (max-width: 480px) {
+  .training-step {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 8px 12px;
+  }
+
+  .step-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+  }
+
+  .step-type,
+  .step-intensity {
+    font-size: 12px;
+
+    mat-icon {
+      font-size: 16px;
+    }
+  }
+
+  .step-value {
+    font-size: 12px;
+  }
+
+  .icon-actions {
+    gap: 6px;
+
+    .drag-icon,
+    .remove {
+      font-size: 18px;
+    }
+  }
+}
