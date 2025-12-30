@@ -309,7 +309,6 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
   }
 
   private triggerOverviewRecompute(): void {
-    console.log("test")
     this.recomputeOverview();
   }
 
@@ -346,11 +345,6 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
     steps.controls.forEach(ctrl => {
       this.watchStep(ctrl as FormGroup);
     });
-
-    // Ajout / suppression de sous-steps
-    // steps.valueChanges.subscribe(() => {
-    //   this.triggerOverviewRecompute();
-    // });
   }
 
 
@@ -358,7 +352,20 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
 
   /* -------------------- SUBMIT -------------------- */
   submit() {
+    if (this.form.invalid) return;
 
+    const payload = {
+      planId: this.data.planId,
+      scheduledDate: this.form.get('date')?.value,
+      name: this.form.get('name')?.value,
+      plannedDistanceKm: this.form.get('plannedDistance')?.value,
+      plannedDurationMin: this.form.get('plannedTime')?.value,
+      sessionType: this.form.get('sessionType')?.value,
+      stepsJson: JSON.stringify(this.steps.value),
+      status: 'PLANNED'
+    };
+
+    this.dialogRef.close(payload);
   }
 
 }

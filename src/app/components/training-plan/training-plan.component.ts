@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, LOCALE_ID, OnInit } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { registerLocaleData } from '@angular/common';
@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivityDialogComponent } from './activity-dialog/activity-dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { CreationPlannedActivityDialogComponent } from './creation-planned-activity-dialog/creation-planned-activity-dialog.component';
+import { PlannedActivityService } from 'src/app/services/planned-activity.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 registerLocaleData(localeFr);
 
@@ -66,7 +68,10 @@ export class TrainingPlanComponent implements OnInit {
     private trainingPlanService: TrainingPlanService,
     private activityService: ActivityService,
     private globalService: GlobalService,
-    private dialog: MatDialog
+    private plannedActivityService: PlannedActivityService,
+    private translateService: TranslateService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -424,14 +429,31 @@ export class TrainingPlanComponent implements OnInit {
       panelClass: 'primary-dialog'
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
+    dialogRef.afterClosed().subscribe((payload) => {
+      if (payload) {
         this.globalService.startLoading();
-        // eregistrement de la séance planifiée
+        // enregistrement de la séance planifiée
+        this.plannedActivityService.savePlannedActivity(payload).subscribe({
+          next: (response: any) => {
+            // success message
+            this.snackBar.open(
+              this.translateService.instant('i18n.page.plan.create_planned_activity_dialog.successMessage.success', { name: response.name }),
+              this.translateService.instant('i18n.page.plan.create_planned_activity_dialog.successMessage.action'),
+              {
+                duration: 3000,
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                panelClass: ['app-snackbar']
+              }
+            );
 
-        // success message
-
-        this.globalService.stopLoading();
+            this.globalService.stopLoading();
+          },
+          error: (err) => {
+            console.error('Erreur lors de la planification de la séance', err);
+            this.globalService.stopLoading();
+          }
+        });
       }
     });
   }

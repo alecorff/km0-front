@@ -123,6 +123,10 @@
                         "specific": "Allures spécifiques",
                         "trail": "Trail",
                         "renfo": "Renforcement"
+                    },
+                    "successMessage": {
+                        "success": "Planification de \"{{name}}\" réussie.",
+                        "action": "Fermer"
                     }
                 }
             },
