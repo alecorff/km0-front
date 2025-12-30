@@ -56,43 +56,7 @@
 
         <!-- ================= ÉTAPE SIMPLE ================= -->
         <ng-container *ngIf="ctrl.value.kind === 'step'" [formGroup]="asFormGroup(ctrl)">
-
-          <div class="training-step">
-            <!-- Contenu -->
-            <div class="step-content">
-
-              <!-- Ligne infos -->
-              <div class="step-info">
-                <button mat-button class="step-type" [matMenuTriggerFor]="typeMenu">
-                  {{ (ctrl.value.type === 'distance' ? 'i18n.page.plan.create_planned_activity_dialog.steps.distance' : 'i18n.page.plan.create_planned_activity_dialog.steps.time') | translate }} :
-                  <span class="step-value">
-                    <ng-container *ngIf="ctrl.value.type === 'distance'; else timeTpl">
-                      {{ ctrl.value.distance | number:'1.2-2' || '—' }} {{ 'i18n.page.plan.create_planned_activity_dialog.steps.metrics.km' | translate }}
-                    </ng-container>
-                    <ng-template #timeTpl>
-                      {{ ctrl.value.time | duration }}
-                    </ng-template>
-                  </span>
-                  <mat-icon>arrow_drop_down</mat-icon>
-                </button>
-
-                <mat-menu #typeMenu="matMenu">
-                  <button mat-menu-item (click)="pickNumericValue(ctrl,'distance')">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.distance' | translate }}</button>
-                  <button mat-menu-item (click)="pickNumericValue(ctrl,'time')">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.time' | translate }}</button>
-                </mat-menu>
-
-                <button mat-button (click)="pickNumericValue(ctrl,'pace')">
-                  {{ 'i18n.page.plan.create_planned_activity_dialog.steps.pace' | translate }} : {{ ctrl.value.pace | pace }} {{ 'i18n.page.plan.create_planned_activity_dialog.steps.metrics.pace' | translate }}
-                </button>
-              </div>
-            </div>
-
-            <div class="icon-actions">
-              <mat-icon class="drag-icon" cdkDragHandle>reorder</mat-icon>
-              <mat-icon class="remove" (click)="removeStep(i)">delete</mat-icon>
-            </div>
-          </div>
-
+          <app-step-info [step]="asFormGroup(ctrl)" (pickNumericValue)="pickNumericValue($event.step, $event.type)" (remove)="removeStep(i)"></app-step-info>
         </ng-container>
 
         <!-- ================= RÉPÉTITION ================= -->
@@ -120,39 +84,8 @@
           </div>
 
           <div class="repetition-steps" formArrayName="steps" cdkDropList [cdkDropListData]="getRepetitionSteps(ctrl).controls" (cdkDropListDropped)="dropIntoRepetition(ctrl, $event)">
-            <div *ngFor="let sub of getRepetitionStepGroups(ctrl); let j = index" [formGroup]="sub" class="training-step sub-step" cdkDrag [cdkDragData]="sub">
-
-              <div class="step-content">
-                <div class="step-info">
-                  <button mat-button class="step-type" [matMenuTriggerFor]="typeMenu">
-                    {{ (sub.value.type === 'distance' ? 'i18n.page.plan.create_planned_activity_dialog.steps.distance' : 'i18n.page.plan.create_planned_activity_dialog.steps.time') | translate }} :
-                    <span class="step-value">
-                      <ng-container *ngIf="sub.value.type === 'distance'; else timeTpl">
-                        {{ sub.value.distance | number:'1.2-2' || '—' }} {{ 'i18n.page.plan.create_planned_activity_dialog.steps.metrics.km' | translate }}
-                      </ng-container>
-                      <ng-template #timeTpl>
-                        {{ sub.value.time | duration }}
-                      </ng-template>
-                    </span>
-                    <mat-icon>arrow_drop_down</mat-icon>
-                  </button>
-
-                  <mat-menu #typeMenu="matMenu">
-                    <button mat-menu-item (click)="pickNumericValue(sub,'distance')">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.distance' | translate }}</button>
-                    <button mat-menu-item (click)="pickNumericValue(sub,'time')">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.time' | translate }}</button>
-                  </mat-menu>
-
-                  <button mat-button (click)="pickNumericValue(sub,'pace')">
-                    {{ 'i18n.page.plan.create_planned_activity_dialog.steps.pace' | translate }} : {{ sub.value.pace | pace }} {{ 'i18n.page.plan.create_planned_activity_dialog.steps.metrics.pace' | translate }}
-                  </button>
-                </div>
-              </div>
-
-              <div class="icon-actions">
-                <mat-icon class="drag-icon" cdkDragHandle>reorder</mat-icon>
-                <mat-icon class="remove" (click)="removeRepetitionStep(ctrl, j)">delete</mat-icon>
-              </div>
-
+            <div *ngFor="let sub of getRepetitionStepGroups(ctrl); let j = index" [formGroup]="sub" class="sub-step" cdkDrag [cdkDragData]="sub">
+              <app-step-info [step]="asFormGroup(sub)" (pickNumericValue)="pickNumericValue($event.step, $event.type)" (remove)="removeRepetitionStep(ctrl, j)"></app-step-info>
             </div>
           </div>
 
@@ -203,6 +136,7 @@
   </div>
 </form>
 
+<!-- SUBMIT FORM -->
 <mat-dialog-actions class="submit-action">
   <button mat-raised-button class="button-actions" [disabled]="form.invalid" (click)="submit()">
     {{ 'i18n.page.plan.create_planned_activity_dialog.actions.submit' | translate }}

@@ -19,6 +19,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { DurationPipe } from '../../common/pipe/duration.pipe';
 import { PacePipe } from '../../common/pipe/pace.pipe';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { StepInfoComponent } from './step-info/step-info.component';
 
 
 @Component({
@@ -40,6 +41,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatCheckboxModule,
     MatMenuModule,
     NumericPickerComponent,
+    StepInfoComponent,
     DurationPipe,
     PacePipe,
     DragDropModule

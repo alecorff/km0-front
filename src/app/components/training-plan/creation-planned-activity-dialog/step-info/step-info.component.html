@@ -1,0 +1,44 @@
+<div class="training-step">
+    <div class="step-content">
+        <div class="step-info">
+            <!-- Bouton type -->
+            <button mat-button class="step-type" [matMenuTriggerFor]="typeMenu">
+                {{ (isDistance()
+                ? 'i18n.page.plan.create_planned_activity_dialog.steps.distance'
+                : 'i18n.page.plan.create_planned_activity_dialog.steps.time') | translate }} :
+                <span class="step-value">
+                    <ng-container *ngIf="isDistance(); else timeTpl">
+                        {{ step.value.distance | number:'1.2-2' || '—' }} {{
+                        'i18n.page.plan.create_planned_activity_dialog.steps.metrics.km' | translate }}
+                    </ng-container>
+                    <ng-template #timeTpl>
+                        {{ step.value.time | duration }}
+                    </ng-template>
+                </span>
+                <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+
+            <mat-menu #typeMenu="matMenu">
+                <button mat-menu-item (click)="onPick('distance')">
+                    {{ 'i18n.page.plan.create_planned_activity_dialog.steps.distance' | translate }}
+                </button>
+                <button mat-menu-item (click)="onPick('time')">
+                    {{ 'i18n.page.plan.create_planned_activity_dialog.steps.time' | translate }}
+                </button>
+            </mat-menu>
+
+            <!-- Bouton pace -->
+            <button mat-button (click)="onPick('pace')">
+                {{ 'i18n.page.plan.create_planned_activity_dialog.steps.pace' | translate }} :
+                {{ step.value.pace | pace }} {{ 'i18n.page.plan.create_planned_activity_dialog.steps.metrics.pace' |
+                translate }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="icon-actions">
+        <mat-icon class="drag-icon" cdkDragHandle>reorder</mat-icon>
+        <mat-icon class="remove" (click)="onRemove()">delete</mat-icon>
+    </div>
+</div>
