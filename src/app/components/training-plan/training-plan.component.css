@@ -316,7 +316,8 @@
   justify-content: center;
 }
 
-.activity-badge .mat-badge-content {
+.activity-badge .mat-badge-content,
+.planned-badge .mat-badge-content {
   background-color: #b7b5ff !important;
   color: #000 !important;
   font-size: 0.65rem;
@@ -329,20 +330,31 @@
   left: 35px !important;
 }
 
+.planned-badge.week .mat-badge-content {
+  top: -3px !important;
+  left: 40px !important;
+}
+
 /* Badge pour le mois */
-.activity-badge.month {
+.activity-badge.month,
+.planned-badge.month {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.activity-badge.month img {
+.activity-badge.month img,
+.planned-badge.month img {
   display: block;
 }
 
 .activity-badge.month .mat-badge-content {
   top: -3px !important;
   left: 25px !important;
+}
+.planned-badge.month .mat-badge-content {
+  top: -3px !important;
+  left: 30px !important;
 }
 
 

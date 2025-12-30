@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TrainingPlanService } from 'src/app/services/training-plan.service';
 import { ActivityService } from 'src/app/services/activity.service';
 import { GlobalService } from 'src/app/services/global.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, forkJoin } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityDialogComponent } from './activity-dialog/activity-dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -24,8 +24,10 @@ interface CalendarDay {
   inMonth: boolean;
   isToday: boolean;
   activity?: any;
+  plannedActivity?: any;
   icon?: any;
   multi?: any;
+  multiPlanned?: any;
 }
 
 @Component({
@@ -98,22 +100,17 @@ export class TrainingPlanComponent implements OnInit {
       return;
     }
 
-    this.activityService.getActivitiesForPlanPeriod(this.currentPlan.startDate).subscribe({
-      next: (activities) => {
+    forkJoin({
+      activities: this.activityService.getActivitiesForPlanPeriod(this.currentPlan.startDate),
+      planned: this.plannedActivityService.getPlannedActivitiesForPlan(this.currentPlan.planId)
+    }).subscribe({
+      next: ({ activities, planned }) => {
         this.activities = activities;
+        this.plannedActivities = planned;
 
-        this.totalDistance = activities.reduce((sum, a) => sum + (a.distance ?? 0), 0).toFixed(2);
+        console.log(this.plannedActivities)
 
-        if (this.currentPlan.type === 'TRAIL') {
-          this.totalElevation = activities.reduce((sum, a) => sum + (a.totalElevationGain ?? 0), 0);
-        }
-
-        const totalTimeSeconds = activities.reduce((sum, a) => sum + (a.movingTime ?? 0), 0);
-        this.totalTime = this.formatSeconds(totalTimeSeconds);
-
-        this.attachActivitiesToWeek();
-
-        // On génère le mois courant
+        this.computeTotals();
         this.generateMonth();
         this.selectedDate = new Date();
         this.extractWeek(this.selectedDate);
@@ -123,6 +120,25 @@ export class TrainingPlanComponent implements OnInit {
         this.globalService.stopLoading();
       }
     });
+  }
+
+  /**
+   * Permet de calculer les temps totaux du plan d'entrainement
+   */
+  computeTotals() {
+    this.totalDistance = this.activities
+      .reduce((sum, a) => sum + (a.distance ?? 0), 0)
+      .toFixed(2);
+
+    if (this.currentPlan?.type === 'TRAIL') {
+      this.totalElevation = this.activities
+        .reduce((sum, a) => sum + (a.totalElevationGain ?? 0), 0);
+    }
+
+    const totalTimeSeconds = this.activities
+      .reduce((sum, a) => sum + (a.movingTime ?? 0), 0);
+
+    this.totalTime = this.formatSeconds(totalTimeSeconds);
   }
 
   /**
@@ -147,6 +163,7 @@ export class TrainingPlanComponent implements OnInit {
     }
 
     this.selectedWeek.forEach(day => {
+      // Affichage des séances réelles
       const activitiesForDay = this.activities.filter(a => {
         const activityDate = new Date(a.startDateLocal);
         return activityDate.toDateString() === day.date.toDateString();
@@ -158,6 +175,25 @@ export class TrainingPlanComponent implements OnInit {
         day.activity = activitiesForDay;
       } else {
         day.activity = null;
+      }
+
+      // Affichage des séances planifiées
+      if (!day.activity) {
+        const plannedActivitiesForDay = this.plannedActivities.filter(p => {
+          if (p.status !== 'PLANNED') {
+            return false;
+          }
+          const plannedDate = new Date(p.scheduledDate);
+          return plannedDate.toDateString() === day.date.toDateString();
+        });
+
+        if (plannedActivitiesForDay.length === 1) {
+          day.plannedActivity = plannedActivitiesForDay[0];
+        } else if (plannedActivitiesForDay.length > 1) {
+          day.plannedActivity = plannedActivitiesForDay;
+        } else {
+          day.plannedActivity = null;
+        }
       }
     });
   }
@@ -182,7 +218,8 @@ export class TrainingPlanComponent implements OnInit {
         inMonth: d.getMonth() === month,
         isToday: this.isToday(d),
         icon: this.getDayIcon(d),
-        multi: this.isMultipleActivities(d)
+        multi: this.isMultipleActivities(d),
+        multiPlanned: this.isMultiplePlannedActivities(d)
       });
     }
   }
@@ -404,10 +441,9 @@ export class TrainingPlanComponent implements OnInit {
 
 
   hasPlannedSession(date: Date): boolean {
-    // return this.plannedSessions.some(p =>
-    //   new Date(p.date).toDateString() === date.toDateString()
-    // );
-    return false
+    return this.plannedActivities.some(p =>
+      new Date(p.scheduledDate).toDateString() === date.toDateString()
+    );
   }
 
   isMultipleActivities(d: Date): any {
@@ -417,6 +453,15 @@ export class TrainingPlanComponent implements OnInit {
     });
 
     return activitiesForDay.length > 1 ? activitiesForDay.length : null;
+  }
+
+  isMultiplePlannedActivities(d: Date): any {
+    const plannedActivitiesForDay = this.plannedActivities.filter(a => {
+      const plannedActivityDate = new Date(a.scheduledDate);
+      return plannedActivityDate.toDateString() === d.toDateString();
+    });
+
+    return plannedActivitiesForDay.length > 1 ? plannedActivitiesForDay.length : null;
   }
 
   planSession() {

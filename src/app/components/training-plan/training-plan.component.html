@@ -94,26 +94,33 @@
                         <div class="wd-number">{{ d.date | date:'d MMM' }}</div>
                     </div>
 
-                    <div class="wd-content" *ngIf="d.activity; else noActivity">
+                    <div class="wd-content" *ngIf="d.activity || d.plannedActivity; else noActivity">
+                        <!-- Activité réelle -->
+                        <ng-container *ngIf="d.activity; else plannedActivityBlock">
                         <ng-container *ngIf="d.activity.length > 1; else singleActivity">
                             <span matBadge="{{ d.activity.length }}" matBadgeOverlap="false" class="activity-badge week">
-                            <img *ngIf="d.activity[0].sportType === 'TrailRun'; else runIcon"
-                                src="assets/images/trail-icon-48px.svg" />
-                            <ng-template #runIcon>
-                                <img src="assets/images/run-icon-48px.svg" />
-                            </ng-template>
+                            <img [src]="d.activity[0].sportType === 'TrailRun' ? 'assets/images/trail-icon-48px.svg' : 'assets/images/run-icon-48px.svg'" />
                             </span>
                         </ng-container>
-
                         <ng-template #singleActivity>
-                            <img *ngIf="d.activity.sportType === 'TrailRun'; else runIcon"
-                                src="assets/images/trail-icon-48px.svg" />
-                            <ng-template #runIcon>
-                            <img src="assets/images/run-icon-48px.svg" />
-                            </ng-template>
+                            <img [src]="d.activity.sportType === 'TrailRun' ? 'assets/images/trail-icon-48px.svg' : 'assets/images/run-icon-48px.svg'" />
+                        </ng-template>
+                        </ng-container>
+
+                        <!-- Activité planifiée -->
+                        <ng-template #plannedActivityBlock>
+                        <ng-container *ngIf="d.plannedActivity.length > 1; else singlePlanned">
+                            <span matBadge="{{ d.plannedActivity.length }}" matBadgeOverlap="false" class="planned-badge week">
+                                <img src="assets/images/event-note-48px.svg" />
+                            </span>
+                        </ng-container>
+                        <ng-template #singlePlanned>
+                            <img src="assets/images/event-note-48px.svg" />
+                        </ng-template>
                         </ng-template>
                     </div>
 
+                    <!-- Pas d'activité -->
                     <ng-template #noActivity>
                         <div class="empty-msg">Aucune séance</div>
                     </ng-template>
@@ -159,9 +166,9 @@
                         </span>
 
                         <!-- Planifiée -->
-                        <mat-icon *ngSwitchCase="'PLANNED'">
-                            event
-                        </mat-icon>
+                        <span *ngSwitchCase="'PLANNED'" [matBadge]="day.multiPlanned ? day.multiPlanned : null" matBadgeOverlap="false" class="planned-badge month">
+                            <img src="assets/images/event-note-32px.svg" />
+                        </span>
 
                         <!-- Jour de course -->
                         <mat-icon *ngSwitchCase="'RACE'">

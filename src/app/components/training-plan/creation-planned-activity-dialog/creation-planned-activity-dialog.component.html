@@ -14,7 +14,7 @@
   <!-- Date -->
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>{{ 'i18n.page.plan.create_planned_activity_dialog.fields.date' | translate }}</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="date" [min]="today" />
+    <input matInput [matDatepicker]="picker" formControlName="date" [min]="today" [max]="maxDate" />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
     <mat-error *ngIf="form.get('date')?.hasError('required')">

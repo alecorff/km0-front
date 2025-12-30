@@ -57,6 +57,7 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
 
   form!: FormGroup;
   today = new Date();
+  maxDate!: Date;
 
   currentPlanType!: 'RUNNING' | 'TRAIL' | 'FITNESS' | 'OTHER';
   filteredSessionTypes: Record<string, TrainingSessionType[]> = {};
@@ -77,6 +78,8 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
   ngOnInit(): void {
     this._locale.set('fr');
     this._adapter.setLocale(this._locale());
+
+    this.maxDate = this.data.endDate;
 
     this.form = this.fb.group({
       name: ['', Validators.required],
@@ -354,9 +357,12 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
   submit() {
     if (this.form.invalid) return;
 
+    const date: Date = this.form.get('date')?.value;
+    const scheduledDate = [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
+
     const payload = {
       planId: this.data.planId,
-      scheduledDate: this.form.get('date')?.value,
+      scheduledDate: scheduledDate,
       name: this.form.get('name')?.value,
       plannedDistanceKm: this.form.get('plannedDistance')?.value,
       plannedDurationMin: this.form.get('plannedTime')?.value,
@@ -364,7 +370,6 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
       stepsJson: JSON.stringify(this.steps.value),
       status: 'PLANNED'
     };
-
     this.dialogRef.close(payload);
   }
 
