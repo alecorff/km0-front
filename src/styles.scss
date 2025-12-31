@@ -34,13 +34,14 @@ html, body {
 
 
 // Style des snackbar
-.mat-mdc-snack-bar-container.app-snackbar {
+// SNACKBAR INFO
+.mat-mdc-snack-bar-container.app-snackbar-info {
   padding: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
 }
 
-.mat-mdc-snack-bar-container.app-snackbar
+.mat-mdc-snack-bar-container.app-snackbar-info
 .mdc-snackbar__surface {
   background: rgba(27, 20, 50, 0.95);
   backdrop-filter: blur(10px);
@@ -56,7 +57,7 @@ html, body {
   width: 600px;
 }
 
-.mat-mdc-snack-bar-container.app-snackbar
+.mat-mdc-snack-bar-container.app-snackbar-info
 .mdc-snackbar__label {
   color: #f5f5f5;
   font-family: 'Montserrat', sans-serif;
@@ -64,11 +65,12 @@ html, body {
   line-height: 1.4;
 }
 
-.mat-mdc-snack-bar-container .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
+.mat-mdc-snack-bar-container.app-snackbar-info
+.mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
   color: #a89dff !important;
 }
 
-.mat-mdc-snack-bar-container.app-snackbar
+.mat-mdc-snack-bar-container.app-snackbar-info
 .mdc-snackbar__action {
   color: #a89dff;
   font-family: 'Montserrat', sans-serif;
@@ -81,10 +83,74 @@ html, body {
   transition: background 0.2s ease, color 0.2s ease;
 }
 
-.mat-mdc-snack-bar-container.app-snackbar
+.mat-mdc-snack-bar-container.app-snackbar-info
 .mdc-snackbar__action:hover {
   background: rgba(168, 157, 255, 0.15);
   color: #c8c3ff;
+}
+
+// SNACKBAR ERROR
+.mat-mdc-snack-bar-container.app-snackbar-error {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.mat-mdc-snack-bar-container.app-snackbar-error
+.mdc-snackbar__surface {
+  background: linear-gradient(
+    135deg,
+    rgba(70, 18, 40, 0.95),
+    rgba(45, 14, 30, 0.95)
+  );
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255, 120, 150, 0.25);
+  border-radius: 14px;
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+
+  padding: 14px 18px;
+  min-width: unset;
+  max-width: none !important;
+  width: 600px;
+}
+
+/* Texte */
+.mat-mdc-snack-bar-container.app-snackbar-error
+.mdc-snackbar__label {
+  color: #ffe9ee;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.mat-mdc-snack-bar-container.app-snackbar-error
+.mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
+  color: #ff9fb6 !important;
+}
+
+/* Bouton action */
+.mat-mdc-snack-bar-container.app-snackbar-error
+.mdc-snackbar__action {
+  color: #ff9fb6;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+
+  margin-left: 12px;
+  border-radius: 8px;
+  padding: 6px 10px;
+
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.mat-mdc-snack-bar-container.app-snackbar-error
+.mdc-snackbar__action:hover {
+  background: rgba(255, 159, 182, 0.15);
+  color: #ffd1dc;
 }
 
 

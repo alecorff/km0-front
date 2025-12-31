@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TrainingPlanService } from 'src/app/services/training-plan.service';
 import { ActivityService } from 'src/app/services/activity.service';
 import { GlobalService } from 'src/app/services/global.service';
@@ -40,7 +40,9 @@ interface CalendarDay {
     MatButtonModule,
     MatBadgeModule
   ],
-  providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'fr-FR' }
+  ],
   templateUrl: './training-plan.component.html',
   styleUrl: './training-plan.component.css'
 })
@@ -73,7 +75,8 @@ export class TrainingPlanComponent implements OnInit {
     private plannedActivityService: PlannedActivityService,
     private translateService: TranslateService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -83,13 +86,15 @@ export class TrainingPlanComponent implements OnInit {
       this.globalService.startLoading();
     });
 
-    if (planId) {
-      this.trainingPlanService.getPlanById(planId).subscribe(plan => {
-        this.currentPlan = plan;
-
-        this.loadActivitiesForPlan();
-      });
+    if (!planId) {
+      this.router.navigate(['/'], { queryParams: { code: 404 }});
+      return;
     }
+
+    this.trainingPlanService.getPlanById(planId).subscribe(plan => {
+      this.currentPlan = plan;
+      this.loadActivitiesForPlan();
+    });
   }
 
   /**
@@ -107,8 +112,6 @@ export class TrainingPlanComponent implements OnInit {
       next: ({ activities, planned }) => {
         this.activities = activities;
         this.plannedActivities = planned;
-
-        console.log(this.plannedActivities)
 
         this.computeTotals();
         this.generateMonth();
@@ -488,7 +491,7 @@ export class TrainingPlanComponent implements OnInit {
                 duration: 3000,
                 horizontalPosition: 'center',
                 verticalPosition: 'top',
-                panelClass: ['app-snackbar']
+                panelClass: ['app-snackbar-info']
               }
             );
 

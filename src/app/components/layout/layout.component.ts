@@ -92,7 +92,7 @@ export class LayoutComponent implements OnInit {
               duration: 3000,
               horizontalPosition: 'center',
               verticalPosition: 'top',
-              panelClass: ['app-snackbar']
+              panelClass: ['app-snackbar-info']
             }
           );
 

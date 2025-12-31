@@ -8,6 +8,19 @@ import { TrainingPlanComponent } from './components/training-plan/training-plan.
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
+    path: 'loginSuccess',
+    component: LoginSuccessComponent
+  },
+  {
+    path: '',
     component: LayoutComponent,
     children: [
       {
@@ -18,9 +31,6 @@ export const routes: Routes = [
         path: 'plan/:id',
         component: TrainingPlanComponent
       }
-    ]  
-  },
-  { path: 'login', component: LoginComponent },
-  { path: 'loginSuccess', component: LoginSuccessComponent },
-  { path: 'home', component: HomeComponent },
+    ]
+  }
 ];

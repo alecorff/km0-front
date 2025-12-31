@@ -135,7 +135,7 @@ export class HomeComponent implements AfterViewInit {
             duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top',
-            panelClass: ['app-snackbar']
+            panelClass: ['app-snackbar-info']
           }
         );
 

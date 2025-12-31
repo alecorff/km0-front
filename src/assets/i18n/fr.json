@@ -7,6 +7,7 @@
                     "home": "Accueil",
                     "stats": "Statistiques",
                     "search": "Recherche",
+                    "settings": "Paramètres",
                     "logout": "Déconnexion"
                 },
                 "sync": "Synchroniser",
@@ -151,6 +152,12 @@
                     "hour": "h",
                     "min": "m",
                     "sec": "s"
+                }
+            },
+            "common": {
+                "errorMessage": {
+                    "plan_not_found": "Ce plan n'existe pas ou n'est plus accessible.",
+                    "action": "Fermer"
                 }
             }
         }
