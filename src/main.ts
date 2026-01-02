@@ -8,6 +8,8 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { importProvidersFrom } from '@angular/core';
 import { HttpErrorInterceptor } from './app/interceptor/httpError.interceptor';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { FR_DATE_FORMATS, MondayDateAdapter } from './app/config/monday-date-adapter';
 
 // Fonction pour créer le loader
 export function HttpLoaderFactory(http: HttpClient) {
@@ -29,6 +31,9 @@ bootstrapApplication(AppComponent, {
         defaultLanguage: 'fr'
       })
     ),
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
+    { provide: DateAdapter, useClass: MondayDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: FR_DATE_FORMATS }
   ],
 }).catch(err => console.error(err));

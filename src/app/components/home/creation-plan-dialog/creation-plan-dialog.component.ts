@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { DateAdapter, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -30,14 +29,10 @@ import { map, startWith } from 'rxjs';
     MatInputModule,
     MatDividerModule
   ],
-  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'ja-JP' }, provideNativeDateAdapter()],
   templateUrl: './creation-plan-dialog.component.html',
   styleUrl: './creation-plan-dialog.component.css'
 })
 export class CreatePlanDialogComponent implements OnInit {
-
-  private readonly _adapter = inject<DateAdapter<unknown, unknown>>(DateAdapter);
-  private readonly _locale = signal(inject<unknown>(MAT_DATE_LOCALE));
 
   form!: FormGroup;
 
@@ -73,9 +68,6 @@ export class CreatePlanDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this._locale.set('fr');
-    this._adapter.setLocale(this._locale());
-
     this.form = this.fb.group({
       name: ['', Validators.required],
       type: ['', Validators.required],

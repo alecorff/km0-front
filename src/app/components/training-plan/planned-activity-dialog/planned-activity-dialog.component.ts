@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, inject, OnInit, signal } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { DateAdapter, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -46,14 +45,10 @@ import { StepInfoComponent } from './step-info/step-info.component';
     PacePipe,
     DragDropModule
   ],
-  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'ja-JP' }, provideNativeDateAdapter()],
   templateUrl: './planned-activity-dialog.component.html',
   styleUrl: './planned-activity-dialog.component.css'
 })
 export class PlannedActivityDialogComponent implements OnInit {
-
-  private readonly _adapter = inject<DateAdapter<unknown, unknown>>(DateAdapter);
-  private readonly _locale = signal(inject<unknown>(MAT_DATE_LOCALE));
 
   form!: FormGroup;
   today = new Date();
@@ -67,7 +62,6 @@ export class PlannedActivityDialogComponent implements OnInit {
   repetitionCounts = Array.from({ length: 50 }, (_, i) => i + 1);
 
   isEditMode = false;
-  //plannedActivity!: any;
   plannedActivities: any[] = [];
   currentIndex = 0;
   currentPlannedActivity: any;
@@ -78,15 +72,11 @@ export class PlannedActivityDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialog: MatDialog
   ) {
-    this._locale.set('fr');
-    this._adapter.setLocale(this._locale());
-
     this.stepsForm = this.fb.array([this.createStep()]);
 
     this.maxDate = data.currentPlan.endDate;
 
     this.isEditMode = !!data.plannedActivity;
-    //this.plannedActivity = data.plannedActivity;
 
     this.plannedActivities = Array.isArray(data.plannedActivity) ? data.plannedActivity : [data.plannedActivity];
 
@@ -98,7 +88,6 @@ export class PlannedActivityDialogComponent implements OnInit {
 
     this.currentIndex = 0;
     this.currentPlannedActivity = this.plannedActivities[this.currentIndex];
-    console.log(this.currentPlannedActivity)
   }
 
   ngOnInit() {
