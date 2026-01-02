@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelectModule } from '@angular/material/select';
@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDividerModule } from '@angular/material/divider';
 import { Country } from 'src/app/enum/enum';
 import { TrainingPlanService } from 'src/app/services/training-plan.service';
+import { map, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-creation-plan-dialog',
@@ -61,6 +62,9 @@ export class CreatePlanDialogComponent implements OnInit {
   })).sort((a, b) => a.label.localeCompare(b.label, 'fr'));
   Country: any = Country;
 
+  countryFilterCtrl = new FormControl('');
+  filteredCountries: typeof this.countries = [];
+
   constructor(
     private fb: FormBuilder, 
     private translateService: TranslateService,
@@ -85,6 +89,15 @@ export class CreatePlanDialogComponent implements OnInit {
       fitnessGoal: [''],
       country: [null]
     });
+
+    this.filteredCountries = this.countries;
+    // Filtrage dynamique
+    this.countryFilterCtrl.valueChanges
+      .pipe(
+        startWith(''),
+        map(search => search ? this.filterCountries(search) : this.countries)
+      )
+      .subscribe(filtered => (this.filteredCountries = filtered));
 
     this.handleTypeChanges();
   }
@@ -129,6 +142,14 @@ export class CreatePlanDialogComponent implements OnInit {
     });
   }
 
+  /**
+   * Permet de filtrer la liste des pays
+   */
+  private filterCountries(search: string) {
+    const lower = search.toLowerCase();
+    return this.countries.filter(c => c.label.toLowerCase().includes(lower));
+  }
+
   submit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -170,6 +191,5 @@ export class CreatePlanDialogComponent implements OnInit {
       }
     });
   }
-
 
 }

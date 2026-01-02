@@ -121,7 +121,6 @@ export class HomeComponent implements AfterViewInit {
   }
 
   goToCurrentPlan() {
-    //this.router.navigate([`/plan/${this.currentPlan.planId}`]);
     this.router.navigate([`/plan/${this.currentPlan.planId}`], {
       state: { plannedActivities: this.plannedActivities }
     });

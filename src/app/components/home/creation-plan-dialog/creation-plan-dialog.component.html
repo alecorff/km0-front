@@ -32,7 +32,7 @@
         <mat-label>{{ 'i18n.page.home.create_dialog.fields.distanceKm' | translate }}</mat-label>
         <input matInput formControlName="distanceKm">
         <mat-error *ngIf="form.get('distanceKm')?.hasError('required')">
-            {{ 'i18n.page.home.create_dialog.errorMessage.field' | translate }}
+          {{ 'i18n.page.home.create_dialog.errorMessage.field' | translate }}
         </mat-error>
       </mat-form-field>
 
@@ -57,25 +57,30 @@
         <mat-label>{{ 'i18n.page.home.create_dialog.fields.location' | translate }}</mat-label>
 
         <mat-select formControlName="country">
-
-            <mat-select-trigger>
+          <!-- Trigger -->
+          <mat-select-trigger>
             <ng-container *ngIf="form.get('country')?.value as selected">
-                <div class="country-option">
+              <div class="country-option">
                 <img [src]="'assets/images/flag/' + selected + '.png'" alt="" />
                 <span>{{ Country[selected] }}</span>
-                </div>
+              </div>
             </ng-container>
-            </mat-select-trigger>
+          </mat-select-trigger>
 
-            <mat-option *ngFor="let country of countries" [value]="country.code">
+          <!-- Input pour filtrer -->
+          <mat-option>
+            <input class="test" type="text" placeholder="Rechercher..." [formControl]="countryFilterCtrl" matInput (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" />
+          </mat-option>
+
+          <!-- Liste filtrée -->
+          <mat-option *ngFor="let country of filteredCountries" [value]="country.code">
             <div class="country-option">
-                <img [src]="country.flag" alt="" />
-                <span>{{ country.label }}</span>
+              <img [src]="country.flag" alt="" />
+              <span>{{ country.label }}</span>
             </div>
-            </mat-option>
-
+          </mat-option>
         </mat-select>
-        </mat-form-field>
+      </mat-form-field>
     </div>
   </ng-container>
 
@@ -97,20 +102,20 @@
   <!-- Dates -->
   <div class="row">
     <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'i18n.page.home.create_dialog.fields.date' | translate }}</mat-label>
+      <mat-label>{{ 'i18n.page.home.create_dialog.fields.date' | translate }}</mat-label>
 
-        <mat-date-range-input [rangePicker]="rangePicker">
-            <input matStartDate formControlName="startDate" placeholder="Début">
-            <input matEndDate formControlName="endDate" placeholder="Fin">
-        </mat-date-range-input>
+      <mat-date-range-input [rangePicker]="rangePicker">
+        <input matStartDate formControlName="startDate" placeholder="Début">
+        <input matEndDate formControlName="endDate" placeholder="Fin">
+      </mat-date-range-input>
 
-        <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
-        <mat-date-range-picker #rangePicker></mat-date-range-picker>
+      <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>
+      <mat-date-range-picker #rangePicker></mat-date-range-picker>
 
-        <mat-error *ngIf="form.get('startDate')?.hasError('required') || form.get('endDate')?.hasError('required')">
-            {{ 'i18n.page.home.create_dialog.errorMessage.date' | translate }}
-        </mat-error>
-        </mat-form-field>
+      <mat-error *ngIf="form.get('startDate')?.hasError('required') || form.get('endDate')?.hasError('required')">
+        {{ 'i18n.page.home.create_dialog.errorMessage.date' | translate }}
+      </mat-error>
+    </mat-form-field>
   </div>
 </form>
 
