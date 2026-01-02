@@ -158,6 +158,9 @@
             "common": {
                 "errorMessage": {
                     "plan_not_found": "Ce plan n'existe pas ou n'est plus accessible.",
+                    "planned_activity_not_found": "Cette séance n'existe pas ou n'est plus accessible.",
+                    "bad_status_activity": "Impossible d'éditer une activité complétée.",
+                    "forbidden_planned_activity": "Vous n'êtes pas autorisé à modifier cette séance.",
                     "action": "Fermer"
                 }
             }

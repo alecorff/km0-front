@@ -22,6 +22,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                 const key = error.error?.message;
                 const translateService = this.injector.get(TranslateService);
 
+                // On redirige sur la page d'accueil
                 if (error.status === 403 || error.status === 404) {
                     this.snackBar.open(
                         translateService.instant('i18n.page.common.errorMessage.' + key),
@@ -35,6 +36,20 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                     );
 
                     this.router.navigate(['/']);
+                }
+
+                // On reste sur la page actuelle
+                if (error.status === 500) {
+                    this.snackBar.open(
+                        translateService.instant('i18n.page.common.errorMessage.' + key),
+                        translateService.instant('i18n.page.common.errorMessage.action'),
+                        {
+                            duration: 3000,
+                            horizontalPosition: 'center',
+                            verticalPosition: 'top',
+                            panelClass: ['app-snackbar-error']
+                        }
+                    );
                 }
 
                 return throwError(() => error);
