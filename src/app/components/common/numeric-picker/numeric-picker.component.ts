@@ -42,7 +42,25 @@ export class NumericPickerComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private translateService: TranslateService
   ) {
-    this.type = this.data;
+    
+    this.type = data.type;
+
+    // Initialisation selon la valeur existante
+    if (data.value != null) {
+      if (this.type === 'distance') {
+        this.km = Math.floor(data.value);
+        this.meters = Math.round((data.value - this.km) * 100);
+      } else if (this.type === 'time') {
+        this.hour = Math.floor(data.value / 3600);
+        this.min = Math.floor((data.value % 3600) / 60);
+        this.sec = data.value % 60;
+      } else if (this.type === 'pace') {
+        this.minPace = Math.floor(data.value / 60);
+        this.secPace = data.value % 60;
+      }
+      this.emitValue();
+    }
+
   }
 
   // ------------------------

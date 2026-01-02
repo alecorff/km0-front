@@ -306,8 +306,10 @@ export class PlannedActivityDialogComponent implements OnInit {
       group.get('type')?.setValue(type);
     }
 
+    const currentValue = group.get(type)?.value;
+
     const dialogRef = this.dialog.open(NumericPickerComponent, {
-      data: type
+      data: { type, value: currentValue }
     });
 
     dialogRef.afterClosed().subscribe(value => {
@@ -316,6 +318,7 @@ export class PlannedActivityDialogComponent implements OnInit {
       }
     });
   }
+
 
   /* -------------------- CALCUL DE L'APERÇU -------------------- */
   private computeStep(step: FormGroup): { distance: number; time: number } | null {
