@@ -137,12 +137,6 @@
   width: fit-content;
 }
 
-.footer {
-  display: flex;
-  justify-content: center;
-  padding-bottom: 6px;
-}
-
 /* Bouton */
 .button-actions {
   display: inline-flex;
@@ -188,29 +182,6 @@
   height: 32px;
   display: inline-block;
   vertical-align: middle;
-}
-
-/* Flèches */
-.nav-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
-.nav-footer button mat-icon {
-  font-size: 32px;
-  color: #f0f0ff;
-  transition: color 0.2s ease, opacity 0.2s ease;
-}
-
-.nav-footer button:disabled mat-icon {
-  color: rgba(240, 240, 255, 0.35);
-  opacity: 0.5;
-}
-
-.nav-footer button:not(:disabled):hover mat-icon {
-  color: #b7b5ff;
 }
 
 @media (max-width: 400px) {

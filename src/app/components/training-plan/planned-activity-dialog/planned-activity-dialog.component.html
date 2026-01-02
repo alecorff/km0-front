@@ -51,12 +51,14 @@
   <div class="planned-content" [hidden]="!form.get('defineContent')?.value">
     <span class="step-title">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.title' | translate }}</span>
 
-    <div class="training-steps" formArrayName="steps" cdkDropList [cdkDropListData]="steps.controls" (cdkDropListDropped)="dropMain($any($event))">
+    <div class="training-steps" formArrayName="steps" cdkDropList [cdkDropListData]="steps.controls"
+      (cdkDropListDropped)="dropMain($any($event))">
       <div *ngFor="let ctrl of steps.controls; let i = index" class="training-block" cdkDrag [cdkDragData]="ctrl">
 
         <!-- ================= ÉTAPE SIMPLE ================= -->
         <ng-container *ngIf="ctrl.value.kind === 'step'" [formGroup]="asFormGroup(ctrl)">
-          <app-step-info [step]="asFormGroup(ctrl)" (pickNumericValue)="pickNumericValue($event.step, $event.type)" (remove)="removeStep(i)"></app-step-info>
+          <app-step-info [step]="asFormGroup(ctrl)" (pickNumericValue)="pickNumericValue($event.step, $event.type)"
+            (remove)="removeStep(i)"></app-step-info>
         </ng-container>
 
         <!-- ================= RÉPÉTITION ================= -->
@@ -68,9 +70,11 @@
                 <mat-icon>arrow_drop_down</mat-icon>
               </button>
 
-              <span class="times-label">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.times' | translate }}</span>
+              <span class="times-label">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.times' | translate
+                }}</span>
               <mat-menu #countMenu="matMenu">
-                <button mat-menu-item *ngFor="let count of repetitionCounts" (click)="ctrl.get('repetitionCount')?.setValue(count)">
+                <button mat-menu-item *ngFor="let count of repetitionCounts"
+                  (click)="ctrl.get('repetitionCount')?.setValue(count)">
                   {{ count }}
                 </button>
               </mat-menu>
@@ -80,12 +84,16 @@
               <mat-icon class="pointer" (click)="addStepToRepetition(ctrl)">add</mat-icon>
               <mat-icon class="move" cdkDragHandle>reorder</mat-icon>
               <mat-icon class="pointer" (click)="removeStep(i)">delete</mat-icon>
-            </div>      
+            </div>
           </div>
 
-          <div class="repetition-steps" formArrayName="steps" cdkDropList [cdkDropListData]="getRepetitionSteps(ctrl).controls" (cdkDropListDropped)="dropIntoRepetition(ctrl, $event)">
-            <div *ngFor="let sub of getRepetitionStepGroups(ctrl); let j = index" [formGroup]="sub" class="sub-step" cdkDrag [cdkDragData]="sub">
-              <app-step-info [step]="asFormGroup(sub)" (pickNumericValue)="pickNumericValue($event.step, $event.type)" (remove)="removeRepetitionStep(ctrl, j)"></app-step-info>
+          <div class="repetition-steps" formArrayName="steps" cdkDropList
+            [cdkDropListData]="getRepetitionSteps(ctrl).controls"
+            (cdkDropListDropped)="dropIntoRepetition(ctrl, $event)">
+            <div *ngFor="let sub of getRepetitionStepGroups(ctrl); let j = index" [formGroup]="sub" class="sub-step"
+              cdkDrag [cdkDragData]="sub">
+              <app-step-info [step]="asFormGroup(sub)" (pickNumericValue)="pickNumericValue($event.step, $event.type)"
+                (remove)="removeRepetitionStep(ctrl, j)"></app-step-info>
             </div>
           </div>
 
@@ -142,3 +150,17 @@
     {{ 'i18n.page.plan.create_planned_activity_dialog.actions.submit' | translate }}
   </button>
 </mat-dialog-actions>
+
+<div class="footer nav-footer" *ngIf="plannedActivities.length > 1">
+  <button mat-icon-button (click)="previous()" [disabled]="currentIndex === 0">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
+  <span class="nav-counter">
+    {{ currentIndex + 1 }} / {{ plannedActivities.length }}
+  </span>
+
+  <button mat-icon-button (click)="next()" [disabled]="currentIndex === plannedActivities.length - 1">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>

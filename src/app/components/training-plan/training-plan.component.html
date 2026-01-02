@@ -24,8 +24,8 @@
                     <span>{{ currentPlan.distanceKm }} km</span>
                 </div>
 
-                <div class="separator" *ngIf="currentPlan.elevation"></div>
-                <div class="info-item" *ngIf="currentPlan.elevation">
+                <div class="separator" *ngIf="currentPlan.elevationGain"></div>
+                <div class="info-item" *ngIf="currentPlan.elevationGain">
                     <mat-icon>terrain</mat-icon>
                     <span>{{ currentPlan.elevationGain }} m D+</span>
                 </div>

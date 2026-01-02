@@ -137,6 +137,9 @@ export class CreatePlanDialogComponent implements OnInit {
 
     const value = this.form.value;
 
+    const startDate = [value.startDate.getFullYear(), String(value.startDate.getMonth() + 1).padStart(2, '0'), String(value.startDate.getDate()).padStart(2, '0')].join('-');
+    const endDate = [value.endDate.getFullYear(), String(value.endDate.getMonth() + 1).padStart(2, '0'), String(value.endDate.getDate()).padStart(2, '0')].join('-');
+
     const payload: any = {
       name: value.name,
       type: value.type,
@@ -154,13 +157,8 @@ export class CreatePlanDialogComponent implements OnInit {
           ? value.elevationGain
           : null,
 
-      startDate: value.startDate
-        ? new Date(value.startDate).toISOString()
-        : null,
-
-      endDate: value.endDate
-        ? new Date(value.endDate).toISOString()
-        : null
+      startDate: startDate,
+      endDate: endDate
     };
 
     this.trainingPlanService.createTrainingPlan(payload).subscribe({

@@ -67,7 +67,10 @@ export class PlannedActivityDialogComponent implements OnInit {
   repetitionCounts = Array.from({ length: 50 }, (_, i) => i + 1);
 
   isEditMode = false;
-  plannedActivity!: any;
+  //plannedActivity!: any;
+  plannedActivities: any[] = [];
+  currentIndex = 0;
+  currentPlannedActivity: any;
 
   constructor(
     private fb: FormBuilder,
@@ -75,18 +78,50 @@ export class PlannedActivityDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialog: MatDialog
   ) {
-    this.stepsForm = this.fb.array([this.createStep()]);
-  }
-
-  ngOnInit(): void {
     this._locale.set('fr');
     this._adapter.setLocale(this._locale());
 
-    this.maxDate = this.data.currentPlan.endDate;
+    this.stepsForm = this.fb.array([this.createStep()]);
 
-    this.isEditMode = !!this.data.plannedActivity;
-    this.plannedActivity = this.data.plannedActivity;
+    this.maxDate = data.currentPlan.endDate;
 
+    this.isEditMode = !!data.plannedActivity;
+    //this.plannedActivity = data.plannedActivity;
+
+    this.plannedActivities = Array.isArray(data.plannedActivity) ? data.plannedActivity : [data.plannedActivity];
+
+    this.plannedActivities.sort(
+      (a, b) =>
+        new Date(a.startDateLocal).getTime() -
+        new Date(b.startDateLocal).getTime()
+    );
+
+    this.currentIndex = 0;
+    this.currentPlannedActivity = this.plannedActivities[this.currentIndex];
+    console.log(this.currentPlannedActivity)
+  }
+
+  ngOnInit() {
+    this.loadPlannedActivity();
+  }
+
+  next() {
+    if (this.currentIndex < this.plannedActivities.length - 1) {
+      this.currentIndex++;
+      this.currentPlannedActivity = this.plannedActivities[this.currentIndex];
+      this.loadPlannedActivity();
+    }
+  }
+
+  previous() {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+      this.currentPlannedActivity = this.plannedActivities[this.currentIndex];
+      this.loadPlannedActivity();
+    }
+  }
+
+  private loadPlannedActivity() {
     this.initForm();
     this.loadSessionTypes();
 
@@ -114,7 +149,7 @@ export class PlannedActivityDialogComponent implements OnInit {
   }
 
   private patchForm(): void {
-    const pa = this.plannedActivity;
+    const pa = this.currentPlannedActivity;
 
     // Date
     const [year, month, day] = pa.scheduledDate.split('-').map(Number);
@@ -458,7 +493,7 @@ export class PlannedActivityDialogComponent implements OnInit {
     };
 
     if (this.isEditMode) {
-      payload['id'] = this.plannedActivity.plannedActivityId;
+      payload['id'] = this.currentPlannedActivity.plannedActivityId;
     }
 
     this.dialogRef.close(payload);

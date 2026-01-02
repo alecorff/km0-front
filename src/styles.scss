@@ -176,3 +176,34 @@ html, body {
     border: 3pt solid transparent;
     background-clip: content-box;
 }
+
+// FOOTER DIALOG MULTI
+.footer {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 6px;
+}
+
+/* Flèches */
+.nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #f0f0ff;
+}
+
+.nav-footer button mat-icon {
+  font-size: 32px;
+  color: #f0f0ff;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-footer button:disabled mat-icon {
+  color: rgba(240, 240, 255, 0.35);
+  opacity: 0.5;
+}
+
+.nav-footer button:not(:disabled):hover mat-icon {
+  color: #b7b5ff;
+}
