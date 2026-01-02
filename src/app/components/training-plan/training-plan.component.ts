@@ -487,7 +487,7 @@ export class TrainingPlanComponent implements OnInit {
             // success message
             this.snackBar.open(
               this.translateService.instant('i18n.page.plan.create_planned_activity_dialog.message.create', { name: response.name }),
-              this.translateService.instant('i18n.page.plan.create_planned_activity_dialog.message.create'),
+              this.translateService.instant('i18n.page.plan.create_planned_activity_dialog.message.action'),
               {
                 duration: 3000,
                 horizontalPosition: 'center',
@@ -496,6 +496,7 @@ export class TrainingPlanComponent implements OnInit {
               }
             );
 
+            this.refreshPlannedActivities();
             this.globalService.stopLoading();
           },
           error: (err) => {
@@ -535,6 +536,7 @@ export class TrainingPlanComponent implements OnInit {
               }
             );
 
+            this.refreshPlannedActivities();
             this.globalService.stopLoading();
           },
           error: (err) => {
@@ -546,5 +548,18 @@ export class TrainingPlanComponent implements OnInit {
     });
   }
 
+  // Méthode pour rafraichir le calendrier et la semaine sélectionnée
+  refreshPlannedActivities() {
+    if (!this.currentPlan) return;
+
+    this.plannedActivityService.getPlannedActivitiesForPlan(this.currentPlan.planId)
+      .subscribe(planned => {
+        this.plannedActivities = planned;
+        this.generateMonth();
+        if (this.selectedDate) {
+          this.extractWeek(this.selectedDate);
+        }
+      });
+  }
 
 }
