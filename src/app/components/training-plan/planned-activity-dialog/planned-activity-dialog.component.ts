@@ -47,10 +47,10 @@ import { StepInfoComponent } from './step-info/step-info.component';
     DragDropModule
   ],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'ja-JP' }, provideNativeDateAdapter()],
-  templateUrl: './creation-planned-activity-dialog.component.html',
-  styleUrl: './creation-planned-activity-dialog.component.css'
+  templateUrl: './planned-activity-dialog.component.html',
+  styleUrl: './planned-activity-dialog.component.css'
 })
-export class CreationPlannedActivityDialogComponent implements OnInit {
+export class PlannedActivityDialogComponent implements OnInit {
 
   private readonly _adapter = inject<DateAdapter<unknown, unknown>>(DateAdapter);
   private readonly _locale = signal(inject<unknown>(MAT_DATE_LOCALE));
@@ -66,9 +66,12 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
 
   repetitionCounts = Array.from({ length: 50 }, (_, i) => i + 1);
 
+  isEditMode = false;
+  plannedActivity!: any;
+
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<CreationPlannedActivityDialogComponent>,
+    private dialogRef: MatDialogRef<PlannedActivityDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialog: MatDialog
   ) {
@@ -79,8 +82,25 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
     this._locale.set('fr');
     this._adapter.setLocale(this._locale());
 
-    this.maxDate = this.data.endDate;
+    this.maxDate = this.data.currentPlan.endDate;
 
+    this.isEditMode = !!this.data.plannedActivity;
+    this.plannedActivity = this.data.plannedActivity;
+
+    this.initForm();
+    this.loadSessionTypes();
+
+    if (this.isEditMode) {
+      this.patchForm();
+    } else {
+      this.addStep();
+    }
+
+    this.watchStepsArray();
+  }
+
+  /* -------------------- INIT FORM VALUES -------------------- */
+  private initForm() {
     this.form = this.fb.group({
       name: ['', Validators.required],
       date: ['', Validators.required],
@@ -91,15 +111,78 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
       plannedDistance: [null],
       plannedPace: [null]
     });
-
-    this.loadSessionTypes();
-    this.addStep();
-    this.watchStepsArray();
   }
+
+  private patchForm(): void {
+    const pa = this.plannedActivity;
+
+    // Date
+    const [year, month, day] = pa.scheduledDate.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+
+    // Steps
+    const rawSteps = pa.stepsJson;
+    const steps = typeof rawSteps === 'string' ? JSON.parse(rawSteps) : rawSteps;
+
+    // On vide le FormArray
+    this.steps.clear();
+
+    // Ajout des étapes dans le FormArray
+    steps.forEach((step: any) => {
+      if (step.kind === 'step') {
+        const fg = this.createStep();
+        fg.patchValue(step);
+        this.steps.push(fg);
+        this.watchStep(fg);
+      } else if (step.kind === 'repeat') {
+        const fg = this.createRepetition();
+        fg.patchValue({
+          kind: 'repeat',
+          type: step.type,
+          repetitionCount: step.repetitionCount
+        });
+
+        const innerSteps = fg.get('steps') as FormArray;
+        innerSteps.clear();
+        step.steps.forEach((s: any) => {
+          const inner = this.createStep();
+          inner.patchValue(s);
+          innerSteps.push(inner);
+          this.watchStep(inner);
+        });
+
+        this.steps.push(fg);
+        this.watchRepetition(fg);
+      }
+    });
+
+    // Cocher defineContent si steps non vide
+    const hasSteps = Array.isArray(steps) && steps.some(step => {
+      if (step.kind === 'step') {
+        return step.distance != null || step.time != null || step.pace != null;
+      } else if (step.kind === 'repeat') {
+        return step.steps.some((s: any) => s.distance != null || s.time != null || s.pace != null);
+      }
+      return false;
+    });
+
+    // Patch du formulaire principal
+    this.form.patchValue({
+      name: pa.name,
+      date: date,
+      sessionType: pa.sessionType,
+      defineContent: hasSteps,
+      plannedDistance: pa.plannedDistanceKm,
+      plannedTime: pa.plannedDurationMin
+    });
+
+    this.triggerOverviewRecompute();
+  }
+
 
   /* -------------------- SESSION TYPES -------------------- */
   loadSessionTypes() {
-    this.currentPlanType = this.data.type;
+    this.currentPlanType = this.data.currentPlan.type;
     const sessions = TRAINING_SESSION_TYPES.filter(session =>
       session.allowedPlans.includes(this.currentPlanType)
     );
@@ -360,8 +443,8 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
     const date: Date = this.form.get('date')?.value;
     const scheduledDate = [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
 
-    const payload = {
-      planId: this.data.planId,
+    const payload: Record<string, any> = {
+      planId: this.data.currentPlan.planId,
       scheduledDate: scheduledDate,
       name: this.form.get('name')?.value,
       plannedDistanceKm: this.form.get('plannedDistance')?.value,
@@ -370,6 +453,11 @@ export class CreationPlannedActivityDialogComponent implements OnInit {
       stepsJson: JSON.stringify(this.steps.value),
       status: 'PLANNED'
     };
+
+    if (this.isEditMode) {
+      payload['id'] = this.plannedActivity.plannedActivityId;
+    }
+
     this.dialogRef.close(payload);
   }
 

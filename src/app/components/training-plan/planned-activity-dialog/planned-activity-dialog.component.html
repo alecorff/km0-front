@@ -48,10 +48,10 @@
   </mat-checkbox>
 
   <!-- Champs optionnels -->
-  <div class="planned-content" *ngIf="form.get('defineContent')?.value">
+  <div class="planned-content" [hidden]="!form.get('defineContent')?.value">
     <span class="step-title">{{ 'i18n.page.plan.create_planned_activity_dialog.steps.title' | translate }}</span>
 
-    <div class="training-steps" cdkDropList [cdkDropListData]="steps.controls" (cdkDropListDropped)="dropMain($any($event))">
+    <div class="training-steps" formArrayName="steps" cdkDropList [cdkDropListData]="steps.controls" (cdkDropListDropped)="dropMain($any($event))">
       <div *ngFor="let ctrl of steps.controls; let i = index" class="training-block" cdkDrag [cdkDragData]="ctrl">
 
         <!-- ================= ÉTAPE SIMPLE ================= -->

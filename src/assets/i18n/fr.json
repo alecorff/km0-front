@@ -125,8 +125,9 @@
                         "trail": "Trail",
                         "renfo": "Renforcement"
                     },
-                    "successMessage": {
-                        "success": "Planification de \"{{name}}\" réussie.",
+                    "message": {
+                        "create": "Planification de \"{{name}}\" réussie.",
+                        "update": "Modification de la séance \"{{name}}\" réussie.",
                         "action": "Fermer"
                     }
                 }

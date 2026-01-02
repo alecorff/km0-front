@@ -13,7 +13,7 @@ import { BehaviorSubject, forkJoin } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityDialogComponent } from './activity-dialog/activity-dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
-import { CreationPlannedActivityDialogComponent } from './creation-planned-activity-dialog/creation-planned-activity-dialog.component';
+import { PlannedActivityDialogComponent } from './planned-activity-dialog/planned-activity-dialog.component';
 import { PlannedActivityService } from 'src/app/services/planned-activity.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -390,9 +390,8 @@ export class TrainingPlanComponent implements OnInit {
         maxWidth: '600px',
         height: '600px'
       });
-    } else if (day.date >= new Date()) {
-      // futur → planification
-      //this.planActivity(day.date);
+    } else if (day.plannedActivity) {
+      this.editPlannedSession(day.plannedActivity);
     }
   }
 
@@ -468,8 +467,10 @@ export class TrainingPlanComponent implements OnInit {
   }
 
   planSession() {
-    const dialogRef = this.dialog.open(CreationPlannedActivityDialogComponent, {
-      data: this.currentPlan,
+    const dialogRef = this.dialog.open(PlannedActivityDialogComponent, {
+      data: {
+        currentPlan: this.currentPlan
+      },
       disableClose: false,
       width: '100%',
       maxWidth: '600px',
@@ -485,8 +486,8 @@ export class TrainingPlanComponent implements OnInit {
           next: (response: any) => {
             // success message
             this.snackBar.open(
-              this.translateService.instant('i18n.page.plan.create_planned_activity_dialog.successMessage.success', { name: response.name }),
-              this.translateService.instant('i18n.page.plan.create_planned_activity_dialog.successMessage.action'),
+              this.translateService.instant('i18n.page.plan.create_planned_activity_dialog.message.create', { name: response.name }),
+              this.translateService.instant('i18n.page.plan.create_planned_activity_dialog.message.create'),
               {
                 duration: 3000,
                 horizontalPosition: 'center',
@@ -505,5 +506,45 @@ export class TrainingPlanComponent implements OnInit {
       }
     });
   }
+
+  editPlannedSession(plannedActivity: any) {
+    const dialogRef = this.dialog.open(PlannedActivityDialogComponent, {
+      data: {
+        currentPlan: this.currentPlan,
+        plannedActivity: plannedActivity
+      },
+      width: '100%',
+      maxWidth: '600px',
+      height: '600px',
+      panelClass: 'primary-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe(payload => {
+      if (payload) {
+        this.plannedActivityService.updatePlannedActivity(payload).subscribe({
+          next: (response: any) => {
+            // success message
+            this.snackBar.open(
+              this.translateService.instant('i18n.page.plan.create_planned_activity_dialog.message.update', { name: response.name }),
+              this.translateService.instant('i18n.page.plan.create_planned_activity_dialog.message.action'),
+              {
+                duration: 3000,
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                panelClass: ['app-snackbar-info']
+              }
+            );
+
+            this.globalService.stopLoading();
+          },
+          error: (err) => {
+            console.error('Erreur lors de la planification de la séance', err);
+            this.globalService.stopLoading();
+          }
+        });
+      }
+    });
+  }
+
 
 }

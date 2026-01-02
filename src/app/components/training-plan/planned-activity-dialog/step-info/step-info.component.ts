@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -17,6 +17,8 @@ import { PacePipe } from 'src/app/components/common/pipe/pace.pipe';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
+    FormsModule,
+    ReactiveFormsModule,
     PacePipe,
     DurationPipe
   ],
