@@ -12,6 +12,7 @@ import { TrainingPlanService } from 'src/app/services/training-plan.service';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { GlobalService } from 'src/app/services/global.service';
+import { PlannedActivityService } from 'src/app/services/planned-activity.service';
 
 registerLocaleData(localeFr);
 
@@ -31,16 +32,15 @@ registerLocaleData(localeFr);
 })
 export class HomeComponent implements AfterViewInit {
 
-  currentPrepa: any = null;
+  currentPlan: any = null;
   weeksArray: any[] = [];
   pastPrepas: any[] = [];
 
   currentIndex = 0;
 
-  nextSession = {
-    day: 'Mardi',
-    label: "100' EF"
-  };
+  nextSession = { day: '', name: '' };
+
+  plannedActivities: any[] = [];
 
   isLoading: boolean = false;
 
@@ -48,6 +48,7 @@ export class HomeComponent implements AfterViewInit {
     private trainingPlanService: TrainingPlanService,
     private translateService: TranslateService,
     private globalService: GlobalService,
+    private plannedActivityService: PlannedActivityService,
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
@@ -69,7 +70,7 @@ export class HomeComponent implements AfterViewInit {
       next: (plans) => {
         const today = new Date();
 
-        this.currentPrepa = null;
+        this.currentPlan = null;
         this.pastPrepas = [];
 
         plans.forEach(plan => {
@@ -78,7 +79,9 @@ export class HomeComponent implements AfterViewInit {
 
           const isCurrent = today >= start && today <= end;
           if (isCurrent) {
-            this.currentPrepa = plan;
+            this.currentPlan = plan;
+
+            this.getNextSession(today);
 
             // calcul de l'avancement
             this.computeWeeks(plan);
@@ -95,9 +98,33 @@ export class HomeComponent implements AfterViewInit {
     });
   }
 
+  // Méthode pour récupérer le nom de la prochaine séance planifiée
+  getNextSession(today: Date): void {
+    this.plannedActivityService.getPlannedActivitiesForPlan(this.currentPlan.planId).subscribe(plannedActivities => {
+      this.plannedActivities = plannedActivities;
 
-  goToCurrentPrepa() {
-    this.router.navigate([`/plan/${this.currentPrepa.planId}`]);
+      // On filtre les activités PLANNED et dont la date est >= aujourd'hui
+      const futurePlanned = plannedActivities.filter(a => a.status === 'PLANNED').filter(a => new Date(a.scheduledDate) >= today);
+
+      if (!futurePlanned.length) return;
+
+      // On trie par date croissante
+      futurePlanned.sort((a, b) => new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime());
+
+      // On récupère le name de la première
+      this.nextSession.name = futurePlanned[0].name;
+
+      // On récupère le jour de la séance en français et on capitalise la première lettre
+      const dayName = new Intl.DateTimeFormat('fr-FR', { weekday: 'long' }).format(new Date(futurePlanned[0].scheduledDate));
+      this.nextSession.day = dayName.charAt(0).toUpperCase() + dayName.slice(1);
+    });
+  }
+
+  goToCurrentPlan() {
+    //this.router.navigate([`/plan/${this.currentPlan.planId}`]);
+    this.router.navigate([`/plan/${this.currentPlan.planId}`], {
+      state: { plannedActivities: this.plannedActivities }
+    });
   }
 
   createPlan() {
@@ -120,9 +147,9 @@ export class HomeComponent implements AfterViewInit {
         const today = new Date();
         const isCurrent = today >= start && today <= end;
         if (isCurrent) {
-          this.currentPrepa = result;
-          this.computeWeeks(this.currentPrepa);
-          this.weeksArray = Array.from({ length: this.currentPrepa?.totalWeeks });
+          this.currentPlan = result;
+          this.computeWeeks(this.currentPlan);
+          this.weeksArray = Array.from({ length: this.currentPlan?.totalWeeks });
         } else {
           this.pastPrepas.push(result);
         }

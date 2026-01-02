@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, LOCALE_ID, OnInit } from '@angular/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TrainingPlanService } from 'src/app/services/training-plan.service';
 import { ActivityService } from 'src/app/services/activity.service';
 import { GlobalService } from 'src/app/services/global.service';
-import { BehaviorSubject, forkJoin } from 'rxjs';
+import { BehaviorSubject, forkJoin, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityDialogComponent } from './activity-dialog/activity-dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -76,7 +76,8 @@ export class TrainingPlanComponent implements OnInit {
     private translateService: TranslateService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -105,9 +106,16 @@ export class TrainingPlanComponent implements OnInit {
       return;
     }
 
+    // si on vient de home, on récupère les séances planifiées
+    const state = this.location.getState() as any;
+    const plannedActivities = state.plannedActivities;
+    history.replaceState({}, '');
+    
+    const plannedObs = plannedActivities ? of(plannedActivities) : this.plannedActivityService.getPlannedActivitiesForPlan(this.currentPlan.planId);
+
     forkJoin({
       activities: this.activityService.getActivitiesForPlanPeriod(this.currentPlan.startDate),
-      planned: this.plannedActivityService.getPlannedActivitiesForPlan(this.currentPlan.planId)
+      planned: plannedObs
     }).subscribe({
       next: ({ activities, planned }) => {
         this.activities = activities;

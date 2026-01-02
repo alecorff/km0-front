@@ -2,11 +2,11 @@
 
     <!-- PLAN D'ENTRAINEMENT ACTUEL -->
     <div class="current-prepa-card">
-        <div *ngIf="currentPrepa; else noCurrentTraining" (click)="goToCurrentPrepa()">
+        <div *ngIf="currentPlan; else noCurrentTraining" (click)="goToCurrentPlan()">
             <div class="prepa-header">
-                <span class="prepa-title">{{ 'i18n.page.home.training.plan' | translate }}: {{ currentPrepa.name
+                <span class="prepa-title">{{ 'i18n.page.home.training.plan' | translate }}: {{ currentPlan.name
                     }}</span>
-                <span class="prepa-date">{{ 'i18n.page.home.training.date' | translate }}: {{ currentPrepa.endDate |
+                <span class="prepa-date">{{ 'i18n.page.home.training.date' | translate }}: {{ currentPlan.endDate |
                     date:'longDate' }}</span>
             </div>
 
@@ -14,17 +14,17 @@
             <div class="next-session">
                 <mat-icon>directions_run</mat-icon>
                 <span>{{ 'i18n.page.home.training.nextSession' | translate }}: {{ nextSession.day }} - {{
-                    nextSession.label }}</span>
+                    nextSession.name }}</span>
             </div>
 
             <!-- Avancement des semaines -->
             <div class="weeks-progress">
                 <div *ngFor="let w of weeksArray; index as i" class="week-block"
-                    [class.week-done]="i < currentPrepa.weeksDone">
+                    [class.week-done]="i < currentPlan.weeksDone">
                 </div>
             </div>
             <div class="weeks-label">
-                {{ currentPrepa.weeksDone }} / {{ currentPrepa.totalWeeks }} {{ 'i18n.page.home.training.weeksCompleted'
+                {{ currentPlan.weeksDone }} / {{ currentPlan.totalWeeks }} {{ 'i18n.page.home.training.weeksCompleted'
                 | translate }}
             </div>
         </div>
