@@ -25,8 +25,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                 // On redirige sur la page d'accueil
                 if (error.status === 403 || error.status === 404) {
                     this.snackBar.open(
-                        translateService.instant('i18n.page.common.errorMessage.' + key),
-                        translateService.instant('i18n.page.common.errorMessage.action'),
+                        translateService.instant('i18n.common.error_message.' + key),
+                        translateService.instant('i18n.common.error_message.action'),
                         {
                             duration: 3000,
                             horizontalPosition: 'center',
@@ -41,8 +41,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
                 // On reste sur la page actuelle
                 if (error.status === 500) {
                     this.snackBar.open(
-                        translateService.instant('i18n.page.common.errorMessage.' + key),
-                        translateService.instant('i18n.page.common.errorMessage.action'),
+                        translateService.instant('i18n.common.error_message.' + key),
+                        translateService.instant('i18n.common.error_message.action'),
                         {
                             duration: 3000,
                             horizontalPosition: 'center',

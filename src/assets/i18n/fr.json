@@ -23,7 +23,7 @@
                 "sync_message": {
                     "success": "Synchronisation des activités réussie.",
                     "action": "Fermer"
-                } 
+                }
             },
             "home": {
                 "training": {
@@ -109,7 +109,7 @@
                             "addStep": "Ajouter une étape",
                             "addRepetition": "Ajouter une répétition"
                         },
-                        "overview": "Aperçu"    
+                        "overview": "Aperçu"
                     },
                     "actions": {
                         "submit": "Planifier"
@@ -117,13 +117,6 @@
                     "errorMessage": {
                         "field": "Champ obligatoire",
                         "date": "Date obligatoire"
-                    },
-                    "session_category": {
-                        "endurance": "Endurance",
-                        "intensite": "Intensité",
-                        "specific": "Allures spécifiques",
-                        "trail": "Trail",
-                        "renfo": "Renforcement"
                     },
                     "message": {
                         "create": "Planification de \"{{name}}\" réussie.",
@@ -139,7 +132,14 @@
                     "heartrate": "bpm"
                 },
                 "open_on_strava": "Voir sur Strava",
-                "link_activity": "Lier une séance"
+                "link_activity": "Lier une séance",
+                "tag": {
+                    "from_plan_info": "Ce tag provient d'une séance planifiée. Le modifier n'impactera que cette activité, pas le plan.",
+                    "message": {
+                        "success": "Le tag a été enregistré avec succès.",
+                        "action": "Fermer"
+                    }
+                }
             },
             "link_activity_dialog": {
                 "title": "Lier une séance",
@@ -165,18 +165,25 @@
                     "min": "m",
                     "sec": "s"
                 }
-            },
-            "common": {
-                "errorMessage": {
-                    "plan_not_found": "Ce plan n'existe pas ou n'est plus accessible.",
-                    "activity_not_found": "Impossible de mettre à jour l'activité Strava.",
-                    "planned_activity_not_found": "Cette séance n'existe pas ou n'est plus accessible.",
-                    "bad_status_activity": "Impossible d'éditer une activité complétée.",
-                    "forbidden_activity": "Vous n'êtes pas autorisé à modifier cette séance Strava.",
-                    "forbidden_planned_activity": "Vous n'êtes pas autorisé à modifier cette séance.",
-                    "action": "Fermer"
-                }
             }
+        },
+        "common": {
+            "error_message": {
+                "plan_not_found": "Ce plan n'existe pas ou n'est plus accessible.",
+                "activity_not_found": "Impossible de mettre à jour l'activité Strava.",
+                "planned_activity_not_found": "Cette séance n'existe pas ou n'est plus accessible.",
+                "bad_status_activity": "Impossible d'éditer une activité complétée.",
+                "forbidden_activity": "Vous n'êtes pas autorisé à modifier cette séance Strava.",
+                "forbidden_planned_activity": "Vous n'êtes pas autorisé à modifier cette séance.",
+                "action": "Fermer"
+            }
+        },
+        "session_category": {
+            "endurance": "Endurance",
+            "intensite": "Intensité",
+            "specific": "Allures spécifiques",
+            "trail": "Trail",
+            "renfo": "Renforcement"
         }
     }
 }

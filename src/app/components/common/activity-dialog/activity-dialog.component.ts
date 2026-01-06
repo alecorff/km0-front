@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Inject, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -9,6 +9,9 @@ import { GlobalService } from 'src/app/services/global.service';
 import { PlannedActivityService } from 'src/app/services/planned-activity.service';
 import { LinkActivityDialogComponent } from '../../training-plan/link-activity-dialog/link-activity-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TRAINING_SESSION_TYPES, TrainingSessionType } from 'src/app/enum/enum';
+import { MatMenuModule } from '@angular/material/menu';
+import { ActivityService } from 'src/app/services/activity.service';
 
 @Component({
   selector: 'app-activity-dialog',
@@ -19,7 +22,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatDialogModule,
     MatButtonModule,
     MatIconModule,
-    MatDividerModule
+    MatDividerModule,
+    MatMenuModule
   ],
   templateUrl: './activity-dialog.component.html',
   styleUrl: './activity-dialog.component.css'
@@ -38,11 +42,17 @@ export class ActivityDialogComponent implements AfterViewInit {
 
   plannedActivitiesAroundDate: any[] = [];
 
+  sessionTypeCategories: string[] = [];
+  sessionTypesByCategory: Record<string, TrainingSessionType[]> = {};
+  isEditingSessionType = false;
+  @ViewChild('sessionTagWrapper') sessionTagWrapper!: ElementRef;
+
   isLoading: boolean = false;
 
   constructor(
     private globalService: GlobalService,
     private plannedActivityService: PlannedActivityService,
+    private activityService: ActivityService,
     private translateService: TranslateService,
     public dialogRef: MatDialogRef<ActivityDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -67,6 +77,7 @@ export class ActivityDialogComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.loadActivity();
+    this.buildSessionTypesByCategory();
   }
 
   next() {
@@ -250,5 +261,73 @@ export class ActivityDialogComponent implements AfterViewInit {
         this.globalService.stopLoading();
       }
     });
+  }
+
+  buildSessionTypesByCategory(): void {
+    const map: Record<string, TrainingSessionType[]> = {};
+
+    for (const type of TRAINING_SESSION_TYPES) {
+      if (!map[type.category]) {
+        map[type.category] = [];
+      }
+      map[type.category].push(type);
+    }
+
+    this.sessionTypesByCategory = map;
+    this.sessionTypeCategories = Object.keys(map);
+  }
+
+  toggleSessionTypeEdit(): void {
+    this.isEditingSessionType = !this.isEditingSessionType;
+  }
+
+  onSessionTypeSelect(code: string): void {
+    if (code === this.currentActivity.sessionType) {
+      this.isEditingSessionType = false;
+      return;
+    }
+
+    const previousType = this.currentActivity.sessionType;
+    this.currentActivity.sessionType = code;
+    this.isEditingSessionType = false;
+
+    this.activityService.updateSessionType(this.currentActivity.activityId, code).subscribe({
+      next: () => {
+        // success message
+        this.snackBar.open(
+          this.translateService.instant('i18n.page.activity_dialog.tag.message.success'),
+          this.translateService.instant('i18n.page.activity_dialog.tag.message.action'),
+          {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['app-snackbar-info']
+          }
+        );
+      },
+      error: () => {
+        // Revenir en arrière si erreur
+        this.currentActivity.sessionType = previousType;
+      }
+    });;
+  }
+
+
+  getSessionTypeLabel(code: string | null | undefined): string {
+    if (!code) {
+      return '';
+    }
+    return (TRAINING_SESSION_TYPES.find(t => t.code === code)?.label ?? code);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (!this.isEditingSessionType) {
+      return;
+    }
+    const clickedInside = this.sessionTagWrapper.nativeElement.contains(event.target);
+    if (!clickedInside) {
+      this.isEditingSessionType = false;
+    }
   }
 }

@@ -39,4 +39,18 @@ export class ActivityService {
         params: params
     });
   }
+
+  updateSessionType(activityId: number, code: string): Observable<any> {
+    const jwt = localStorage.getItem('jwt') ?? "";
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${jwt}`);
+
+    const payload = {
+      activityId: activityId,
+      sessionType: code
+    };
+
+    return this.http.post(`${this.baseUrl}/updateSessionType`, payload, { 
+      headers: headers
+    });
+  }
 }
