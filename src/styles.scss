@@ -208,3 +208,104 @@ html, body {
 .nav-footer button:not(:disabled):hover mat-icon {
   color: #b7b5ff;
 }
+
+// OVERRIDE MAT-MDC IN FORM
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
+    color: #f2f1ff !important;
+  }
+
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input,
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input {
+    caret-color: #8b7cff !important;
+    color: #f2f1ff !important;
+  }
+
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
+    border-color: #8b7cff !important;
+  }
+
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+    border-color: #3b3561 !important;
+  }
+
+  .mat-mdc-select-arrow,
+  .mat-mdc-select,
+  .mat-datepicker-toggle {
+    color: #f2f1ff !important;
+  }
+
+  .mat-date-range-input-separator {
+    font-size: 0.8em;
+    font-weight: 300;
+    color: #f2f1ff !important;
+  }
+
+  .mat-date-range-input-wrapper {
+    input::placeholder {
+      font-size: 0.8em;
+      font-weight: 300;
+      color: #f2f1ff !important;
+    }
+  }
+
+  .mdc-checkbox .mdc-checkbox__native-control:enabled:checked~.mdc-checkbox__background,
+  .mdc-checkbox .mdc-checkbox__native-control:enabled:indeterminate~.mdc-checkbox__background,
+  .mdc-checkbox .mdc-checkbox__native-control[data-indeterminate=true]:enabled~.mdc-checkbox__background {
+    border-color: #8b7cff !important;
+    background-color: #8b7cff !important;
+  }
+
+  .mdc-checkbox .mdc-checkbox__native-control:focus:checked~.mdc-checkbox__ripple {
+    opacity: 0.1 !important;
+    background-color: #8b7cff !important;
+  }
+
+  .mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate):not([data-indeterminate=true])~.mdc-checkbox__background {
+    border-color: #f2f1ff !important;
+    background-color: transparent !important;
+  }
+
+  .mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__background::before {
+    background-color: #8b7cff !important;
+  }
+
+  .mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:enabled:checked+.mdc-radio__background .mdc-radio__outer-circle {
+    border-color: #8b7cff !important;
+  }
+
+  .mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:enabled+.mdc-radio__background .mdc-radio__inner-circle {
+    border-color: #8b7cff !important;
+  }
+
+  .mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:active + .mdc-radio__background .mdc-radio__outer-circle,
+  .mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:active + .mdc-radio__background .mdc-radio__inner-circle {
+      border-color: #8b7cff !important;
+  }
+
+  .mat-mdc-radio-button .mdc-radio .mdc-radio__native-control:enabled:not(:checked)+.mdc-radio__background .mdc-radio__outer-circle {
+    border-color: #f2f1ff !important;
+    opacity: 0.75 !important;
+  }
+}
+
+// COMMON CSS
+.title {
+  font-family: 'Montserrat', sans-serif !important;
+  font-weight: 300 !important;
+  font-size: 1.5rem !important;
+  letter-spacing: -0.01em !important;
+  color: #f0f0ff !important;
+}
+
+mat-divider {
+  border-top-color: #f0f0ff !important;
+}
