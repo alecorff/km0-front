@@ -138,7 +138,18 @@
                     "elevation": "m D+",
                     "heartrate": "bpm"
                 },
-                "open_on_strava": "Voir sur Strava"
+                "open_on_strava": "Voir sur Strava",
+                "link_activity": "Lier une séance"
+            },
+            "link_activity_dialog": {
+                "title": "Lier une séance",
+                "description": "Cette action permet d'associer une activité réelle à une séance planifiée afin de suivre correctement le plan d'entrainement.",
+                "subtitle": "Séances planifiées trouvées à proximité de cette activité",
+                "submit": "Lier",
+                "message": {
+                    "success": "La séance planifiée a été liée à votre activité.",
+                    "action": "Fermer"
+                }
             },
             "numeric_picker": {
                 "title": {
@@ -158,8 +169,10 @@
             "common": {
                 "errorMessage": {
                     "plan_not_found": "Ce plan n'existe pas ou n'est plus accessible.",
+                    "activity_not_found": "Impossible de mettre à jour l'activité Strava.",
                     "planned_activity_not_found": "Cette séance n'existe pas ou n'est plus accessible.",
                     "bad_status_activity": "Impossible d'éditer une activité complétée.",
+                    "forbidden_activity": "Vous n'êtes pas autorisé à modifier cette séance Strava.",
                     "forbidden_planned_activity": "Vous n'êtes pas autorisé à modifier cette séance.",
                     "action": "Fermer"
                 }

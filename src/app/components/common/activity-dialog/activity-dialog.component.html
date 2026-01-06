@@ -33,24 +33,29 @@
       </div>
 
       <div class="stats-grid">
-        <div class="stat-card" *ngIf="data.averageSpeed">
+        <div class="stat-card" *ngIf="currentActivity.averageSpeed">
           <mat-icon>speed</mat-icon>{{ currentActivity.averageSpeed }}
         </div>
 
-        <div class="stat-card" *ngIf="data.averageHeartrate">
+        <div class="stat-card" *ngIf="currentActivity.averageHeartrate">
           <mat-icon>favorite</mat-icon>{{ currentActivity.averageHeartrate }} {{ 'i18n.page.activity_dialog.metrics.heartrate' | translate }}
         </div>
       </div>
 
-      <div class="chip" *ngIf="data.sessionType">
+      <div class="chip" *ngIf="currentActivity.sessionType">
         {{ currentActivity.sessionType }}
       </div>
     </div>
 
     <div class="footer">
+      <button *ngIf="plannedActivitiesAroundDate?.length && !currentActivity.sessionType" mat-raised-button class="button-actions" (click)="linkActivity()">
+        <mat-icon>link</mat-icon>
+        {{ 'i18n.page.activity_dialog.link_activity' | translate }}
+      </button>
+
       <button mat-raised-button class="button-actions" (click)="openStrava()">
-      <img src="assets/images/strava.svg" class="strava-logo" /> 
-      {{ 'i18n.page.activity_dialog.open_on_strava' | translate }}
+        <img src="assets/images/strava.svg" class="strava-logo" /> 
+        {{ 'i18n.page.activity_dialog.open_on_strava' | translate }}
       </button>
     </div>
 

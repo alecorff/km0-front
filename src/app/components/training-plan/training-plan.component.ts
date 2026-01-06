@@ -11,7 +11,7 @@ import { ActivityService } from 'src/app/services/activity.service';
 import { GlobalService } from 'src/app/services/global.service';
 import { BehaviorSubject, forkJoin, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivityDialogComponent } from './activity-dialog/activity-dialog.component';
+import { ActivityDialogComponent } from '../common/activity-dialog/activity-dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
 import { PlannedActivityDialogComponent } from './planned-activity-dialog/planned-activity-dialog.component';
 import { PlannedActivityService } from 'src/app/services/planned-activity.service';
@@ -194,6 +194,12 @@ export class TrainingPlanComponent implements OnInit {
           if (p.status !== 'PLANNED') {
             return false;
           }
+          const todayStr = new Date().toISOString().split('T')[0];
+          // Ne pas afficher les séances planifiées passées
+          if (p.scheduledDate < todayStr) {
+            return false;
+          }
+
           const plannedDate = new Date(p.scheduledDate);
           return plannedDate.toDateString() === day.date.toDateString();
         });
@@ -382,7 +388,6 @@ export class TrainingPlanComponent implements OnInit {
     ) {
       return true;
     }
-
     return false;
   }
 
@@ -393,7 +398,10 @@ export class TrainingPlanComponent implements OnInit {
     if (day.activity) {
       // ouvrir dialog avec l'activité
       this.dialog.open(ActivityDialogComponent, {
-        data: day.activity,
+        data: {
+          activity: day.activity,
+          plannedActivities: this.plannedActivities
+        },
         width: '100%',
         maxWidth: '600px',
         height: '600px'
@@ -451,6 +459,13 @@ export class TrainingPlanComponent implements OnInit {
 
 
   hasPlannedSession(date: Date): boolean {
+    const today = new Date();
+
+    // Ne pas afficher les séances planifiées passées
+    if (date < today) {
+      return false;
+    }
+
     return this.plannedActivities.some(p =>
       new Date(p.scheduledDate).toDateString() === date.toDateString()
     );

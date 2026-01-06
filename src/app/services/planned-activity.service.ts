@@ -1,7 +1,7 @@
 // user.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +26,8 @@ export class PlannedActivityService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${jwt}`);
 
     return this.http.put(`${this.baseUrl}/update/${payload.id}`, payload, { 
-        headers: headers 
-      });
+      headers: headers 
+    });
   }
 
 
@@ -44,4 +44,21 @@ export class PlannedActivityService {
     });
   }
 
+  linkPlannedActivity(activityId: number, plannedActivity: any) {
+    const jwt = localStorage.getItem('jwt') ?? '';
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${jwt}`);
+
+    let params = new HttpParams();
+    params = params.set('activityId', activityId);
+
+    const payload = {
+      plannedActivityId: plannedActivity.plannedActivityId,
+      sessionType: plannedActivity.sessionType
+    };
+
+    return this.http.post(`${this.baseUrl}/linkActivity`, payload, { 
+      headers: headers,
+      params: params 
+    });
+  }
 }

@@ -1,20 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { GlobalService } from 'src/app/services/global.service';
+import { PlannedActivityService } from 'src/app/services/planned-activity.service';
+import { LinkActivityDialogComponent } from '../../training-plan/link-activity-dialog/link-activity-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-activity-dialog',
   standalone: true,
   imports: [
     CommonModule,
-    TranslateModule, 
-    MatDialogModule, 
-    MatButtonModule, 
+    TranslateModule,
+    MatDialogModule,
+    MatButtonModule,
     MatIconModule,
     MatDividerModule
   ],
@@ -33,14 +36,20 @@ export class ActivityDialogComponent implements AfterViewInit {
   city: string = '';
   country: string = '';
 
+  plannedActivitiesAroundDate: any[] = [];
+
   isLoading: boolean = false;
 
   constructor(
     private globalService: GlobalService,
+    private plannedActivityService: PlannedActivityService,
+    private translateService: TranslateService,
     public dialogRef: MatDialogRef<ActivityDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {
-    this.activities = Array.isArray(data) ? data : [data];
+    this.activities = Array.isArray(data.activity) ? data.activity : [data.activity];
 
     this.activities.sort(
       (a, b) =>
@@ -50,6 +59,10 @@ export class ActivityDialogComponent implements AfterViewInit {
 
     this.currentIndex = 0;
     this.currentActivity = this.activities[this.currentIndex];
+
+    if (this.data.plannedActivities && !this.currentActivity.sessionType) {
+      this.getPlannedActivitiesAroundDate();
+    }
   }
 
   ngAfterViewInit() {
@@ -81,6 +94,30 @@ export class ActivityDialogComponent implements AfterViewInit {
       this.city = res.address.city || res.address.town || res.address.village || res.address.hamlet;
       this.country = res.address.country_code.toUpperCase();
     });
+  }
+
+  getPlannedActivitiesAroundDate() {
+    const ref = new Date(this.currentActivity.startDateLocal);
+    const rangeDays = 1;
+
+    const toDayNumber = (d: Date) =>
+      d.getFullYear() * 10000 +
+      (d.getMonth() + 1) * 100 +
+      d.getDate();
+
+    const addDays = (d: Date, days: number) => {
+      const copy = new Date(d);
+      copy.setDate(copy.getDate() + days);
+      return copy;
+    };
+
+    const startDay = toDayNumber(addDays(ref, -rangeDays));
+    const endDay = toDayNumber(addDays(ref, rangeDays));
+
+    this.plannedActivitiesAroundDate = this.data.plannedActivities.filter((p: any) => {
+      const day = toDayNumber(new Date(p.scheduledDate));
+      return (day >= startDay && day <= endDay && p.status === 'PLANNED' && !p.activityId);
+    })
   }
 
   formatTime(seconds: number): string {
@@ -176,5 +213,42 @@ export class ActivityDialogComponent implements AfterViewInit {
     }
 
     return coordinates;
+  }
+
+  linkActivity() {
+    const dialogRef = this.dialog.open(LinkActivityDialogComponent, {
+      data: {
+        plannedActivitiesAroundDate: this.plannedActivitiesAroundDate
+      },
+      disableClose: false,
+      width: '100%',
+      maxWidth: '400px',
+      height: '400px',
+      panelClass: 'primary-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe((plannedActivity) => {
+      if (plannedActivity) {
+        this.globalService.startLoading();
+        // enregistrement
+        this.plannedActivityService.linkPlannedActivity(this.currentActivity.activityId, plannedActivity).subscribe(() => {
+          this.currentActivity.sessionType = plannedActivity.sessionType;
+        })
+
+        // success message
+        this.snackBar.open(
+          this.translateService.instant('i18n.page.link_activity_dialog.message.success'),
+          this.translateService.instant('i18n.page.link_activity_dialog.message.action'),
+          {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['app-snackbar-info']
+          }
+        );
+
+        this.globalService.stopLoading();
+      }
+    });
   }
 }

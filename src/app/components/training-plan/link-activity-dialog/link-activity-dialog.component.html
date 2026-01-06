@@ -1,0 +1,35 @@
+<h2 mat-dialog-title class="title">{{ 'i18n.page.link_activity_dialog.title' | translate }}</h2>
+<mat-divider></mat-divider>
+
+<div class="link-info-box">
+  <div class="info-text">
+    <div class="info-description">
+      {{ 'i18n.page.link_activity_dialog.description' | translate }}
+    </div>
+  </div>
+</div>
+
+
+<form mat-dialog-content class="form-content">
+  <p class="info-message">
+    {{ 'i18n.page.link_activity_dialog.subtitle' | translate }}
+  </p>
+
+  <mat-radio-group class="planned-radio-group">
+    <mat-radio-button *ngFor="let p of plannedActivitiesAroundDate" [value]="p" class="planned-radio" (change)="onRadioChange(p)">
+      <div class="radio-content">
+        <span class="date">{{ p.scheduledDate | date:'dd MMM' }}</span>
+        <span class="separator">•</span>
+        <span class="name">{{ p.name }}</span>
+      </div>
+    </mat-radio-button>
+  </mat-radio-group>
+
+</form>
+
+<!-- SUBMIT FORM -->
+<mat-dialog-actions class="submit-action">
+  <button mat-raised-button class="button-actions" [disabled]="!hasSelectedActivity" (click)="submit()">
+    {{ 'i18n.page.link_activity_dialog.submit' | translate }}
+  </button>
+</mat-dialog-actions>
