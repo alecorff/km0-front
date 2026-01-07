@@ -265,41 +265,40 @@ export enum Country {
 
 export interface TrainingSessionType {
   code: string;
-  label: string;
   allowedPlans: ('RUNNING' | 'TRAIL' | 'FITNESS' | 'OTHER')[];
   category: string;
 }
 
 export const TRAINING_SESSION_TYPES: TrainingSessionType[] = [
   // Endurance & récupération
-  { code: 'EF', label: 'Endurance fondamentale (EF)', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'endurance' },
-  { code: 'LONG_RUN', label: 'Sortie longue', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'endurance' },
-  { code: 'RECOVERY', label: 'Récupération', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'endurance' },
-  { code: 'RACE', label: 'Course', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'endurance' },
+  { code: 'EF', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'endurance' },
+  { code: 'LONG_RUN', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'endurance' },
+  { code: 'RECOVERY', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'endurance' },
+  { code: 'RACE', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'endurance' },
 
   // Fractionné & intensité
-  { code: 'SHORT_INTERVALS', label: 'Fractionné court', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'intensite' },
-  { code: 'LONG_INTERVALS', label: 'Fractionné long', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'intensite' },
-  { code: 'PYRAMID', label: 'Pyramide', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'intensite' },
-  { code: 'INTERVALS', label: 'Intervalles', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'intensite' },
-  { code: 'VMA', label: 'VMA', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'intensite' },
+  { code: 'SHORT_INTERVALS', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'intensite' },
+  { code: 'LONG_INTERVALS', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'intensite' },
+  { code: 'PYRAMID', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'intensite' },
+  { code: 'INTERVALS', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'intensite' },
+  { code: 'VMA', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'intensite' },
 
   // Seuil & allures spécifiques
-  { code: 'SEUIL', label: 'Seuil', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'specific' },
-  { code: 'TEMPO', label: 'Tempo run', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'specific' },
-  { code: 'AS5', label: 'Allure spécifique 5 km (AS5)', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'specific' },
-  { code: 'AS10', label: 'Allure spécifique 10 km (AS10)', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'specific' },
-  { code: 'AS21', label: 'Allure spécifique semi-marathon (AS21)', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'specific' },
-  { code: 'AS42', label: 'Allure spécifique marathon (AS42)', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'specific' },
+  { code: 'SEUIL', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'specific' },
+  { code: 'TEMPO', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'specific' },
+  { code: 'AS5', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'specific' },
+  { code: 'AS10', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'specific' },
+  { code: 'AS21', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'specific' },
+  { code: 'AS42', allowedPlans: ['RUNNING', 'TRAIL', 'OTHER'], category: 'specific' },
 
   // Trail / dénivelé
-  { code: 'SHORT_HILLS', label: 'Côtes courtes', allowedPlans: ['TRAIL', 'OTHER'], category: 'trail' },
-  { code: 'LONG_HILLS', label: 'Côtes longues', allowedPlans: ['TRAIL', 'OTHER'], category: 'trail' },
-  { code: 'HILL_INTERVALS', label: 'Fractionné en côtes', allowedPlans: ['TRAIL', 'OTHER'], category: 'trail' },
-  { code: 'DOWNHILL', label: 'Travail en descente', allowedPlans: ['TRAIL', 'OTHER'], category: 'trail' },
-  { code: 'HILLY_RUN', label: 'Sortie vallonnée', allowedPlans: ['TRAIL', 'OTHER'], category: 'trail' },
+  { code: 'SHORT_HILLS', allowedPlans: ['TRAIL', 'OTHER'], category: 'trail' },
+  { code: 'LONG_HILLS', allowedPlans: ['TRAIL', 'OTHER'], category: 'trail' },
+  { code: 'HILL_INTERVALS', allowedPlans: ['TRAIL', 'OTHER'], category: 'trail' },
+  { code: 'DOWNHILL', allowedPlans: ['TRAIL', 'OTHER'], category: 'trail' },
+  { code: 'HILLY_RUN', allowedPlans: ['TRAIL', 'OTHER'], category: 'trail' },
 
   // Renforcement
-  { code: 'STRENGTH', label: 'Renforcement musculaire', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'renfo' },
-  { code: 'PPG', label: 'PPG', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'renfo' },
+  { code: 'STRENGTH', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'renfo' },
+  { code: 'PPG', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'renfo' },
 ];

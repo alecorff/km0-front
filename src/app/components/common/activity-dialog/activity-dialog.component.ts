@@ -312,14 +312,6 @@ export class ActivityDialogComponent implements AfterViewInit {
     });;
   }
 
-
-  getSessionTypeLabel(code: string | null | undefined): string {
-    if (!code) {
-      return '';
-    }
-    return (TRAINING_SESSION_TYPES.find(t => t.code === code)?.label ?? code);
-  }
-
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (!this.isEditingSessionType) {

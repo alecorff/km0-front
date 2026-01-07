@@ -178,12 +178,38 @@
                 "action": "Fermer"
             }
         },
-        "session_category": {
-            "endurance": "Endurance",
-            "intensite": "Intensité",
-            "specific": "Allures spécifiques",
-            "trail": "Trail",
-            "renfo": "Renforcement"
+        "session_type": {
+            "category": {
+                "endurance": "Endurance",
+                "intensite": "Intensité",
+                "specific": "Allures spécifiques",
+                "trail": "Trail",
+                "renfo": "Renforcement"
+            },
+            "label": {
+                "EF": "Endurance fondamentale (EF)",
+                "LONG_RUN": "Sortie longue",
+                "RECOVERY": "Récupération",
+                "RACE": "Course",
+                "SHORT_INTERVALS": "Fractionné court",
+                "LONG_INTERVALS": "Fractionné long",
+                "PYRAMID": "Pyramide",
+                "INTERVALS": "Intervalles",
+                "VMA": "VMA",
+                "SEUIL": "Seuil",
+                "TEMPO": "Tempo run",
+                "AS5": "Allure spécifique 5 km (AS5)",
+                "AS10": "Allure spécifique 10 km (AS10)",
+                "AS21": "Allure spécifique semi-marathon (AS21)",
+                "AS42": "Allure spécifique marathon (AS42)",
+                "SHORT_HILLS": "Côtes courtes",
+                "LONG_HILLS": "Côtes longues",
+                "HILL_INTERVALS": "Fractionné en côtes",
+                "DOWNHILL": "Travail en descente",
+                "HILLY_RUN": "Sortie vallonnée",
+                "STRENGTH": "Renforcement musculaire",
+                "PPG": "PPG"
+            }
         }
     }
 }

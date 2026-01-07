@@ -29,9 +29,9 @@
     <mat-select formControlName="sessionType">
       <ng-container *ngFor="let category of categories">
         <mat-optgroup
-          [label]="'i18n.session_category.' + category | translate">
+          [label]="'i18n.session_type.category.' + category | translate">
           <mat-option *ngFor="let session of filteredSessionTypes[category]" [value]="session.code">
-            {{ session.label }}
+            <span class="menu-label">{{ 'i18n.session_type.label.' + session.code | translate }}</span>
           </mat-option>
         </mat-optgroup>
       </ng-container>

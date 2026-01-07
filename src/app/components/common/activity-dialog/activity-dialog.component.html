@@ -47,7 +47,7 @@
         <div class="session-tag clickable" (click)="toggleSessionTypeEdit()">
           <mat-icon class="tag-icon">local_offer</mat-icon>
           <span class="tag-label">
-            {{ getSessionTypeLabel(currentActivity.sessionType) }}
+              {{ 'i18n.session_type.label.' + currentActivity.sessionType | translate }}
           </span>
           <mat-icon class="edit-icon">expand_more</mat-icon>
         </div>
@@ -61,11 +61,11 @@
 
           <ng-container *ngFor="let category of sessionTypeCategories">
             <div class="menu-category">
-              {{ ('i18n.session_category.' + category) | translate }}
+              {{ ('i18n.session_type.category.' + category) | translate }}
             </div>
 
             <div class="session-type-option" *ngFor="let type of sessionTypesByCategory[category]" (click)="onSessionTypeSelect(type.code)">
-              <span class="menu-label">{{ type.label }}</span>
+              <span class="menu-label">{{ 'i18n.session_type.label.' + type.code | translate }}</span>
               <mat-icon *ngIf="type.code === currentActivity.sessionType">
                 check
               </mat-icon>
