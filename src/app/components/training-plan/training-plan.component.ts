@@ -585,4 +585,8 @@ export class TrainingPlanComponent implements OnInit {
       });
   }
 
+  goToSearchPage() {
+    this.router.navigate([`/search/${this.currentPlan.planId}`]);
+  }
+
 }

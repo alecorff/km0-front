@@ -50,7 +50,7 @@ export class ActivityDialogComponent implements AfterViewInit {
   isLoading: boolean = false;
 
   constructor(
-    private globalService: GlobalService,
+    public globalService: GlobalService,
     private plannedActivityService: PlannedActivityService,
     private activityService: ActivityService,
     private translateService: TranslateService,
@@ -129,13 +129,6 @@ export class ActivityDialogComponent implements AfterViewInit {
       const day = toDayNumber(new Date(p.scheduledDate));
       return (day >= startDay && day <= endDay && p.status === 'PLANNED' && !p.activityId);
     })
-  }
-
-  formatTime(seconds: number): string {
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
-    return `${h > 0 ? h + 'h ' : ''}${m}m ${s}s`;
   }
 
   openStrava() {

@@ -4,6 +4,7 @@ import { LoginSuccessComponent } from './login-success/login-success.component';
 import { HomeComponent } from './components/home/home.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { TrainingPlanComponent } from './components/training-plan/training-plan.component';
+import { SearchComponent } from './components/search/search.component';
 
 export const routes: Routes = [
   {
@@ -30,6 +31,14 @@ export const routes: Routes = [
       {
         path: 'plan/:id',
         component: TrainingPlanComponent
+      },
+      {
+        path: 'search',
+        component: SearchComponent
+      },
+      {
+        path: 'search/:id',
+        component: SearchComponent
       }
     ]
   }

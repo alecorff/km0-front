@@ -1,0 +1,55 @@
+<ng-container *ngIf="!(loading$ | async)">
+    <div class="search-page">
+
+        <!-- Header -->
+        <div class="training-plan-link" (click)="goToTrainingPlan()">
+            <span class="plan-name">{{ currentPlan.name }}</span>
+        </div>
+
+        <!-- Search input -->
+        <div class="search-bar">
+            <mat-icon>search</mat-icon>
+            <input type="text" placeholder="Chercher par mot-clé" [(ngModel)]="query" (input)="onSearch()" />
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <button class="chip" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">Tous</button>
+
+            <button class="chip" (click)="setFilter('distance')">Distance</button>
+            <button class="chip" (click)="setFilter('elevation')">Dénivelé</button>
+            <button class="chip" (click)="setFilter('difficulty')">Difficulté</button>
+        </div>
+
+        <!-- Results -->
+        <div class="results">
+            <div class="result-card" *ngFor="let activity of filteredActivities">
+                <div class="map-preview">
+                    <app-polyline-preview [polyline]="activity.polyline"></app-polyline-preview>
+                </div>
+
+                <div class="info">
+                    <h3>{{ activity.name }}</h3>
+
+                    <div class="meta">
+                        <!-- TODO: mettre le tag -->
+                        <span>{{ activity.distance }} km</span>
+                        <span>•</span>
+                        <span>{{ activity.totalElevationGain }} m</span>
+                        <span>•</span>
+                        <span>{{ globalService.formatTime(activity.movingTime) }}</span>
+                    </div>
+
+                    <div class="location">
+                        Nantes
+                    </div>
+
+                    <div class="created">
+                        {{ activity.startDateLocal | date:'longDate' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</ng-container>
