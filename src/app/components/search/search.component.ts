@@ -10,6 +10,8 @@ import { ActivityService } from 'src/app/services/activity.service';
 import { GlobalService } from 'src/app/services/global.service';
 import { TrainingPlanService } from 'src/app/services/training-plan.service';
 import { PolylinePreviewComponent } from '../common/polyline-preview/polyline-preview.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-search',
@@ -20,6 +22,8 @@ import { PolylinePreviewComponent } from '../common/polyline-preview/polyline-pr
     MatIconModule,
     MatInputModule,
     FormsModule,
+    MatDividerModule,
+    MatButtonModule,
     PolylinePreviewComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],

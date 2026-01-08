@@ -22,6 +22,7 @@ export class GlobalService {
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
     return this.http.get<any>(url);
   }
+  
 
   formatTime(seconds: number): string {
     const h = Math.floor(seconds / 3600);
