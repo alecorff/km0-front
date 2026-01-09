@@ -38,16 +38,22 @@
                     <div class="filters-scroll">
                     <!-- Type d'activité -->
                     <div class="filter-section">
-                        <h5>Type d'activité</h5>
+                        <h5 class="filter-title-with-badge" matBadge="{{ selectedActivityTypesCount }}" matBadgeHidden="{{ selectedActivityTypesCount === 0 }}" matBadgeSize="small">
+                            Type d'activité
+                        </h5>
+
                         <div class="checkbox-row">
-                            <mat-checkbox>Course</mat-checkbox>
-                            <mat-checkbox>Trail</mat-checkbox>
+                            <mat-checkbox *ngFor="let type of activityTypes" [(ngModel)]="type.checked" (change)="applyFilters()">
+                                {{ type.label }}
+                            </mat-checkbox>
                         </div>
                     </div>
                     <mat-divider></mat-divider>
                     <!-- Tag -->
                     <div class="filter-section">
-                        <h5>Tag</h5>
+                        <h5 class="filter-title-with-badge" matBadge="{{ selectedTagsCount  }}" matBadgeHidden="{{ selectedTagsCount  === 0 }}" matBadgeSize="small">
+                            Tag
+                        </h5>
                         <div class="tag-list" [class.collapsed]="!showAllTags">
                             <button class="tag" *ngFor="let code of allTags" [class.active]="isTagSelected(code)" (click)="toggleTag(code)">
                                 {{ ('i18n.session_type.label.' + code) | translate }}
@@ -59,41 +65,44 @@
                         </button>
                     </div>
                     <mat-divider></mat-divider>
-                    <!-- Distance -->
                     <div class="filter-section">
-                        <h5>Distance (km)</h5>
+                        <h5 class="filter-title-with-badge" matBadge="{{ distanceFilterBadge }}" matBadgeHidden="{{ !isDistanceFilterActive }}" matBadgeSize="small">
+                            Distance (km)
+                        </h5>
                         <div class="range-values">
-                            <span>0</span>
-                            <span>100km+</span>
+                            <span>{{ formatDistance(minDistance) }}</span>
+                            <span>{{ formatDistance(maxDistance) }}</span>
                         </div>
-                        <mat-slider min="0" max="100" step="1" discrete>
-                            <input matSliderStartThumb value="10">
-                            <input matSliderEndThumb value="30">
+                        <mat-slider min="0" max="MAX_DISTANCE" step="1" thumbLabel (change)="applyFilters()">
+                            <input matSliderStartThumb [(ngModel)]="minDistance">
+                            <input matSliderEndThumb [(ngModel)]="maxDistance">
                         </mat-slider>
                     </div>
                     <mat-divider></mat-divider>
-                    <!-- Dénivelé -->
                     <div class="filter-section">
-                        <h5>Dénivelé (m)</h5>
+                        <h5 class="filter-title-with-badge" matBadge="{{ elevationFilterBadge }}" matBadgeHidden="{{ !isElevationFilterActive }}" matBadgeSize="small">
+                            Dénivelé (m)
+                        </h5>
                         <div class="range-values">
-                            <span>0</span>
-                            <span>3000m+</span>
+                            <span>{{ formatElevation(minElevation) }}</span>
+                            <span>{{ formatElevation(maxElevation) }}</span>
                         </div>
-                        <mat-slider min="0" max="3000" step="10" discrete>
-                            <input matSliderStartThumb value="100">
-                            <input matSliderEndThumb value="500">
+                        <mat-slider min="0" [max]="MAX_ELEVATION" step="10" thumbLabel (change)="applyFilters()">
+                            <input matSliderStartThumb [(ngModel)]="minElevation">
+                            <input matSliderEndThumb [(ngModel)]="maxElevation">
                         </mat-slider>
                     </div>
                     <mat-divider></mat-divider>
                     <!-- Temps -->
                     <div class="filter-section">
-                        <h5>Temps d'activité</h5>
+                        <h5 class="filter-title-with-badge" matBadge="{{ durationFilterBadge }}" matBadgeHidden="{{ !isDurationFilterActive }}" matBadgeSize="small">
+                            Temps d'activité
+                        </h5>
                         <div class="range-values">
                             <span>{{ formatDuration(minDuration) }}</span>
                             <span>{{ formatDuration(maxDuration) }}</span>
                         </div>
-
-                        <mat-slider min="0" [max]="MAX_DURATION" step="5" thumbLabel>
+                        <mat-slider min="0" [max]="MAX_DURATION" step="5" thumbLabel (change)="applyFilters()">
                             <input matSliderStartThumb [(ngModel)]="minDuration">
                             <input matSliderEndThumb [(ngModel)]="maxDuration">
                         </mat-slider>
@@ -101,11 +110,13 @@
                     <mat-divider></mat-divider>
                     <!-- Date -->
                     <div class="filter-section">
-                        <h5>Date</h5>
+                        <h5 class="filter-title-with-badge" matBadge="1" matBadgeHidden="{{ !isDateFilterActive }}" matBadgeSize="small">
+                            Date
+                        </h5>
                         <mat-form-field appearance="outline" class="full-width">
                             <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
-                                <input matStartDate placeholder="Du">
-                                <input matEndDate placeholder="Au">
+                                <input matStartDate placeholder="Du" [(ngModel)]="selectedStartDate" (dateChange)="onDateRangeChange()">
+                                <input matEndDate placeholder="Au" [(ngModel)]="selectedEndDate" (dateChange)="onDateRangeChange()">
                             </mat-date-range-input>
 
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

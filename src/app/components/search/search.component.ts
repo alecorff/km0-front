@@ -16,6 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { TRAINING_SESSION_TYPES } from 'src/app/enum/enum';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
   selector: 'app-search',
@@ -31,6 +32,7 @@ import { TRAINING_SESSION_TYPES } from 'src/app/enum/enum';
     MatCheckboxModule,
     MatSliderModule,
     MatDatepickerModule,
+    MatBadgeModule,
     PolylinePreviewComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
@@ -44,11 +46,34 @@ export class SearchComponent implements OnInit {
   query = '';
   activeFilter: 'all' | 'distance' | 'elevation' | 'difficulty' = 'all';
 
+  activityTypes = [
+    { label: 'Course à pied', value: 'Run', checked: false },
+    { label: 'Trail', value: 'TrailRun', checked: false }
+  ];
+
   minDate!: Date;
   maxDate!: Date;
-  minDuration: number = 60;
-  maxDuration: number = 360;
+  
+  readonly MAX_DISTANCE = 100;
+  readonly DEFAULT_MIN_DISTANCE = 10;
+  readonly DEFAULT_MAX_DISTANCE = 30;
+  minDistance: number = this.DEFAULT_MIN_DISTANCE;
+  maxDistance: number = this.DEFAULT_MAX_DISTANCE;
+
+  readonly MAX_ELEVATION = 3000;
+  readonly DEFAULT_MIN_ELEVATION = 100;
+  readonly DEFAULT_MAX_ELEVATION = 500;
+  minElevation: number = this.DEFAULT_MIN_ELEVATION;
+  maxElevation: number = this.DEFAULT_MAX_ELEVATION;
+
   readonly MAX_DURATION = 600;
+  readonly DEFAULT_MIN_DURATION = 60;
+  readonly DEFAULT_MAX_DURATION = 360;
+  minDuration: number = this.DEFAULT_MIN_DURATION;
+  maxDuration: number = this.DEFAULT_MAX_DURATION;
+
+  selectedStartDate: Date | null = null;
+  selectedEndDate: Date | null = null;
 
   showAllTags = false;
   selectedTags: string[] = [];
@@ -107,23 +132,29 @@ export class SearchComponent implements OnInit {
   }
 
   onSearch() {
-    const q = this.query.toLowerCase();
-
-    this.filteredActivities = this.activities.filter(a =>
-      a.name.toLowerCase().includes(q) ||
-      a.description?.toLowerCase().includes(q)
-    ).sort((a, b) => new Date(b.startDateLocal).getTime() - new Date(a.startDateLocal).getTime());
-  }
-
-  setFilter(filter: any) {
-    this.activeFilter = filter;
-    // logique de filtre à enrichir plus tard
+    this.applyFilters();
   }
 
   goToTrainingPlan() {
     this.router.navigate([`/plan/${this.currentPlan.planId}`]);
   }
 
+  toggleTag(code: string): void {
+    if (this.selectedTags.includes(code)) {
+      this.selectedTags = this.selectedTags.filter(t => t !== code);
+    } else {
+      this.selectedTags = [...this.selectedTags, code];
+    }
+
+    this.applyFilters();
+  }
+
+  isTagSelected(code: string): boolean {
+    return this.selectedTags.includes(code);
+  }
+
+
+  /* -------------------- FORMAT SLIDER VALUES -------------------- */
   formatDuration(minutes: number): string {
     if (minutes < 60) {
       return `${minutes} min`;
@@ -140,16 +171,173 @@ export class SearchComponent implements OnInit {
     return formatted;
   }
 
-  toggleTag(code: string): void {
-    if (this.selectedTags.includes(code)) {
-      this.selectedTags = this.selectedTags.filter(t => t !== code);
-    } else {
-      this.selectedTags = [...this.selectedTags, code];
+  formatElevation(meters: number): string {
+    let formatted = `${meters}m`;
+    if (meters === this.MAX_ELEVATION) {
+      formatted += '+';
+    }
+    return formatted;
+  }
+
+  formatDistance(km: number): string {
+    let formatted = `${km}km`;
+    if (km === this.MAX_DISTANCE) {
+      formatted += '+';
+    }
+    return formatted;
+  }
+
+  /* -------------------- FILTERS LOGIC -------------------- */
+  onDateRangeChange(): void {
+    if (this.selectedStartDate && this.selectedEndDate) {
+      this.applyFilters();
     }
   }
 
-  isTagSelected(code: string): boolean {
-    return this.selectedTags.includes(code);
+
+  applyFilters(): void {
+    let result = [...this.activities];
+
+    // Filtre par recherche texte
+    if (this.query) {
+      const q = this.query.toLowerCase();
+      result = result.filter(a =>
+        a.name.toLowerCase().includes(q) ||
+        a.description?.toLowerCase().includes(q)
+      );
+    }
+
+    // Filtre par type d'activité
+    const selectedTypes = this.activityTypes
+      .filter(t => t.checked)
+      .map(t => t.value);
+
+    if (selectedTypes.length > 0) {
+      result = result.filter(a =>
+        selectedTypes.includes(a.sportType)
+      );
+    }
+
+    // Filtre par tag
+    if (this.selectedTags.length > 0) {
+      result = result.filter(a =>
+        a.sessionType && this.selectedTags.includes(a.sessionType)
+      );
+    }
+
+    // Filtre par distance
+    if (this.isDistanceFilterActive) {
+      result = result.filter(a => {
+        if (this.maxDistance === this.MAX_DISTANCE) {
+          // Cas "100km et +"
+          return a.distance >= this.minDistance;
+        }
+        return (
+          a.distance >= this.minDistance &&
+          a.distance <= this.maxDistance
+        );
+      });
+    }
+
+    // Filtre par dénivelé
+    if (this.isElevationFilterActive) {
+      result = result.filter(a => {
+        if (this.maxElevation === this.MAX_ELEVATION) {
+          // Cas "3000m et +"
+          return a.totalElevationGain >= this.minElevation;
+        }
+        return (
+          a.totalElevationGain >= this.minElevation &&
+          a.totalElevationGain <= this.maxElevation
+        );
+      });
+    }
+
+    // Filtre par temps d'activité
+    if (this.isDurationFilterActive) {
+      result = result.filter(a => {
+        if (this.maxDuration === this.MAX_ELEVATION) {
+          // Cas "10h et +"
+          return a.movingTime >= this.minDuration*60;
+        }
+        return (
+          a.movingTime >= this.minDuration*60 &&
+          a.movingTime <= this.maxDuration*60
+        );
+      });
+    }
+
+    // Filtre par date
+    if (this.isDateFilterActive) {
+      const start = this.startOfDay(this.selectedStartDate!);
+      const end = this.endOfDay(this.selectedEndDate!);
+
+      result = result.filter(a => {
+        const activityDate = new Date(a.startDateLocal);
+        return activityDate >= start && activityDate <= end;
+      });
+    }
+
+    // Tri
+    this.filteredActivities = result.sort(
+      (a, b) =>
+        new Date(b.startDateLocal).getTime() -
+        new Date(a.startDateLocal).getTime()
+    );
+  }
+
+  private startOfDay(date: Date): Date {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  private endOfDay(date: Date): Date {
+    const d = new Date(date);
+    d.setHours(23, 59, 59, 999);
+    return d;
+  }
+
+  get selectedActivityTypesCount(): number {
+    return this.activityTypes.filter(t => t.checked).length;
+  }
+
+  get selectedTagsCount(): number {
+    return this.selectedTags.length;
+  }
+
+  get isDistanceFilterActive(): boolean {
+    return (
+      this.minDistance !== this.DEFAULT_MIN_DISTANCE || this.maxDistance !== this.DEFAULT_MAX_DISTANCE
+    );
+  }
+
+  get distanceFilterBadge(): number {
+    return 1;
+  }
+
+  get isElevationFilterActive(): boolean {
+    return (
+      this.minElevation !== this.DEFAULT_MIN_ELEVATION || this.maxElevation !== this.DEFAULT_MAX_ELEVATION
+    );
+  }
+
+  get elevationFilterBadge(): number {
+    return 1;
+  }
+
+  get isDurationFilterActive(): boolean {
+    return (
+      this.minDuration !== this.DEFAULT_MIN_DURATION || this.maxDuration !== this.DEFAULT_MAX_DURATION
+    );
+  }
+
+  get durationFilterBadge(): number {
+    return 1;
+  }
+
+  get isDateFilterActive(): boolean {
+    return !!this.selectedStartDate && !!this.selectedEndDate;
   }
 
 }
