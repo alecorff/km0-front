@@ -28,14 +28,92 @@
         <div class="content-layout">
             <!-- Filters column -->
             <aside class="filters-panel">
-                <div class="filters-header">
-                    <h4 class="filters-title">Filtres</h4>
-                    <button class="refresh-filters-btn">Réinitialiser les filtres</button>
-                </div>
-                <mat-divider></mat-divider>
-                <div class="filters">
+                
+                    <div class="filters-header">
+                        <h4 class="filters-title">Filtres</h4>
+                        <button class="filters-btn">Réinitialiser les filtres</button>
+                    </div>
+                    <mat-divider></mat-divider>
 
+                    <div class="filters-scroll">
+                    <!-- Type d'activité -->
+                    <div class="filter-section">
+                        <h5>Type d'activité</h5>
+                        <div class="checkbox-row">
+                            <mat-checkbox>Course</mat-checkbox>
+                            <mat-checkbox>Trail</mat-checkbox>
+                        </div>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <!-- Tag -->
+                    <div class="filter-section">
+                        <h5>Tag</h5>
+                        <div class="tag-list" [class.collapsed]="!showAllTags">
+                            <button class="tag" *ngFor="let code of allTags" [class.active]="isTagSelected(code)" (click)="toggleTag(code)">
+                                {{ ('i18n.session_type.label.' + code) | translate }}
+                            </button>
+                        </div>
+
+                        <button class="filters-btn center-btn" (click)="showAllTags = !showAllTags">
+                            {{ showAllTags ? 'Afficher moins' : 'Afficher tout' }}
+                        </button>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <!-- Distance -->
+                    <div class="filter-section">
+                        <h5>Distance (km)</h5>
+                        <div class="range-values">
+                            <span>0</span>
+                            <span>100km+</span>
+                        </div>
+                        <mat-slider min="0" max="100" step="1" discrete>
+                            <input matSliderStartThumb value="10">
+                            <input matSliderEndThumb value="30">
+                        </mat-slider>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <!-- Dénivelé -->
+                    <div class="filter-section">
+                        <h5>Dénivelé (m)</h5>
+                        <div class="range-values">
+                            <span>0</span>
+                            <span>3000m+</span>
+                        </div>
+                        <mat-slider min="0" max="3000" step="10" discrete>
+                            <input matSliderStartThumb value="100">
+                            <input matSliderEndThumb value="500">
+                        </mat-slider>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <!-- Temps -->
+                    <div class="filter-section">
+                        <h5>Temps d'activité</h5>
+                        <div class="range-values">
+                            <span>{{ formatDuration(minDuration) }}</span>
+                            <span>{{ formatDuration(maxDuration) }}</span>
+                        </div>
+
+                        <mat-slider min="0" [max]="MAX_DURATION" step="5" thumbLabel>
+                            <input matSliderStartThumb [(ngModel)]="minDuration">
+                            <input matSliderEndThumb [(ngModel)]="maxDuration">
+                        </mat-slider>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <!-- Date -->
+                    <div class="filter-section">
+                        <h5>Date</h5>
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
+                                <input matStartDate placeholder="Du">
+                                <input matEndDate placeholder="Au">
+                            </mat-date-range-input>
+
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                        </mat-form-field>
+                    </div>
                 </div>
+
             </aside>
 
             <!-- Results column -->

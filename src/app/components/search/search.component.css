@@ -87,21 +87,30 @@
   padding: 16px;
 }
 
+.filters-scroll {
+  height: calc(100% - 120px);
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+}
+
 .filters-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
   width: 100%;
 }
 
 .filters-title {
-  font-size: 1rem;
+  font-size: 1.4rem;
   font-weight: 500;
   margin: 12px 0;
   opacity: 0.9;
 }
 
-.refresh-filters-btn {
+.filters-btn {
   background-color: rgba(255, 255, 255, 0.1);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -112,18 +121,95 @@
   font-family: 'Montserrat', sans-serif;
 }
 
-.refresh-filters-btn:hover {
+.filters-btn:hover {
   background-color: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-.filters {
+/* FILTERS - DESKTOP */
+.filter-section {
+  margin-top: 20px;
+
+  h5 {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+}
+
+.checkbox-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  gap: 16px;
+  align-items: center;
+
+  .mdc-form-field {
+    color: #f2f1ff !important;
+  }
+}
+
+mat-slider {
+  width: 100%;
 }
 
 
+.range-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.full-width {
+    width: 100%;
+}
+
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+  max-height: none;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.tag-list.collapsed {
+  max-height: 72px;
+}
+
+.tag {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #1b1432;
+  border: 1px solid #2a2445;
+  color: #ccc;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tag:hover {
+  background: #2a2445;
+  color: #fff;
+}
+
+.tag.active {
+  background: #5d53a8;
+  color: #fff;
+}
+
+.center-btn {
+  display: block;
+  margin: 0 auto;
+}
+
+
+
+
+/* FILTERS - MOBILE */
 .chip {
   padding: 6px 12px;
   border-radius: 20px;
@@ -359,4 +445,10 @@
   .results-panel {
     flex: 1;
   }
+}
+
+
+mat-divider {
+  margin: 30px 0;
+  border-top-color: #1b1432 !important;
 }

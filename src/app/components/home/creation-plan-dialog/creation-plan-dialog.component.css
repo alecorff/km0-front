@@ -1,25 +1,3 @@
-/* MAT-DATE-RANGE */
-::ng-deep .mat-calendar-body-selected {
-    background-color: #8b7cff !important;
-    color: #f2f1ff !important;
-}
-
-::ng-deep .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
-    background-color: #8b7cff !important;
-    color: #f2f1ff !important;
-}
-
-::ng-deep .mat-calendar-body-in-range::before {
-    background: #3b3561 !important;
-    filter: brightness(3);
-}
-
-::ng-deep .cdk-program-focused .mat-calendar-body-active>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
-    background: #8b7cff !important;
-    border-color: #8b7cff !important;
-    color: #f2f1ff !important;
-}
-
 .full-width {
     width: 100%;
 }

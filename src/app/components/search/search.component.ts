@@ -12,6 +12,10 @@ import { TrainingPlanService } from 'src/app/services/training-plan.service';
 import { PolylinePreviewComponent } from '../common/polyline-preview/polyline-preview.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { TRAINING_SESSION_TYPES } from 'src/app/enum/enum';
 
 @Component({
   selector: 'app-search',
@@ -24,6 +28,9 @@ import { MatButtonModule } from '@angular/material/button';
     FormsModule,
     MatDividerModule,
     MatButtonModule,
+    MatCheckboxModule,
+    MatSliderModule,
+    MatDatepickerModule,
     PolylinePreviewComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
@@ -36,6 +43,16 @@ export class SearchComponent implements OnInit {
 
   query = '';
   activeFilter: 'all' | 'distance' | 'elevation' | 'difficulty' = 'all';
+
+  minDate!: Date;
+  maxDate!: Date;
+  minDuration: number = 60;
+  maxDuration: number = 360;
+  readonly MAX_DURATION = 600;
+
+  showAllTags = false;
+  selectedTags: string[] = [];
+  allTags = TRAINING_SESSION_TYPES.map(t => t.code);
 
   activities: any[] = [];
   filteredActivities: any[] = [];
@@ -64,6 +81,10 @@ export class SearchComponent implements OnInit {
 
     this.trainingPlanService.getPlanById(planId).subscribe(plan => {
       this.currentPlan = plan;
+
+      this.minDate = this.currentPlan.startDate;
+      this.maxDate = this.currentPlan.endDate;
+
       this.loadActivitiesForPlan();
     });
   }
@@ -101,6 +122,34 @@ export class SearchComponent implements OnInit {
 
   goToTrainingPlan() {
     this.router.navigate([`/plan/${this.currentPlan.planId}`]);
+  }
+
+  formatDuration(minutes: number): string {
+    if (minutes < 60) {
+      return `${minutes} min`;
+    }
+
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+
+    let formatted = m === 0 ? `${h}h` : `${h}h${m}`;
+
+    if (minutes === this.MAX_DURATION) {
+      formatted += '+';
+    }
+    return formatted;
+  }
+
+  toggleTag(code: string): void {
+    if (this.selectedTags.includes(code)) {
+      this.selectedTags = this.selectedTags.filter(t => t !== code);
+    } else {
+      this.selectedTags = [...this.selectedTags, code];
+    }
+  }
+
+  isTagSelected(code: string): boolean {
+    return this.selectedTags.includes(code);
   }
 
 }
