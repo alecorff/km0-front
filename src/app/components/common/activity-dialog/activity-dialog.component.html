@@ -13,9 +13,9 @@
 
     <h2 mat-dialog-title class="title">{{ currentActivity.name }}</h2>
 
-    <h3 class="subtitle" *ngIf="country">
-      <img class="flag" [src]="'assets/images/flag/' + country + '.png'" />
-      <span>{{ city }}</span>
+    <h3 class="subtitle">
+      <img *ngIf="currentActivity.country" class="flag" [src]="'assets/images/flag/' + currentActivity.country + '.png'" />
+      <span>{{ currentActivity.city }}</span>
       <span>•</span>
       <span>
         {{ currentActivity.startDateLocal | date:'dd MMM yyyy' }},

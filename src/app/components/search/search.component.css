@@ -235,8 +235,17 @@ mat-slider {
   margin: 0 auto;
 }
 
+.country-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 
-
+  img {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+  }
+}
 
 /* FILTERS - MOBILE */
 .chip {

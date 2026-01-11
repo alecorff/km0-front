@@ -1,5 +1,5 @@
 <ng-container *ngIf="!(loading$ | async)">
-    <div class="search-page">
+    <div class="search-page" cdkScrollable>
 
         <!-- Header -->
         <div class="training-plan-header" (click)="goToTrainingPlan()">
@@ -110,7 +110,7 @@
                     <mat-divider></mat-divider>
                     <!-- Date -->
                     <div class="filter-section">
-                        <h5 class="filter-title-with-badge" matBadge="1" matBadgeHidden="{{ !isDateFilterActive }}" matBadgeSize="small">
+                        <h5 class="filter-title-with-badge" matBadge="{{ durationFilterBadge }}" matBadgeHidden="{{ !isDateFilterActive }}" matBadgeSize="small">
                             Date
                         </h5>
                         <mat-form-field appearance="outline" class="full-width">
@@ -123,8 +123,36 @@
                             <mat-date-range-picker #picker></mat-date-range-picker>
                         </mat-form-field>
                     </div>
-                </div>
+                    <mat-divider></mat-divider>
+                    <!-- Lieu -->
+                    <div class="filter-section">
+                        <h5 class="filter-title-with-badge" matBadge="{{ selectedLocationCount }}" matBadgeHidden="{{ !isLocationFilterActive }}" matBadgeSize="small">
+                            Lieu
+                        </h5>
+                        <!-- Pays -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Pays</mat-label>
+                            <mat-select multiple [(ngModel)]="selectedCountries" (selectionChange)="applyFilters()" disableOptionCentering>
+                                <mat-option *ngFor="let country of allCountries" [value]="country">
+                                    <div class="country-option">
+                                        <img [src]="'assets/images/flag/' + country + '.png'" />    
+                                        {{ Country[country] }}
+                                    </div>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
 
+                        <!-- Ville -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Ville</mat-label>
+                            <mat-select multiple [(ngModel)]="selectedCities" (selectionChange)="applyFilters()">
+                                <mat-option *ngFor="let city of filteredCities" [value]="city">
+                                    {{ city }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
             </aside>
 
             <!-- Results column -->
@@ -160,9 +188,9 @@
 
                             <div class="footer">
                                 <div class="location-and-date">
-                                    <div class="location">
-                                        <img class="flag" src="assets/images/flag/GR.png" />
-                                        <span>Kalavarda</span>
+                                    <div *ngIf="activity.city" class="location">
+                                        <img *ngIf="activity.country" class="flag" [src]="'assets/images/flag/' + activity.country + '.png'" />
+                                        <span>{{ activity.city }}</span>
                                     </div>
                                     <div class="created">
                                         {{ activity.startDateLocal | date:'longDate' }}

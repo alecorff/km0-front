@@ -61,7 +61,7 @@
           <mat-select-trigger>
             <ng-container *ngIf="form.get('country')?.value as selected">
               <div class="country-option">
-                <img [src]="'assets/images/flag/' + selected + '.png'" alt="" />
+                <img [src]="'assets/images/flag/' + selected + '.png'" />
                 <span>{{ Country[selected] }}</span>
               </div>
             </ng-container>

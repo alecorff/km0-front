@@ -15,8 +15,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { TRAINING_SESSION_TYPES } from 'src/app/enum/enum';
+import { Country, TRAINING_SESSION_TYPES } from 'src/app/enum/enum';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatSelectModule } from '@angular/material/select';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @Component({
   selector: 'app-search',
@@ -33,6 +35,8 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatSliderModule,
     MatDatepickerModule,
     MatBadgeModule,
+    MatSelectModule,
+    ScrollingModule,
     PolylinePreviewComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
@@ -74,6 +78,13 @@ export class SearchComponent implements OnInit {
 
   selectedStartDate: Date | null = null;
   selectedEndDate: Date | null = null;
+
+  Country: any = Country;
+  selectedCountries: string[] = [];
+  selectedCities: string[] = [];
+  allCountries: string[] = [];
+  allCities: string[] = [];
+  filteredCities: string[] = [];
 
   showAllTags = false;
   selectedTags: string[] = [];
@@ -123,12 +134,31 @@ export class SearchComponent implements OnInit {
       next: (result) => {
         console.log(result)
         this.activities = result;
+        this.extractLocationsFromActivities();
       },
       complete: () => {
         this.loading$.next(false);
         this.globalService.stopLoading();
       }
     });
+  }
+
+  private extractLocationsFromActivities() {
+    const countries = new Set<string>();
+    const cities = new Set<string>();
+
+    this.activities.forEach(activity => {
+      if (activity.country) {
+        countries.add(activity.country);
+      }
+      if (activity.city) {
+        cities.add(activity.city);
+      }
+    });
+
+    this.allCountries = Array.from(countries).sort();
+    this.allCities = Array.from(cities).sort();
+    this.filteredCities = [...this.allCities];
   }
 
   onSearch() {
@@ -278,6 +308,21 @@ export class SearchComponent implements OnInit {
       });
     }
 
+    // Filtre par lieu (pays / ville)
+    if (this.isLocationFilterActive) {
+      result = result.filter(a => {
+        if (this.selectedCountries.length > 0 && !this.selectedCountries.includes(a.country)) {
+          return false;
+        }
+
+        if (this.selectedCities.length > 0 && !this.selectedCities.includes(a.city)) {
+          return false;
+        }
+
+        return true;
+      });
+    }
+
     // Tri
     this.filteredActivities = result.sort(
       (a, b) =>
@@ -338,6 +383,14 @@ export class SearchComponent implements OnInit {
 
   get isDateFilterActive(): boolean {
     return !!this.selectedStartDate && !!this.selectedEndDate;
+  }
+
+  get isLocationFilterActive(): boolean {
+    return this.selectedCountries.length > 0 || this.selectedCities.length > 0;
+  }
+
+  get selectedLocationCount(): number {
+    return this.selectedCountries.length + this.selectedCities.length;
   }
 
 }

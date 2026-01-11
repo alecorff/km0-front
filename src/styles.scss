@@ -317,7 +317,15 @@ body {
   }
 }
 
-/* MAT-DATE-RANGE OVERRIDE */
+/* MAT-SELECT MULTIPLE */
+.mat-pseudo-checkbox-full.mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-full.mat-pseudo-checkbox-indeterminate {
+  background-color: #8b7cff !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+    color: #8b7cff !important;
+  }
+
 .mat-calendar-body-selected {
   background-color: #8b7cff !important;
   color: #f2f1ff !important;

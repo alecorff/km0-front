@@ -100,11 +100,6 @@ export class ActivityDialogComponent implements AfterViewInit {
     if (this.currentActivity.polyline) {
       this.drawPolyline(this.currentActivity.polyline);
     }
-
-    this.globalService.getCity(this.currentActivity.startLatitude, this.currentActivity.startLongitude).subscribe(res => {
-      this.city = res.address.city || res.address.town || res.address.village || res.address.hamlet;
-      this.country = res.address.country_code.toUpperCase();
-    });
   }
 
   getPlannedActivitiesAroundDate() {
