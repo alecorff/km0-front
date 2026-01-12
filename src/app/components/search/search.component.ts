@@ -393,4 +393,39 @@ export class SearchComponent implements OnInit {
     return this.selectedCountries.length + this.selectedCities.length;
   }
 
+  resetFilters() {
+    // Filtre par recherche texte
+    this.query = '';
+
+    // Filtre par type d'activité
+    this.activityTypes.forEach(activity => {
+      activity.checked = false;
+    });
+
+    // Filtre par tag
+    this.selectedTags = [];
+
+    // Filtre par distance
+    this.minDistance = this.DEFAULT_MIN_DISTANCE; 
+    this.maxDistance = this.DEFAULT_MAX_DISTANCE;
+
+    // Filtre par dénivelé
+    this.minElevation = this.DEFAULT_MIN_ELEVATION; 
+    this.maxElevation = this.DEFAULT_MAX_ELEVATION;
+
+    // Filtre par temps d'activité
+    this.minDuration = this.DEFAULT_MIN_DURATION; 
+    this.maxDuration = this.DEFAULT_MAX_DURATION;
+
+    // Filtre par date
+    this.selectedStartDate = null;
+    this.selectedEndDate = null;
+
+    // Filtre par lieu (pays / ville)
+    this.selectedCountries = [];
+    this.selectedCities = [];
+
+    this.applyFilters();
+  }
+
 }
