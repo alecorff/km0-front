@@ -46,9 +46,12 @@
       <div class="session-tag-wrapper" #sessionTagWrapper>
         <div class="session-tag clickable" (click)="toggleSessionTypeEdit()">
           <mat-icon class="tag-icon">local_offer</mat-icon>
-          <span class="tag-label">
+          <span *ngIf="currentActivity.sessionType; else noSessionType" class="tag-label">
               {{ 'i18n.session_type.label.' + currentActivity.sessionType | translate }}
           </span>
+          <ng-template #noSessionType>
+            {{ 'i18n.session_type.label.default' | translate }}  
+          </ng-template>
           <mat-icon class="edit-icon">expand_more</mat-icon>
         </div>
 

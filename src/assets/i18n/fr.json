@@ -187,6 +187,7 @@
                 "renfo": "Renforcement"
             },
             "label": {
+                "default": "Ajouter un tag",
                 "EF": "Endurance fondamentale (EF)",
                 "LONG_RUN": "Sortie longue",
                 "RECOVERY": "Récupération",
