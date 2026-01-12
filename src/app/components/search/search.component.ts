@@ -428,4 +428,8 @@ export class SearchComponent implements OnInit {
     this.applyFilters();
   }
 
+  openStrava(activityId: any) {
+    window.open(`https://www.strava.com/activities/${activityId}`, '_blank');
+  }
+
 }

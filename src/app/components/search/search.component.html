@@ -196,7 +196,7 @@
                                         {{ activity.startDateLocal | date:'longDate' }}
                                     </div>
                                 </div>
-                                <button mat-raised-button class="button-actions">
+                                <button mat-raised-button class="button-actions" (click)="openStrava(activity.activityId)">
                                     <img src="assets/images/strava.svg" class="strava-logo" /> 
                                     <span>Ouvrir dans Strava</span>
                                 </button>
