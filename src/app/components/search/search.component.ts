@@ -191,9 +191,9 @@ export class SearchComponent implements OnInit {
     }
 
     const h = Math.floor(minutes / 60);
-    const m = minutes % 60;
+    const m = (minutes % 60).toString().padStart(2, '0');
 
-    let formatted = m === 0 ? `${h}h` : `${h}h${m}`;
+    let formatted = m === '00' ? `${h}h` : `${h}h${m}`;
 
     if (minutes === this.MAX_DURATION) {
       formatted += '+';
@@ -357,8 +357,8 @@ export class SearchComponent implements OnInit {
     );
   }
 
-  get distanceFilterBadge(): number {
-    return 1;
+  get distanceFilterBadge(): string {
+    return `${this.formatDistance(this.minDistance)} - ${this.formatDistance(this.maxDistance)}`;
   }
 
   get isElevationFilterActive(): boolean {
@@ -367,8 +367,8 @@ export class SearchComponent implements OnInit {
     );
   }
 
-  get elevationFilterBadge(): number {
-    return 1;
+  get elevationFilterBadge(): string {
+    return `${this.formatElevation(this.minElevation)} - ${this.formatElevation(this.maxElevation)}`;
   }
 
   get isDurationFilterActive(): boolean {
@@ -377,12 +377,18 @@ export class SearchComponent implements OnInit {
     );
   }
 
-  get durationFilterBadge(): number {
-    return 1;
+  get durationFilterBadge(): string {
+    return `${this.formatDuration(this.minDuration)} - ${this.formatDuration(this.maxDuration)}`;
   }
 
   get isDateFilterActive(): boolean {
     return !!this.selectedStartDate && !!this.selectedEndDate;
+  }
+
+  get dateFilterBadge(): string {
+    const start = this.selectedStartDate?.toLocaleDateString('fr-FR', {day: '2-digit', month: '2-digit', year: 'numeric'});
+    const end = this.selectedEndDate?.toLocaleDateString('fr-FR', {day: '2-digit', month: '2-digit', year: 'numeric'});
+    return `${start} - ${end}`;
   }
 
   get isLocationFilterActive(): boolean {
@@ -425,6 +431,30 @@ export class SearchComponent implements OnInit {
     this.selectedCountries = [];
     this.selectedCities = [];
 
+    this.applyFilters();
+  }
+
+  resetFilterDistance() {
+    this.minDistance = this.DEFAULT_MIN_DISTANCE; 
+    this.maxDistance = this.DEFAULT_MAX_DISTANCE;
+    this.applyFilters();
+  }
+
+  resetFilterElevation() {
+    this.minElevation = this.DEFAULT_MIN_ELEVATION; 
+    this.maxElevation = this.DEFAULT_MAX_ELEVATION;
+    this.applyFilters();
+  }
+
+  resetFilterDuration() {
+    this.minDuration = this.DEFAULT_MIN_DURATION; 
+    this.maxDuration = this.DEFAULT_MAX_DURATION;
+    this.applyFilters();
+  }
+
+  resetFilterDate() {
+    this.selectedStartDate = null;
+    this.selectedEndDate = null;
     this.applyFilters();
   }
 

@@ -165,7 +165,39 @@
   padding: 0 4px;
   border-radius: 999px;
   margin-left: 4px;
+
+  width: auto;
 }
+
+.custom-badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    background-color: #8b7cff;
+    color: #f2f1ff;
+    font-size: 0.65rem;
+    font-weight: 600;
+    height: 16px;
+    line-height: 16px;
+    padding: 0 4px 0 6px;
+    border-radius: 999px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.custom-badge .close-icon {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+    margin-left: 4px;
+    cursor: pointer;
+    color: #f2f1ff;
+}
+
+.custom-badge .close-icon:hover {
+    opacity: 0.8;
+}
+
 
 .checkbox-row {
   display: flex;

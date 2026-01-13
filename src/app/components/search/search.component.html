@@ -66,8 +66,12 @@
                     </div>
                     <mat-divider></mat-divider>
                     <div class="filter-section">
-                        <h5 class="filter-title-with-badge" matBadge="{{ distanceFilterBadge }}" matBadgeHidden="{{ !isDistanceFilterActive }}" matBadgeSize="small">
+                        <h5 class="filter-title-with-badge">
                             Distance (km)
+                            <span *ngIf="isDistanceFilterActive" class="custom-badge">
+                                {{ distanceFilterBadge }}
+                                <mat-icon class="close-icon" (click)="resetFilterDistance()">close</mat-icon>
+                            </span>
                         </h5>
                         <div class="range-values">
                             <span>{{ formatDistance(minDistance) }}</span>
@@ -80,8 +84,12 @@
                     </div>
                     <mat-divider></mat-divider>
                     <div class="filter-section">
-                        <h5 class="filter-title-with-badge" matBadge="{{ elevationFilterBadge }}" matBadgeHidden="{{ !isElevationFilterActive }}" matBadgeSize="small">
+                        <h5 class="filter-title-with-badge">
                             Dénivelé (m)
+                            <span *ngIf="isElevationFilterActive" class="custom-badge">
+                                {{ elevationFilterBadge }}
+                                <mat-icon class="close-icon" (click)="resetFilterElevation()">close</mat-icon>
+                            </span>
                         </h5>
                         <div class="range-values">
                             <span>{{ formatElevation(minElevation) }}</span>
@@ -95,8 +103,12 @@
                     <mat-divider></mat-divider>
                     <!-- Temps -->
                     <div class="filter-section">
-                        <h5 class="filter-title-with-badge" matBadge="{{ durationFilterBadge }}" matBadgeHidden="{{ !isDurationFilterActive }}" matBadgeSize="small">
+                        <h5 class="filter-title-with-badge">
                             Temps d'activité
+                            <span *ngIf="isDurationFilterActive" class="custom-badge">
+                                {{ durationFilterBadge }}
+                                <mat-icon class="close-icon" (click)="resetFilterDuration()">close</mat-icon>
+                            </span>
                         </h5>
                         <div class="range-values">
                             <span>{{ formatDuration(minDuration) }}</span>
@@ -110,8 +122,12 @@
                     <mat-divider></mat-divider>
                     <!-- Date -->
                     <div class="filter-section">
-                        <h5 class="filter-title-with-badge" matBadge="{{ durationFilterBadge }}" matBadgeHidden="{{ !isDateFilterActive }}" matBadgeSize="small">
+                        <h5 class="filter-title-with-badge">
                             Date
+                            <span *ngIf="isDateFilterActive" class="custom-badge">
+                                {{ dateFilterBadge }}
+                                <mat-icon class="close-icon" (click)="resetFilterDate()">close</mat-icon>
+                            </span>
                         </h5>
                         <mat-form-field appearance="outline" class="full-width">
                             <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
