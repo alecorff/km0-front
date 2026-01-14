@@ -125,6 +125,40 @@
                     }
                 }
             },
+            "search": {
+                "input": {
+                    "placeholder": "Rechercher par nom ou description"
+                },
+                "filters": {
+                    "title": "Filtres",
+                    "actions": {
+                        "reset": "Réinitialiser les filtres",
+                        "show_all": "Afficher tout",
+                        "show_less": "Afficher moins",
+                        "open_activity": "Ouvrir l'activité"
+                    },
+                    "fields": {
+                        "type": "Type d'activité",
+                        "run": "Course à pied",
+                        "trail": "Trail",
+                        "tags": "Tags",
+                        "distance": "Distance (km)",
+                        "elevation": "Dénivelé (m)",
+                        "duration": "Temps d'activité",
+                        "date": "Date",
+                        "location": "Lieu",
+                        "from": "Du",
+                        "to": "Au",
+                        "country": "Pays",
+                        "city": "Ville"
+                    }
+                },
+                "found_activities": "activités trouvées.",
+                "no_data": {
+                    "title": "Aucune activité disponible",
+                    "subtitle": "Aucune activité ne correspond à tes critères actuels. Vérifie tes filtres ou importe une nouvelle séance."
+                }
+            },
             "activity_dialog": {
                 "metrics": {
                     "distance": "km",
@@ -176,6 +210,10 @@
                 "forbidden_activity": "Vous n'êtes pas autorisé à modifier cette séance Strava.",
                 "forbidden_planned_activity": "Vous n'êtes pas autorisé à modifier cette séance.",
                 "action": "Fermer"
+            },
+            "metrics": {
+                "kilometer": "km",
+                "meter": "m"
             }
         },
         "session_type": {

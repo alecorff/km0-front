@@ -51,8 +51,8 @@ export class SearchComponent implements OnInit {
   activeFilter: 'all' | 'distance' | 'elevation' | 'difficulty' = 'all';
 
   activityTypes = [
-    { label: 'Course à pied', value: 'Run', checked: false },
-    { label: 'Trail', value: 'TrailRun', checked: false }
+    { label: 'run', value: 'Run', checked: false },
+    { label: 'trail', value: 'TrailRun', checked: false }
   ];
 
   minDate!: Date;

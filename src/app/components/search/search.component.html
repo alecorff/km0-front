@@ -13,7 +13,7 @@
         <!-- Search input -->
         <div class="search-bar">
             <mat-icon>search</mat-icon>
-            <input type="text" placeholder="Rechercher par nom ou description" [(ngModel)]="query"
+            <input type="text" placeholder="{{ 'i18n.page.search.input.placeholder' | translate }}" [(ngModel)]="query"
                 (input)="onSearch()" />
         </div>
 
@@ -21,10 +21,9 @@
 
             <!-- DESKTOP ONLY -->
             <aside class="filters-panel desktop-only">
-                <!-- ton panneau de filtres EXISTANT -->
                 <div class="filters-header">
-                    <h4 class="filters-title">Filtres</h4>
-                    <button class="filters-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
+                    <h4 class="filters-title">{{ 'i18n.page.search.filters.title' | translate }}</h4>
+                    <button class="filters-btn" (click)="resetFilters()">{{ 'i18n.page.search.filters.actions.reset' | translate }}</button>
                 </div>
                 <mat-divider></mat-divider>
 
@@ -33,13 +32,13 @@
                     <div class="filter-section">
                         <h5 class="filter-title-with-badge" matBadge="{{ selectedActivityTypesCount }}"
                             matBadgeHidden="{{ selectedActivityTypesCount === 0 }}" matBadgeSize="small">
-                            Type d'activité
+                            {{ 'i18n.page.search.filters.fields.type' | translate }}
                         </h5>
 
                         <div class="checkbox-row">
                             <mat-checkbox *ngFor="let type of activityTypes" [(ngModel)]="type.checked"
                                 (change)="applyFilters()">
-                                {{ type.label }}
+                                {{ 'i18n.page.search.filters.fields.' + type.label | translate }}
                             </mat-checkbox>
                         </div>
                     </div>
@@ -48,7 +47,7 @@
                     <div class="filter-section">
                         <h5 class="filter-title-with-badge" matBadge="{{ selectedTagsCount  }}"
                             matBadgeHidden="{{ selectedTagsCount  === 0 }}" matBadgeSize="small">
-                            Tag
+                            {{ 'i18n.page.search.filters.fields.type' | translate }}
                         </h5>
                         <div class="tag-list" [class.collapsed]="!showAllTags">
                             <button class="tag" *ngFor="let code of allTags" [class.active]="isTagSelected(code)"
@@ -58,14 +57,14 @@
                         </div>
 
                         <button class="filters-btn center-btn" (click)="showAllTags = !showAllTags">
-                            {{ showAllTags ? 'Afficher moins' : 'Afficher tout' }}
+                            {{ showAllTags ? ('i18n.page.search.filters.actions.show_less' | translate) : ('i18n.page.search.filters.actions.show_all' | translate) }}
                         </button>
                     </div>
                     <mat-divider></mat-divider>
                     <!-- Distance -->
                     <div class="filter-section">
                         <h5 class="filter-title-with-badge">
-                            Distance (km)
+                            {{ 'i18n.page.search.filters.fields.distance' | translate }}
                             <span *ngIf="isDistanceFilterActive" class="custom-badge">
                                 {{ distanceFilterBadge }}
                                 <mat-icon class="close-icon" (click)="resetFilterDistance()">close</mat-icon>
@@ -84,7 +83,7 @@
                     <!-- Dénivelé -->
                     <div class="filter-section">
                         <h5 class="filter-title-with-badge">
-                            Dénivelé (m)
+                            {{ 'i18n.page.search.filters.fields.elevation' | translate }}
                             <span *ngIf="isElevationFilterActive" class="custom-badge">
                                 {{ elevationFilterBadge }}
                                 <mat-icon class="close-icon" (click)="resetFilterElevation()">close</mat-icon>
@@ -103,7 +102,7 @@
                     <!-- Temps -->
                     <div class="filter-section">
                         <h5 class="filter-title-with-badge">
-                            Temps d'activité
+                            {{ 'i18n.page.search.filters.fields.duration' | translate }}
                             <span *ngIf="isDurationFilterActive" class="custom-badge">
                                 {{ durationFilterBadge }}
                                 <mat-icon class="close-icon" (click)="resetFilterDuration()">close</mat-icon>
@@ -122,7 +121,7 @@
                     <!-- Date -->
                     <div class="filter-section">
                         <h5 class="filter-title-with-badge">
-                            Date
+                            {{ 'i18n.page.search.filters.fields.date' | translate }}
                             <span *ngIf="isDateFilterActive" class="custom-badge">
                                 {{ dateFilterBadge }}
                                 <mat-icon class="close-icon" (click)="resetFilterDate()">close</mat-icon>
@@ -130,9 +129,9 @@
                         </h5>
                         <mat-form-field appearance="outline" class="full-width">
                             <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
-                                <input matStartDate placeholder="Du" [(ngModel)]="selectedStartDate"
+                                <input matStartDate placeholder=" {{ 'i18n.page.search.filters.fields.from' | translate }}" [(ngModel)]="selectedStartDate"
                                     (dateChange)="onDateRangeChange()">
-                                <input matEndDate placeholder="Au" [(ngModel)]="selectedEndDate"
+                                <input matEndDate placeholder=" {{ 'i18n.page.search.filters.fields.to' | translate }}" [(ngModel)]="selectedEndDate"
                                     (dateChange)="onDateRangeChange()">
                             </mat-date-range-input>
 
@@ -145,11 +144,11 @@
                     <div class="filter-section">
                         <h5 class="filter-title-with-badge" matBadge="{{ selectedLocationCount }}"
                             matBadgeHidden="{{ !isLocationFilterActive }}" matBadgeSize="small">
-                            Lieu
+                            {{ 'i18n.page.search.filters.fields.location' | translate }}
                         </h5>
                         <!-- Pays -->
                         <mat-form-field appearance="outline" class="full-width">
-                            <mat-label>Pays</mat-label>
+                            <mat-label> {{ 'i18n.page.search.filters.fields.country' | translate }}</mat-label>
                             <mat-select multiple [(ngModel)]="selectedCountries" (selectionChange)="applyFilters()"
                                 disableOptionCentering>
                                 <mat-option *ngFor="let country of allCountries" [value]="country">
@@ -163,7 +162,7 @@
 
                         <!-- Ville -->
                         <mat-form-field appearance="outline" class="full-width">
-                            <mat-label>Ville</mat-label>
+                            <mat-label> {{ 'i18n.page.search.filters.fields.city' | translate }}</mat-label>
                             <mat-select multiple [(ngModel)]="selectedCities" (selectionChange)="applyFilters()">
                                 <mat-option *ngFor="let city of filteredCities" [value]="city">
                                     {{ city }}
@@ -181,14 +180,14 @@
                     <div class="chip-wrapper">
                         <button class="chip" [class.active]="selectedActivityTypesCount > 0"
                             (click)="openMobileFilter('activityType')">
-                            Type
+                            {{ 'i18n.page.search.filters.fields.type' | translate }}
                         </button>
                     </div>
 
                     <!-- Tags -->
                     <div class="chip-wrapper">
                         <button class="chip" [class.active]="selectedTagsCount > 0" (click)="openMobileFilter('tags')">
-                            Tags
+                            {{ 'i18n.page.search.filters.fields.tags' | translate }}
                         </button>
                     </div>
 
@@ -196,7 +195,7 @@
                     <div class="chip-wrapper">
                         <button class="chip" [class.active]="isDistanceFilterActive"
                             (click)="openMobileFilter('distance')">
-                            Distance
+                            {{ 'i18n.page.search.filters.fields.distance' | translate }}
                         </button>
                     </div>
 
@@ -204,7 +203,7 @@
                     <div class="chip-wrapper">
                         <button class="chip" [class.active]="isElevationFilterActive"
                             (click)="openMobileFilter('elevation')">
-                            Dénivelé
+                            {{ 'i18n.page.search.filters.fields.elevation' | translate }}
                         </button>
                     </div>
 
@@ -212,14 +211,14 @@
                     <div class="chip-wrapper">
                         <button class="chip" [class.active]="isDurationFilterActive"
                             (click)="openMobileFilter('duration')">
-                            Temps d'activité
+                            {{ 'i18n.page.search.filters.fields.duration' | translate }}
                         </button>
                     </div>
 
                     <!-- Date -->
                     <div class="chip-wrapper">
                         <button class="chip" [class.active]="isDateFilterActive" (click)="openMobileFilter('date')">
-                            Date
+                            {{ 'i18n.page.search.filters.fields.date' | translate }}
                         </button>
                     </div>
 
@@ -227,7 +226,7 @@
                     <div class="chip-wrapper">
                         <button class="chip" [class.active]="isLocationFilterActive"
                             (click)="openMobileFilter('location')">
-                            Lieu
+                            {{ 'i18n.page.search.filters.fields.location' | translate }}
                         </button>
                     </div>
                 </div>
@@ -238,7 +237,7 @@
                     <div class="checkbox-column">
                         <mat-checkbox *ngFor="let type of activityTypes" [(ngModel)]="type.checked"
                             (change)="applyFilters()">
-                            {{ type.label }}
+                            {{ 'i18n.page.search.filters.fields.' + type.label | translate }}
                         </mat-checkbox>
                     </div>
                 </div>
@@ -254,7 +253,7 @@
                     </div>
 
                     <button class="filters-btn center-btn" (click)="showAllTags = !showAllTags">
-                        {{ showAllTags ? 'Afficher moins' : 'Afficher tout' }}
+                        {{ showAllTags ?  ('i18n.page.search.filters.fields.show_less' | translate) : ('i18n.page.search.filters.fields.show_less' | translate) }}
                     </button>
                 </div>
 
@@ -302,9 +301,9 @@
                 <div class="mobile-filter-overlay" *ngIf="openedMobileFilter === 'date'">
                     <mat-form-field appearance="outline" class="full-width">
                         <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
-                            <input matStartDate placeholder="Du" [(ngModel)]="selectedStartDate"
+                            <input matStartDate placeholder="{{ 'i18n.page.search.filters.fields.from' | translate }}" [(ngModel)]="selectedStartDate"
                                 (dateChange)="onDateRangeChange()">
-                            <input matEndDate placeholder="Au" [(ngModel)]="selectedEndDate"
+                            <input matEndDate placeholder="{{ 'i18n.page.search.filters.fields.to' | translate }}" [(ngModel)]="selectedEndDate"
                                 (dateChange)="onDateRangeChange()">
                         </mat-date-range-input>
 
@@ -318,7 +317,7 @@
                 <div class="mobile-filter-overlay" *ngIf="openedMobileFilter === 'location'">
                     <!-- Pays -->
                     <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Pays</mat-label>
+                        <mat-label>{{ 'i18n.page.search.filters.fields.country' | translate }}</mat-label>
                         <mat-select multiple [(ngModel)]="selectedCountries" (selectionChange)="applyFilters()"
                             disableOptionCentering>
                             <mat-option *ngFor="let country of allCountries" [value]="country">
@@ -332,7 +331,7 @@
 
                     <!-- Ville -->
                     <mat-form-field appearance="outline" class="full-width">
-                        <mat-label>Ville</mat-label>
+                        <mat-label>{{ 'i18n.page.search.filters.fields.city' | translate }}</mat-label>
                         <mat-select multiple [(ngModel)]="selectedCities" (selectionChange)="applyFilters()">
                             <mat-option *ngFor="let city of filteredCities" [value]="city">
                                 {{ city }}
@@ -396,7 +395,7 @@
             <section class="results-panel">
                 <div class="results" *ngIf="filteredActivities.length > 0; else nodata">
 
-                    <span class="total-activities">{{ filteredActivities.length }} activités trouvées.</span>
+                    <span class="total-activities">{{ filteredActivities.length }} {{ 'i18n.page.search.filters.found_activities' | translate }}</span>
 
                     <div class="result-card" *ngFor="let activity of filteredActivities">
 
@@ -410,9 +409,9 @@
                             <div class="meta">
                                 <img class="meta-icon" [src]="activity.sportType === 'TrailRun' ? 'assets/images/trail-icon-32px.svg' : 'assets/images/run-icon-32px.svg'" />
                                 <div class="meta-infos">
-                                    <span>{{ activity.distance }} km</span>
+                                    <span>{{ activity.distance }} {{ 'i18n.common.metrics.kilometer' | translate }}</span>
                                     <span class="desktop-only">•</span>
-                                    <span>{{ activity.totalElevationGain }} m</span>
+                                    <span>{{ activity.totalElevationGain }} {{ 'i18n.common.metrics.meter' | translate }}</span>
                                     <span class="desktop-only">•</span>
                                     <span>{{ globalService.formatTime(activity.movingTime) }}</span>
                                 </div>
@@ -439,7 +438,7 @@
                                 <button mat-raised-button class="button-actions desktop-only"
                                     (click)="openStrava(activity.activityId)">
                                     <img src="assets/images/strava.svg" class="strava-logo" />
-                                    <span>Ouvrir dans Strava</span>
+                                    <span>{{ 'i18n.page.search.actions.open_activity' | translate }}</span>
                                 </button>
                             </div>
                         </div>
@@ -448,14 +447,11 @@
                 </div>
                 <ng-template class="nodata-container" #nodata>
                     <div class="nodata">
-                        <span>Aucune activité disponible</span>
-                        <span>Aucune activité ne correspond à tes critères actuels. Vérifie tes filtres ou importe
-                            une nouvelle séance.</span>
+                        <span>{{ 'i18n.page.search.no_data.title' | translate }}</span>
+                        <span>{{ 'i18n.page.search.no_data.subtitle' | translate }}</span>
                     </div>
                 </ng-template>
             </section>
-
         </div>
-
     </div>
 </ng-container>

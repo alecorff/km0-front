@@ -75,19 +75,11 @@
   }
 }
 
-/* FILTRES */
+/* FILTRES DESKTOP */
 .filters-panel {
   background: #120d24;
   border-radius: 16px;
   padding: 16px;
-}
-
-.filters-scroll {
-  height: calc(100% - 120px);
-  flex-grow: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 10px;
 }
 
 .filters-header {
@@ -121,7 +113,14 @@
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-/* FILTERS - DESKTOP */
+.filters-scroll {
+  height: calc(100% - 120px);
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+}
+
 .filter-section {
   margin-top: 20px;
 
@@ -162,6 +161,102 @@
   width: auto;
 }
 
+/* FILTERS - MOBILE */
+.filter-mobile-container {
+  position: relative;
+  display: flex;
+}
+
+.filter-mobile {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filter-mobile::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  white-space: nowrap;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid #2a2445;
+  background: #1b1432;
+  color: #ccc;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chip.active {
+  background: #8b7cff;
+  color: #fff;
+  border-color: #8b7cff;
+}
+
+.mobile-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chip-wrapper {
+  position: relative;
+}
+
+.mobile-filter-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: transparent;
+}
+
+.mobile-filter-overlay {
+  position: absolute;
+  top: 100%;
+  left: 16px;
+  z-index: 1000;
+
+  min-width: 200px;
+  margin-top: 8px;
+
+  background: #120d24;
+  border-radius: 12px;
+  padding: 12px 16px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.mobile-filter-overlay mat-checkbox {
+  font-size: 0.9rem;
+}
+
+.active-filters-mobile {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+.active-filters-mobile .custom-badge {
+  font-size: 0.7rem;
+}
+
+.active-filters-mobile::-webkit-scrollbar {
+  display: none;
+}
+
+/* COMMON FILTERS CSS */
 .custom-badge {
   position: relative;
   display: inline-flex;
@@ -280,107 +375,6 @@ mat-slider {
     height: 32px;
     object-fit: cover;
   }
-}
-
-/* FILTERS - MOBILE */
-.filter-mobile-container {
-  position: relative;
-  display: flex;
-}
-
-.filter-mobile {
-  display: flex;
-  gap: 8px;
-  padding: 12px 16px;
-
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-}
-
-.filter-mobile::-webkit-scrollbar {
-  display: none;
-}
-
-.chip {
-  white-space: nowrap;
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 1px solid #2a2445;
-  background: #1b1432;
-  color: #ccc;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.chip.active {
-  background: #8b7cff;
-  color: #fff;
-  border-color: #8b7cff;
-}
-
-.mobile-filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.chip-wrapper {
-  position: relative;
-}
-
-.mobile-filter-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 900;
-  background: transparent;
-}
-
-.mobile-filter-overlay {
-  position: absolute;
-  top: 100%;
-  left: 16px;
-  z-index: 1000;
-
-  min-width: 200px;
-  margin-top: 8px;
-
-  background: #120d24;
-  border-radius: 12px;
-  padding: 12px 16px;
-
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-}
-
-.mobile-filter-overlay mat-checkbox {
-  font-size: 0.9rem;
-}
-
-.active-filters-mobile {
-  display: flex;
-  gap: 8px;
-  padding: 0 16px 8px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
-}
-
-.active-filters-mobile .custom-badge {
-  font-size: 0.7rem;
-}
-
-.active-filters-mobile::-webkit-scrollbar {
-  display: none;
-}
-
-
-/* MOBILE ONLY */
-.mobile-only {
-  display: flex;
 }
 
 /* SEARCH RESULTS */
@@ -604,7 +598,7 @@ mat-slider {
 }
 
 .mobile-only {
-  display: block;
+  display: flex;
 }
 
 /* DESKTOP-ONLY */
@@ -617,17 +611,17 @@ mat-slider {
     display: none;
   }
 
+  .page {
+    display: flex;
+    padding: 20px;
+  }
+
   .filters-panel {
     width: 500px;
     height: 500px;
     flex-shrink: 0;
     position: sticky;
     top: 16px;
-  }
-
-  .page {
-    display: flex;
-    padding: 20px;
   }
 
   .meta {
