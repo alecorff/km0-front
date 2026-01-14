@@ -397,7 +397,7 @@
 
                     <span class="total-activities">{{ filteredActivities.length }} {{ 'i18n.page.search.found_activities' | translate }}</span>
 
-                    <div class="result-card" *ngFor="let activity of filteredActivities">
+                    <div class="result-card" *ngFor="let activity of filteredActivities" (click)="isMobile ? openActivity(activity) : null">
 
                         <div class="map-preview">
                             <app-polyline-preview [polyline]="activity.polyline"></app-polyline-preview>
@@ -435,9 +435,7 @@
                                         {{ activity.startDateLocal | date:'longDate' }}
                                     </div>
                                 </div>
-                                <button mat-raised-button class="button-actions desktop-only"
-                                    (click)="openStrava(activity.activityId)">
-                                    <img src="assets/images/strava.svg" class="strava-logo" />
+                                <button mat-raised-button class="button-actions desktop-only" (click)="openActivity(activity)">
                                     <span>{{ 'i18n.page.search.open_activity' | translate }}</span>
                                 </button>
                             </div>

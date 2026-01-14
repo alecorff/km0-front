@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, LOCALE_ID, OnInit } from '@angular/core';
+import { Component, HostListener, LOCALE_ID, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -19,6 +19,8 @@ import { Country, TRAINING_SESSION_TYPES } from 'src/app/enum/enum';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatSelectModule } from '@angular/material/select';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ActivityDialogComponent } from '../common/activity-dialog/activity-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-search',
@@ -57,7 +59,7 @@ export class SearchComponent implements OnInit {
 
   minDate!: Date;
   maxDate!: Date;
-  
+
   readonly MAX_DISTANCE = 100;
   readonly DEFAULT_MIN_DISTANCE = 10;
   readonly DEFAULT_MAX_DISTANCE = 30;
@@ -95,6 +97,8 @@ export class SearchComponent implements OnInit {
 
   openedMobileFilter: 'activityType' | 'tags' | 'distance' | 'elevation' | 'duration' | 'date' | 'location' | null = null;
 
+  isMobile: boolean = false;
+
   loading$ = new BehaviorSubject<boolean>(true);
 
   constructor(
@@ -103,7 +107,8 @@ export class SearchComponent implements OnInit {
     private activityService: ActivityService,
     public globalService: GlobalService,
     private trainingPlanService: TrainingPlanService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -126,6 +131,13 @@ export class SearchComponent implements OnInit {
 
       this.loadActivitiesForPlan();
     });
+
+    this.onResize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.isMobile = window.innerWidth < 768;
   }
 
   loadActivitiesForPlan() {
@@ -290,11 +302,11 @@ export class SearchComponent implements OnInit {
       result = result.filter(a => {
         if (this.maxDuration === this.MAX_ELEVATION) {
           // Cas "10h et +"
-          return a.movingTime >= this.minDuration*60;
+          return a.movingTime >= this.minDuration * 60;
         }
         return (
-          a.movingTime >= this.minDuration*60 &&
-          a.movingTime <= this.maxDuration*60
+          a.movingTime >= this.minDuration * 60 &&
+          a.movingTime <= this.maxDuration * 60
         );
       });
     }
@@ -404,8 +416,8 @@ export class SearchComponent implements OnInit {
   }
 
   get dateFilterBadge(): string {
-    const start = this.selectedStartDate?.toLocaleDateString('fr-FR', {day: '2-digit', month: '2-digit', year: 'numeric'});
-    const end = this.selectedEndDate?.toLocaleDateString('fr-FR', {day: '2-digit', month: '2-digit', year: 'numeric'});
+    const start = this.selectedStartDate?.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const end = this.selectedEndDate?.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
     return `${start} - ${end}`;
   }
 
@@ -420,18 +432,18 @@ export class SearchComponent implements OnInit {
   get countryFilterBadge(): string {
     const count = this.selectedCountries.length;
     const displayedCountries = count > 3 ? this.selectedCountries.slice(0, 3) : this.selectedCountries;
-    
+
     const translatedCountries = displayedCountries.map(
       country => Country[country as keyof typeof Country] ?? country
     );
-    
+
     const suffix = count > 3 ? ', ...' : '';
     return `${count} · ${translatedCountries.join(', ')}${suffix}`;
   }
 
   get cityFilterBadge(): string {
     const count = this.selectedCities.length;
-    const displayedCities = count > 3 ? this.selectedCities.slice(0, 3) : this.selectedCities;   
+    const displayedCities = count > 3 ? this.selectedCities.slice(0, 3) : this.selectedCities;
     const suffix = count > 3 ? ', ...' : '';
     return `${count} · ${displayedCities.join(', ')}${suffix}`;
   }
@@ -449,15 +461,15 @@ export class SearchComponent implements OnInit {
     this.selectedTags = [];
 
     // Filtre par distance
-    this.minDistance = this.DEFAULT_MIN_DISTANCE; 
+    this.minDistance = this.DEFAULT_MIN_DISTANCE;
     this.maxDistance = this.DEFAULT_MAX_DISTANCE;
 
     // Filtre par dénivelé
-    this.minElevation = this.DEFAULT_MIN_ELEVATION; 
+    this.minElevation = this.DEFAULT_MIN_ELEVATION;
     this.maxElevation = this.DEFAULT_MAX_ELEVATION;
 
     // Filtre par temps d'activité
-    this.minDuration = this.DEFAULT_MIN_DURATION; 
+    this.minDuration = this.DEFAULT_MIN_DURATION;
     this.maxDuration = this.DEFAULT_MAX_DURATION;
 
     // Filtre par date
@@ -484,19 +496,19 @@ export class SearchComponent implements OnInit {
   }
 
   resetFilterDistance() {
-    this.minDistance = this.DEFAULT_MIN_DISTANCE; 
+    this.minDistance = this.DEFAULT_MIN_DISTANCE;
     this.maxDistance = this.DEFAULT_MAX_DISTANCE;
     this.applyFilters();
   }
 
   resetFilterElevation() {
-    this.minElevation = this.DEFAULT_MIN_ELEVATION; 
+    this.minElevation = this.DEFAULT_MIN_ELEVATION;
     this.maxElevation = this.DEFAULT_MAX_ELEVATION;
     this.applyFilters();
   }
 
   resetFilterDuration() {
-    this.minDuration = this.DEFAULT_MIN_DURATION; 
+    this.minDuration = this.DEFAULT_MIN_DURATION;
     this.maxDuration = this.DEFAULT_MAX_DURATION;
     this.applyFilters();
   }
@@ -539,8 +551,15 @@ export class SearchComponent implements OnInit {
   }
 
 
-  openStrava(activityId: any) {
-    window.open(`https://www.strava.com/activities/${activityId}`, '_blank');
+  openActivity(activity: any) {
+    this.dialog.open(ActivityDialogComponent, {
+      data: {
+        activity: activity
+      },
+      width: '100%',
+      maxWidth: '600px',
+      height: '600px'
+    });
   }
 
 }
