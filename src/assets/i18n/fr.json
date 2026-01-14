@@ -134,8 +134,7 @@
                     "actions": {
                         "reset": "Réinitialiser les filtres",
                         "show_all": "Afficher tout",
-                        "show_less": "Afficher moins",
-                        "open_activity": "Ouvrir l'activité"
+                        "show_less": "Afficher moins"
                     },
                     "fields": {
                         "type": "Type d'activité",
@@ -154,6 +153,7 @@
                     }
                 },
                 "found_activities": "activités trouvées.",
+                "open_activity": "Ouvrir l'activité",
                 "no_data": {
                     "title": "Aucune activité disponible",
                     "subtitle": "Aucune activité ne correspond à tes critères actuels. Vérifie tes filtres ou importe une nouvelle séance."

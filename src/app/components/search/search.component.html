@@ -395,7 +395,7 @@
             <section class="results-panel">
                 <div class="results" *ngIf="filteredActivities.length > 0; else nodata">
 
-                    <span class="total-activities">{{ filteredActivities.length }} {{ 'i18n.page.search.filters.found_activities' | translate }}</span>
+                    <span class="total-activities">{{ filteredActivities.length }} {{ 'i18n.page.search.found_activities' | translate }}</span>
 
                     <div class="result-card" *ngFor="let activity of filteredActivities">
 
@@ -438,7 +438,7 @@
                                 <button mat-raised-button class="button-actions desktop-only"
                                     (click)="openStrava(activity.activityId)">
                                     <img src="assets/images/strava.svg" class="strava-logo" />
-                                    <span>{{ 'i18n.page.search.actions.open_activity' | translate }}</span>
+                                    <span>{{ 'i18n.page.search.open_activity' | translate }}</span>
                                 </button>
                             </div>
                         </div>
