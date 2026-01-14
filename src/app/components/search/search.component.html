@@ -13,37 +13,32 @@
         <!-- Search input -->
         <div class="search-bar">
             <mat-icon>search</mat-icon>
-            <input type="text" placeholder="Rechercher par nom ou description" [(ngModel)]="query" (input)="onSearch()" />
+            <input type="text" placeholder="Rechercher par nom ou description" [(ngModel)]="query"
+                (input)="onSearch()" />
         </div>
 
-        <!-- Filters 
-        <div class="filters">
-            <button class="chip" [class.active]="activeFilter === 'all'" (click)="setFilter('all')">Tous</button>
+        <div class="page">
 
-            <button class="chip" (click)="setFilter('distance')">Distance</button>
-            <button class="chip" (click)="setFilter('elevation')">Dénivelé</button>
-            <button class="chip" (click)="setFilter('difficulty')">Difficulté</button>
-        </div> -->
+            <!-- DESKTOP ONLY -->
+            <aside class="filters-panel desktop-only">
+                <!-- ton panneau de filtres EXISTANT -->
+                <div class="filters-header">
+                    <h4 class="filters-title">Filtres</h4>
+                    <button class="filters-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
+                </div>
+                <mat-divider></mat-divider>
 
-        <div class="content-layout">
-            <!-- Filters column -->
-            <aside class="filters-panel">
-                
-                    <div class="filters-header">
-                        <h4 class="filters-title">Filtres</h4>
-                        <button class="filters-btn" (click)="resetFilters()">Réinitialiser les filtres</button>
-                    </div>
-                    <mat-divider></mat-divider>
-
-                    <div class="filters-scroll">
+                <div class="filters-scroll">
                     <!-- Type d'activité -->
                     <div class="filter-section">
-                        <h5 class="filter-title-with-badge" matBadge="{{ selectedActivityTypesCount }}" matBadgeHidden="{{ selectedActivityTypesCount === 0 }}" matBadgeSize="small">
+                        <h5 class="filter-title-with-badge" matBadge="{{ selectedActivityTypesCount }}"
+                            matBadgeHidden="{{ selectedActivityTypesCount === 0 }}" matBadgeSize="small">
                             Type d'activité
                         </h5>
 
                         <div class="checkbox-row">
-                            <mat-checkbox *ngFor="let type of activityTypes" [(ngModel)]="type.checked" (change)="applyFilters()">
+                            <mat-checkbox *ngFor="let type of activityTypes" [(ngModel)]="type.checked"
+                                (change)="applyFilters()">
                                 {{ type.label }}
                             </mat-checkbox>
                         </div>
@@ -51,11 +46,13 @@
                     <mat-divider></mat-divider>
                     <!-- Tag -->
                     <div class="filter-section">
-                        <h5 class="filter-title-with-badge" matBadge="{{ selectedTagsCount  }}" matBadgeHidden="{{ selectedTagsCount  === 0 }}" matBadgeSize="small">
+                        <h5 class="filter-title-with-badge" matBadge="{{ selectedTagsCount  }}"
+                            matBadgeHidden="{{ selectedTagsCount  === 0 }}" matBadgeSize="small">
                             Tag
                         </h5>
                         <div class="tag-list" [class.collapsed]="!showAllTags">
-                            <button class="tag" *ngFor="let code of allTags" [class.active]="isTagSelected(code)" (click)="toggleTag(code)">
+                            <button class="tag" *ngFor="let code of allTags" [class.active]="isTagSelected(code)"
+                                (click)="toggleTag(code)">
                                 {{ ('i18n.session_type.label.' + code) | translate }}
                             </button>
                         </div>
@@ -65,6 +62,7 @@
                         </button>
                     </div>
                     <mat-divider></mat-divider>
+                    <!-- Distance -->
                     <div class="filter-section">
                         <h5 class="filter-title-with-badge">
                             Distance (km)
@@ -83,6 +81,7 @@
                         </mat-slider>
                     </div>
                     <mat-divider></mat-divider>
+                    <!-- Dénivelé -->
                     <div class="filter-section">
                         <h5 class="filter-title-with-badge">
                             Dénivelé (m)
@@ -131,8 +130,10 @@
                         </h5>
                         <mat-form-field appearance="outline" class="full-width">
                             <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
-                                <input matStartDate placeholder="Du" [(ngModel)]="selectedStartDate" (dateChange)="onDateRangeChange()">
-                                <input matEndDate placeholder="Au" [(ngModel)]="selectedEndDate" (dateChange)="onDateRangeChange()">
+                                <input matStartDate placeholder="Du" [(ngModel)]="selectedStartDate"
+                                    (dateChange)="onDateRangeChange()">
+                                <input matEndDate placeholder="Au" [(ngModel)]="selectedEndDate"
+                                    (dateChange)="onDateRangeChange()">
                             </mat-date-range-input>
 
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -142,16 +143,18 @@
                     <mat-divider></mat-divider>
                     <!-- Lieu -->
                     <div class="filter-section">
-                        <h5 class="filter-title-with-badge" matBadge="{{ selectedLocationCount }}" matBadgeHidden="{{ !isLocationFilterActive }}" matBadgeSize="small">
+                        <h5 class="filter-title-with-badge" matBadge="{{ selectedLocationCount }}"
+                            matBadgeHidden="{{ !isLocationFilterActive }}" matBadgeSize="small">
                             Lieu
                         </h5>
                         <!-- Pays -->
                         <mat-form-field appearance="outline" class="full-width">
                             <mat-label>Pays</mat-label>
-                            <mat-select multiple [(ngModel)]="selectedCountries" (selectionChange)="applyFilters()" disableOptionCentering>
+                            <mat-select multiple [(ngModel)]="selectedCountries" (selectionChange)="applyFilters()"
+                                disableOptionCentering>
                                 <mat-option *ngFor="let country of allCountries" [value]="country">
                                     <div class="country-option">
-                                        <img [src]="'assets/images/flag/' + country + '.png'" />    
+                                        <img [src]="'assets/images/flag/' + country + '.png'" />
                                         {{ Country[country] }}
                                     </div>
                                 </mat-option>
@@ -171,64 +174,282 @@
                 </div>
             </aside>
 
-            <!-- Results column -->
-            <section class="results-panel">
-                <div class="results" *ngIf="filteredActivities.length > 0; else nodata">
+            <main class="results">
 
-                    <span class="total-activities">{{ filteredActivities.length }} activités trouvées.</span>
-
-                    <div class="result-card" *ngFor="let activity of filteredActivities">
-
-                        <div class="map-preview">
-                            <app-polyline-preview [polyline]="activity.polyline"></app-polyline-preview>
+                <!-- MOBILE ONLY -->
+                <div class="filter-mobile-container mobile-only">
+                    <div class="filter-mobile">
+                        <!-- Type d'activité -->
+                        <div class="chip-wrapper">
+                            <button class="chip" [class.active]="selectedActivityTypesCount > 0" (click)="openMobileFilter('activityType')">
+                                Type
+                            </button>
                         </div>
 
-                        <div class="info">
-                            <h3>{{ activity.name }}</h3>
-
-                            <div class="meta">
-                                <img [src]="activity.sportType === 'TrailRun' ? 'assets/images/trail-icon-24px.svg' : 'assets/images/run-icon-24px.svg'" />
-                                <span>{{ activity.distance }} km</span>
-                                <span>•</span>
-                                <span>{{ activity.totalElevationGain }} m</span>
-                                <span>•</span>
-                                <span>{{ globalService.formatTime(activity.movingTime) }}</span>
-                            </div>
-
-                            <div class="session-tag" *ngIf="activity.sessionType">
-                                <mat-icon class="tag-icon">local_offer</mat-icon>
-                                <span class="tag-label">
-                                    {{ 'i18n.session_type.label.' + activity.sessionType | translate }}
-                                </span>
-                            </div>
-
-                            <div class="footer">
-                                <div class="location-and-date">
-                                    <div *ngIf="activity.city" class="location">
-                                        <img *ngIf="activity.country" class="flag" [src]="'assets/images/flag/' + activity.country + '.png'" />
-                                        <span>{{ activity.city }}</span>
-                                    </div>
-                                    <div class="created">
-                                        {{ activity.startDateLocal | date:'longDate' }}
-                                    </div>
-                                </div>
-                                <button mat-raised-button class="button-actions" (click)="openStrava(activity.activityId)">
-                                    <img src="assets/images/strava.svg" class="strava-logo" /> 
-                                    <span>Ouvrir dans Strava</span>
-                                </button>
-                            </div>
+                        <!-- Tags -->
+                        <div class="chip-wrapper">
+                            <button class="chip" [class.active]="selectedTagsCount > 0" (click)="openMobileFilter('tags')">
+                                Tags
+                            </button>
                         </div>
 
+                        <!-- Distance -->
+                        <div class="chip-wrapper">
+                            <button class="chip" [class.active]="isDistanceFilterActive" (click)="openMobileFilter('distance')">
+                                Distance
+                            </button>
+                        </div>
+
+                        <!-- Dénivelé -->
+                        <div class="chip-wrapper">
+                            <button class="chip" [class.active]="isElevationFilterActive" (click)="openMobileFilter('elevation')">
+                                Dénivelé
+                            </button>
+                        </div>
+
+                        <!-- Temps d'activité -->
+                        <div class="chip-wrapper">
+                            <button class="chip" [class.active]="isDurationFilterActive" (click)="openMobileFilter('duration')">
+                                Temps d'activité
+                            </button>
+                        </div>
+
+                        <!-- Date -->
+                        <div class="chip-wrapper">
+                            <button class="chip" [class.active]="isDateFilterActive" (click)="openMobileFilter('date')">
+                                Date
+                            </button>
+                        </div>
+
+                        <!-- Lieu -->
+                        <div class="chip-wrapper">
+                            <button class="chip" [class.active]="isLocationFilterActive" (click)="openMobileFilter('location')">
+                                Lieu
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Type d'activité -->
+                    <div class="mobile-filter-backdrop" *ngIf="openedMobileFilter" (click)="closeMobileFilter()"></div>
+                    <div class="mobile-filter-overlay" *ngIf="openedMobileFilter === 'activityType'">
+                        <div class="checkbox-column">
+                            <mat-checkbox *ngFor="let type of activityTypes" [(ngModel)]="type.checked" (change)="applyFilters()">
+                                {{ type.label }}
+                            </mat-checkbox>
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="mobile-filter-backdrop" *ngIf="openedMobileFilter" (click)="closeMobileFilter()"></div>
+                    <div class="mobile-filter-overlay" *ngIf="openedMobileFilter === 'tags'">
+                        <div class="tag-list" [class.collapsed]="!showAllTags">
+                            <button class="tag" *ngFor="let code of allTags" [class.active]="isTagSelected(code)" (click)="toggleTag(code)">
+                                {{ ('i18n.session_type.label.' + code) | translate }}
+                            </button>
+                        </div>
+
+                        <button class="filters-btn center-btn" (click)="showAllTags = !showAllTags">
+                            {{ showAllTags ? 'Afficher moins' : 'Afficher tout' }}
+                        </button>
+                    </div>
+
+                    <!-- Distance -->
+                    <div class="mobile-filter-backdrop" *ngIf="openedMobileFilter" (click)="closeMobileFilter()"></div>
+                    <div class="mobile-filter-overlay" *ngIf="openedMobileFilter === 'distance'">
+                        <div class="range-values">
+                            <span>{{ formatDistance(minDistance) }}</span>
+                            <span>{{ formatDistance(maxDistance) }}</span>
+                        </div>
+                        <mat-slider min="0" max="MAX_DISTANCE" step="1" thumbLabel (change)="applyFilters()">
+                            <input matSliderStartThumb [(ngModel)]="minDistance">
+                            <input matSliderEndThumb [(ngModel)]="maxDistance">
+                        </mat-slider>
+                    </div>
+
+                    <!-- Dénivelé -->
+                    <div class="mobile-filter-backdrop" *ngIf="openedMobileFilter" (click)="closeMobileFilter()"></div>
+                    <div class="mobile-filter-overlay" *ngIf="openedMobileFilter === 'elevation'">
+                        <div class="range-values">
+                            <span>{{ formatElevation(minElevation) }}</span>
+                            <span>{{ formatElevation(maxElevation) }}</span>
+                        </div>
+                        <mat-slider min="0" [max]="MAX_ELEVATION" step="10" thumbLabel (change)="applyFilters()">
+                            <input matSliderStartThumb [(ngModel)]="minElevation">
+                            <input matSliderEndThumb [(ngModel)]="maxElevation">
+                        </mat-slider>
+                    </div>
+
+                    <!-- Temps d'activité -->
+                    <div class="mobile-filter-backdrop" *ngIf="openedMobileFilter" (click)="closeMobileFilter()"></div>
+                    <div class="mobile-filter-overlay" *ngIf="openedMobileFilter === 'duration'">
+                        <div class="range-values">
+                            <span>{{ formatDuration(minDuration) }}</span>
+                            <span>{{ formatDuration(maxDuration) }}</span>
+                        </div>
+                        <mat-slider min="0" [max]="MAX_DURATION" step="5" thumbLabel (change)="applyFilters()">
+                            <input matSliderStartThumb [(ngModel)]="minDuration">
+                            <input matSliderEndThumb [(ngModel)]="maxDuration">
+                        </mat-slider>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="mobile-filter-backdrop" *ngIf="openedMobileFilter" (click)="closeMobileFilter()"></div>
+                    <div class="mobile-filter-overlay" *ngIf="openedMobileFilter === 'date'">
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
+                                <input matStartDate placeholder="Du" [(ngModel)]="selectedStartDate"
+                                    (dateChange)="onDateRangeChange()">
+                                <input matEndDate placeholder="Au" [(ngModel)]="selectedEndDate"
+                                    (dateChange)="onDateRangeChange()">
+                            </mat-date-range-input>
+
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker #picker></mat-date-range-picker>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Lieu -->
+                    <div class="mobile-filter-backdrop" *ngIf="openedMobileFilter" (click)="closeMobileFilter()"></div>
+                    <div class="mobile-filter-overlay" *ngIf="openedMobileFilter === 'location'">
+                        <!-- Pays -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Pays</mat-label>
+                            <mat-select multiple [(ngModel)]="selectedCountries" (selectionChange)="applyFilters()"
+                                disableOptionCentering>
+                                <mat-option *ngFor="let country of allCountries" [value]="country">
+                                    <div class="country-option">
+                                        <img [src]="'assets/images/flag/' + country + '.png'" />
+                                        {{ Country[country] }}
+                                    </div>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!-- Ville -->
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Ville</mat-label>
+                            <mat-select multiple [(ngModel)]="selectedCities" (selectionChange)="applyFilters()">
+                                <mat-option *ngFor="let city of filteredCities" [value]="city">
+                                    {{ city }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                 </div>
-                <ng-template class="nodata-container" #nodata>
-                    <div class="nodata">
-                        <span>Aucune activité disponible</span>
-                        <span>Aucune activité ne correspond à tes critères actuels. Vérifie tes filtres ou importe une nouvelle séance.</span>
-                    </div> 
-                </ng-template>
-            </section>
 
+                <!-- FILTRES ACTIFS (MOBILE) -->
+                <div class="active-filters-mobile mobile-only" *ngIf="hasAnyFilterActive()">
+                    <!-- Type d'activité -->
+                    <span *ngIf="selectedActivityTypesCount > 0" class="custom-badge">
+                        {{ typeFilterBadge }}
+                        <mat-icon class="close-icon" (click)="resetFilterActivityType()">close</mat-icon>
+                    </span>
+
+                    <!-- Tags -->
+                    <span *ngIf="selectedTagsCount > 0" class="custom-badge">
+                        {{ tagsFilterBadge }}
+                        <mat-icon class="close-icon" (click)="resetFilterTags()">close</mat-icon>
+                    </span>
+
+                    <!-- Distance -->
+                    <span *ngIf="isDistanceFilterActive" class="custom-badge">
+                        {{ distanceFilterBadge }}
+                        <mat-icon class="close-icon" (click)="resetFilterDistance()">close</mat-icon>
+                    </span>
+
+                    <!-- Dénivelé -->
+                    <span *ngIf="isElevationFilterActive" class="custom-badge">
+                        {{ elevationFilterBadge }}
+                        <mat-icon class="close-icon" (click)="resetFilterElevation()">close</mat-icon>
+                    </span>
+
+                    <!-- Durée -->
+                    <span *ngIf="isDurationFilterActive" class="custom-badge">
+                        {{ durationFilterBadge }}
+                        <mat-icon class="close-icon" (click)="resetFilterDuration()">close</mat-icon>
+                    </span>
+
+                    <!-- Date -->
+                    <span *ngIf="isDateFilterActive" class="custom-badge">
+                        {{ dateFilterBadge }}
+                        <mat-icon class="close-icon" (click)="resetFilterDate()">close</mat-icon>
+                    </span>
+
+                    <!-- Lieu -->
+                    <span *ngIf="selectedCountries.length > 0" class="custom-badge">
+                        {{ countryFilterBadge }}
+                        <mat-icon class="close-icon" (click)="resetFilterCountry()">close</mat-icon>
+                    </span>
+                    <span *ngIf="selectedCities.length > 0" class="custom-badge">
+                        {{ cityFilterBadge }}
+                    <mat-icon class="close-icon" (click)="resetFilterCity()">close</mat-icon>
+                    </span>
+                </div>
+
+
+                <!-- RÉSULTATS -->
+                <section class="results-panel">
+                    <div class="results" *ngIf="filteredActivities.length > 0; else nodata">
+
+                        <span class="total-activities">{{ filteredActivities.length }} activités trouvées.</span>
+
+                        <div class="result-card" *ngFor="let activity of filteredActivities">
+
+                            <div class="map-preview">
+                                <app-polyline-preview [polyline]="activity.polyline"></app-polyline-preview>
+                            </div>
+
+                            <div class="info">
+                                <h3>{{ activity.name }}</h3>
+
+                                <div class="meta">
+                                    <img
+                                        [src]="activity.sportType === 'TrailRun' ? 'assets/images/trail-icon-24px.svg' : 'assets/images/run-icon-24px.svg'" />
+                                    <span>{{ activity.distance }} km</span>
+                                    <span>•</span>
+                                    <span>{{ activity.totalElevationGain }} m</span>
+                                    <span>•</span>
+                                    <span>{{ globalService.formatTime(activity.movingTime) }}</span>
+                                </div>
+
+                                <div class="session-tag" *ngIf="activity.sessionType">
+                                    <mat-icon class="tag-icon">local_offer</mat-icon>
+                                    <span class="tag-label">
+                                        {{ 'i18n.session_type.label.' + activity.sessionType | translate }}
+                                    </span>
+                                </div>
+
+                                <div class="footer">
+                                    <div class="location-and-date">
+                                        <div *ngIf="activity.city" class="location">
+                                            <img *ngIf="activity.country" class="flag"
+                                                [src]="'assets/images/flag/' + activity.country + '.png'" />
+                                            <span>{{ activity.city }}</span>
+                                        </div>
+                                        <div class="created">
+                                            {{ activity.startDateLocal | date:'longDate' }}
+                                        </div>
+                                    </div>
+                                    <button mat-raised-button class="button-actions"
+                                        (click)="openStrava(activity.activityId)">
+                                        <img src="assets/images/strava.svg" class="strava-logo" />
+                                        <span>Ouvrir dans Strava</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <ng-template class="nodata-container" #nodata>
+                        <div class="nodata">
+                            <span>Aucune activité disponible</span>
+                            <span>Aucune activité ne correspond à tes critères actuels. Vérifie tes filtres ou importe
+                                une nouvelle séance.</span>
+                        </div>
+                    </ng-template>
+                </section>
+
+            </main>
 
         </div>
 

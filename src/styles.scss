@@ -204,7 +204,8 @@ body {
 
 // OVERRIDE MAT-MDC
 .form-content,
-.filter-section {
+.filter-section,
+.filter-mobile-container {
   /* INPUT */
   .mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
     color: #f2f1ff !important;

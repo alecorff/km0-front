@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { ActivityService } from 'src/app/services/activity.service';
 import { GlobalService } from 'src/app/services/global.service';
@@ -93,6 +93,8 @@ export class SearchComponent implements OnInit {
   activities: any[] = [];
   filteredActivities: any[] = [];
 
+  openedMobileFilter: 'activityType' | 'tags' | 'distance' | 'elevation' | 'duration' | 'date' | 'location' | null = null;
+
   loading$ = new BehaviorSubject<boolean>(true);
 
   constructor(
@@ -100,7 +102,8 @@ export class SearchComponent implements OnInit {
     private router: Router,
     private activityService: ActivityService,
     public globalService: GlobalService,
-    private trainingPlanService: TrainingPlanService
+    private trainingPlanService: TrainingPlanService,
+    private translateService: TranslateService
   ) { }
 
   ngOnInit() {
@@ -224,7 +227,6 @@ export class SearchComponent implements OnInit {
     }
   }
 
-
   applyFilters(): void {
     let result = [...this.activities];
 
@@ -347,8 +349,24 @@ export class SearchComponent implements OnInit {
     return this.activityTypes.filter(t => t.checked).length;
   }
 
+  get typeFilterBadge(): string {
+    return this.activityTypes.filter(type => type.checked).map(type => type.label).join(', ');
+  }
+
   get selectedTagsCount(): number {
     return this.selectedTags.length;
+  }
+
+  get tagsFilterBadge(): string {
+    const count = this.selectedTags.length;
+    const displayedTags = count > 3 ? this.selectedTags.slice(0, 3) : this.selectedTags;
+    const translatedTags = displayedTags.map(
+      tag => this.translateService.instant(`i18n.session_type.label.${tag}`)
+    );
+
+    const suffix = count > 3 ? ', ...' : '';
+
+    return `${count} · ${translatedTags.join(', ')}${suffix}`;
   }
 
   get isDistanceFilterActive(): boolean {
@@ -399,6 +417,25 @@ export class SearchComponent implements OnInit {
     return this.selectedCountries.length + this.selectedCities.length;
   }
 
+  get countryFilterBadge(): string {
+    const count = this.selectedCountries.length;
+    const displayedCountries = count > 3 ? this.selectedCountries.slice(0, 3) : this.selectedCountries;
+    
+    const translatedCountries = displayedCountries.map(
+      country => Country[country as keyof typeof Country] ?? country
+    );
+    
+    const suffix = count > 3 ? ', ...' : '';
+    return `${count} · ${translatedCountries.join(', ')}${suffix}`;
+  }
+
+  get cityFilterBadge(): string {
+    const count = this.selectedCities.length;
+    const displayedCities = count > 3 ? this.selectedCities.slice(0, 3) : this.selectedCities;   
+    const suffix = count > 3 ? ', ...' : '';
+    return `${count} · ${displayedCities.join(', ')}${suffix}`;
+  }
+
   resetFilters() {
     // Filtre par recherche texte
     this.query = '';
@@ -434,6 +471,18 @@ export class SearchComponent implements OnInit {
     this.applyFilters();
   }
 
+  resetFilterActivityType() {
+    this.activityTypes.forEach(activity => {
+      activity.checked = false;
+    });
+    this.applyFilters();
+  }
+
+  resetFilterTags() {
+    this.selectedTags = [];
+    this.applyFilters();
+  }
+
   resetFilterDistance() {
     this.minDistance = this.DEFAULT_MIN_DISTANCE; 
     this.maxDistance = this.DEFAULT_MAX_DISTANCE;
@@ -457,6 +506,38 @@ export class SearchComponent implements OnInit {
     this.selectedEndDate = null;
     this.applyFilters();
   }
+
+  resetFilterCountry() {
+    this.selectedCountries = [];
+    this.applyFilters();
+  }
+
+  resetFilterCity() {
+    this.selectedCities = [];
+    this.applyFilters();
+  }
+
+  openMobileFilter(type: typeof this.openedMobileFilter): void {
+    this.openedMobileFilter =
+      this.openedMobileFilter === type ? null : type;
+  }
+
+  closeMobileFilter(): void {
+    this.openedMobileFilter = null;
+  }
+
+  hasAnyFilterActive(): boolean {
+    return (
+      this.selectedActivityTypesCount > 0 ||
+      this.selectedTagsCount > 0 ||
+      this.isDistanceFilterActive ||
+      this.isElevationFilterActive ||
+      this.isDurationFilterActive ||
+      this.isDateFilterActive ||
+      this.isLocationFilterActive
+    );
+  }
+
 
   openStrava(activityId: any) {
     window.open(`https://www.strava.com/activities/${activityId}`, '_blank');
