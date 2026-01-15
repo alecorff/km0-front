@@ -361,3 +361,10 @@ body {
 mat-divider {
   border-top-color: #f0f0ff !important;
 }
+
+// MOBILE ONLY
+@media (max-width: 768px) {
+  mat-sidenav-container .mat-drawer-content {
+    overflow-x: hidden;
+  }
+}

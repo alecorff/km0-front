@@ -362,7 +362,7 @@ export class SearchComponent implements OnInit {
   }
 
   get typeFilterBadge(): string {
-    return this.activityTypes.filter(type => type.checked).map(type => type.label).join(', ');
+    return this.activityTypes.filter(type => type.checked).map(type => this.translateService.instant(`i18n.page.search.filters.fields.${type.label}`)).join(', ');
   }
 
   get selectedTagsCount(): number {

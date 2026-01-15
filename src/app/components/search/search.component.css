@@ -170,7 +170,7 @@
 .filter-mobile {
   display: flex;
   gap: 8px;
-  padding: 12px 16px;
+  padding: 12px 10px;
 
   overflow-x: auto;
   overflow-y: hidden;
@@ -660,6 +660,11 @@ mat-slider {
   .search-page,
   .results-panel {
     padding: 10px;
+  }
+
+  .training-plan-header,
+  .search-bar {
+    margin: 10px;
   }
 
   .search-bar {

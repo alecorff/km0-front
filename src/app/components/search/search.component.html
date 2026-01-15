@@ -149,7 +149,7 @@
                         <!-- Pays -->
                         <mat-form-field appearance="outline" class="full-width">
                             <mat-label> {{ 'i18n.page.search.filters.fields.country' | translate }}</mat-label>
-                            <mat-select multiple [(ngModel)]="selectedCountries" (selectionChange)="applyFilters()"
+                            <mat-select multiple [(ngModel)]="selectedCountries" (closed)="applyFilters()"
                                 disableOptionCentering>
                                 <mat-option *ngFor="let country of allCountries" [value]="country">
                                     <div class="country-option">
@@ -163,7 +163,7 @@
                         <!-- Ville -->
                         <mat-form-field appearance="outline" class="full-width">
                             <mat-label> {{ 'i18n.page.search.filters.fields.city' | translate }}</mat-label>
-                            <mat-select multiple [(ngModel)]="selectedCities" (selectionChange)="applyFilters()">
+                            <mat-select multiple [(ngModel)]="selectedCities" (closed)="applyFilters()">
                                 <mat-option *ngFor="let city of filteredCities" [value]="city">
                                     {{ city }}
                                 </mat-option>
@@ -253,7 +253,7 @@
                     </div>
 
                     <button class="filters-btn center-btn" (click)="showAllTags = !showAllTags">
-                        {{ showAllTags ?  ('i18n.page.search.filters.fields.show_less' | translate) : ('i18n.page.search.filters.fields.show_less' | translate) }}
+                        {{ showAllTags ?  ('i18n.page.search.filters.actions.show_less' | translate) : ('i18n.page.search.filters.actions.show_all' | translate) }}
                     </button>
                 </div>
 
@@ -318,7 +318,7 @@
                     <!-- Pays -->
                     <mat-form-field appearance="outline" class="full-width">
                         <mat-label>{{ 'i18n.page.search.filters.fields.country' | translate }}</mat-label>
-                        <mat-select multiple [(ngModel)]="selectedCountries" (selectionChange)="applyFilters()"
+                        <mat-select multiple [(ngModel)]="selectedCountries" (closed)="applyFilters()"
                             disableOptionCentering>
                             <mat-option *ngFor="let country of allCountries" [value]="country">
                                 <div class="country-option">
@@ -332,7 +332,7 @@
                     <!-- Ville -->
                     <mat-form-field appearance="outline" class="full-width">
                         <mat-label>{{ 'i18n.page.search.filters.fields.city' | translate }}</mat-label>
-                        <mat-select multiple [(ngModel)]="selectedCities" (selectionChange)="applyFilters()">
+                        <mat-select multiple [(ngModel)]="selectedCities" (closed)="applyFilters()">
                             <mat-option *ngFor="let city of filteredCities" [value]="city">
                                 {{ city }}
                             </mat-option>
