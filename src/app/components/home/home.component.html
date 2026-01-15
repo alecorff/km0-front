@@ -88,19 +88,20 @@
                                         <mat-icon>electric_bolt</mat-icon> {{ p.fitnessGoal }}
                                     </ng-container>
                                     <ng-template #running>
-                                        <div *ngIf="p.distanceKm">
-                                            <mat-icon>straighten</mat-icon> {{ p.distanceKm }} {{
-                                            'i18n.page.home.carousel.km' | translate }}
+                                        <div *ngIf="p.distanceKm" class="info-item">
+                                            <!-- <mat-icon>straighten</mat-icon>  -->
+                                            <img src="assets/images/distance-icon-18px.svg" />
+                                            {{ p.distanceKm }} {{ 'i18n.page.home.carousel.km' | translate }}
                                         </div>
-                                        <div *ngIf="p.elevationGain">
-                                            <mat-icon>terrain</mat-icon> {{ p.elevationGain }} {{
-                                            'i18n.page.home.carousel.elevation' | translate }}
+                                        <div *ngIf="p.elevationGain" class="info-item">
+                                            <mat-icon>terrain</mat-icon>
+                                            {{ p.elevationGain }} {{ 'i18n.page.home.carousel.elevation' | translate }}
                                         </div>
                                     </ng-template>
                                 </div>
+
                             </div>
                         </div>
-
                     </div>
                 </div>
 
