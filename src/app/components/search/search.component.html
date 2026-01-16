@@ -2,7 +2,7 @@
     <div class="search-page" cdkScrollable>
 
         <!-- Header -->
-        <div class="training-plan-header" (click)="goToTrainingPlan()">
+        <div *ngIf="currentPlan" class="training-plan-header" (click)="goToTrainingPlan()">
             <h1 class="plan-name">
                 {{ currentPlan.name }}
                 <mat-icon class="arrow-icon">arrow_forward</mat-icon>

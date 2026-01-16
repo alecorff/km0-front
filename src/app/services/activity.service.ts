@@ -40,6 +40,15 @@ export class ActivityService {
     });
   }
 
+  getAllActivities(): Observable<any[]> {
+    const jwt = localStorage.getItem('jwt') ?? "";
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${jwt}`);
+
+    return this.http.get<any[]>(`${this.baseUrl}/getAllActivities`, {
+        headers: headers
+    });
+  }
+
   updateSessionType(activityId: number, code: string): Observable<any> {
     const jwt = localStorage.getItem('jwt') ?? "";
     const headers = new HttpHeaders().set('Authorization', `Bearer ${jwt}`);

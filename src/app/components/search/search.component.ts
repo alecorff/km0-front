@@ -119,7 +119,7 @@ export class SearchComponent implements OnInit {
     });
 
     if (!planId) {
-      this.router.navigate(['/'], { queryParams: { code: 404 } });
+      this.loadAllActivities();
       return;
     }
 
@@ -158,6 +158,20 @@ export class SearchComponent implements OnInit {
     });
   }
 
+  loadAllActivities() {
+    this.activityService.getAllActivities().subscribe({
+      next: (result) => {
+        console.log(result)
+        this.activities = result;
+        this.extractLocationsFromActivities();
+      },
+      complete: () => {
+        this.loading$.next(false);
+        this.globalService.stopLoading();
+      }
+    });
+  }
+
   private extractLocationsFromActivities() {
     const countries = new Set<string>();
     const cities = new Set<string>();
@@ -171,7 +185,9 @@ export class SearchComponent implements OnInit {
       }
     });
 
-    this.allCountries = Array.from(countries).sort();
+    this.allCountries = Array.from(countries).sort((a, b) =>
+      Country[a as keyof typeof Country].localeCompare(Country[b as keyof typeof Country])
+    );
     this.allCities = Array.from(cities).sort();
     this.filteredCities = [...this.allCities];
   }
