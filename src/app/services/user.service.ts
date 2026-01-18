@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { GlobalService } from './global.service';
 
 export interface User {
   athleteId: number;
@@ -19,9 +20,12 @@ export interface User {
 })
 export class UserService {
 
-  private baseUrl = 'http://localhost:8080/api/user';
+  private baseUrl = `${this.globalService.apiUrl}/api/user`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private globalService: GlobalService
+  ) {}
 
   getLastSync(): Observable<string> {
     const jwt = localStorage.getItem('jwt') ?? "";

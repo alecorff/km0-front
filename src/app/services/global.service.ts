@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalService {
@@ -8,7 +8,9 @@ export class GlobalService {
   private loadingSubject = new BehaviorSubject<boolean>(false);
   loading$ = this.loadingSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  readonly apiUrl = environment.apiUrl;
+
+  constructor() {}
 
   startLoading() {
     this.loadingSubject.next(true);

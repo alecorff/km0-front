@@ -2,15 +2,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { GlobalService } from './global.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActivityService {
 
-  private baseUrl = 'http://localhost:8080/api/activity';
+  private baseUrl = `${this.globalService.apiUrl}/api/activity`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private globalService: GlobalService
+  ) {}
 
   syncActivities(lastSync: any): Observable<string> {
     const jwt = localStorage.getItem('jwt') ?? "";

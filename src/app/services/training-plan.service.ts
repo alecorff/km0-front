@@ -2,15 +2,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { GlobalService } from './global.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TrainingPlanService {
 
-  private baseUrl = 'http://localhost:8080/api/plan';
+  private baseUrl = `${this.globalService.apiUrl}/api/plan`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private globalService: GlobalService
+  ) {}
 
   createTrainingPlan(payload: any) {
     const jwt = localStorage.getItem('jwt') ?? "";

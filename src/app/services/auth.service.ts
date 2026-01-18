@@ -1,14 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { GlobalService } from './global.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private backendUrl = 'http://localhost:8080';
+  
+  private backendUrl = `${this.globalService.apiUrl}`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private globalService: GlobalService
+  ) {}
 
   login() {
     window.location.href = `${this.backendUrl}/oauth2/authorization/strava`;
