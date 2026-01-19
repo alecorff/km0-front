@@ -10,22 +10,26 @@ fi
 
 GIT_REMOTE=origin
 
-# Sync branches
+# Sync
 git checkout master
 git pull $GIT_REMOTE master
 
 git checkout develop
 git pull $GIT_REMOTE develop
 
-# Merge develop into master
+# Merge develop → master
 git checkout master
 git merge develop
 
-# Release version
+# Release
 npm version $TYPE -m "build(release): %s"
 
-# Push
 git push $GIT_REMOTE master
 git push $GIT_REMOTE --tags
+
+# Report version back to develop
+git checkout develop
+git merge master
+git push $GIT_REMOTE develop
 
 echo "Frontend release ($TYPE) done"
