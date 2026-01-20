@@ -160,7 +160,6 @@ export class SearchComponent implements OnInit {
   loadAllActivities() {
     this.activityService.getAllActivities().subscribe({
       next: (result) => {
-        console.log(result)
         this.activities = result;
         this.extractLocationsFromActivities();
       },
