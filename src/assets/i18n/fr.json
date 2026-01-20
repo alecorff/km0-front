@@ -203,6 +203,7 @@
         },
         "common": {
             "error_message": {
+                "session_lost": "Session perdue. Veuillez vous reconnecter.",
                 "plan_not_found": "Ce plan n'existe pas ou n'est plus accessible.",
                 "activity_not_found": "Impossible de mettre à jour l'activité Strava.",
                 "planned_activity_not_found": "Cette séance n'existe pas ou n'est plus accessible.",

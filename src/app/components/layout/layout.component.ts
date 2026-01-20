@@ -8,7 +8,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { User, UserService } from 'src/app/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SyncDialogComponent } from './sync-dialog/sync-dialog.component';
@@ -52,7 +52,8 @@ export class LayoutComponent implements OnInit {
     private translateService: TranslateService,
     private globalService: GlobalService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) { 
   }
 
@@ -123,6 +124,12 @@ export class LayoutComponent implements OnInit {
     }
 
     return "-";
+  }
+
+  logout() {
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
+    this.router.navigate(['/']);
   }
 
 }
