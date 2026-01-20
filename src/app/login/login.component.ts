@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,17 +10,9 @@ import { ActivatedRoute } from '@angular/router';
 export class LoginComponent implements OnInit {
   tokenResponse: string | null = null;
 
-  constructor(private authService: AuthService, private route: ActivatedRoute) {}
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.tokenResponse = params['tokenResponse'];
-      if (this.tokenResponse) {
-        this.authService.getUserInfo(this.tokenResponse).subscribe(userInfo => {
-          console.log('User Info:', userInfo);
-        });
-      }
-    });
   }
 
   login() {

@@ -8,7 +8,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { User, UserService } from 'src/app/services/user.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SyncDialogComponent } from './sync-dialog/sync-dialog.component';
@@ -23,6 +23,7 @@ import { GlobalService } from 'src/app/services/global.service';
   imports: [
     CommonModule,
     TranslateModule,
+    RouterLink,
     RouterOutlet,
     MatToolbarModule,
     MatMenuModule,

@@ -1,25 +1,35 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { firstValueFrom, Observable } from 'rxjs';
 import { GlobalService } from './global.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  
+
   private backendUrl = `${this.globalService.apiUrl}`;
+  private baseUrl = `${this.globalService.apiUrl}/api/auth`;
 
   constructor(
     private http: HttpClient,
     private globalService: GlobalService
-  ) {}
+  ) { }
 
   login() {
     window.location.href = `${this.backendUrl}/oauth2/authorization/strava`;
   }
 
-  getUserInfo(tokenResponse: string): Observable<any> {
-    return this.http.get(`${this.backendUrl}/loginSuccess?tokenResponse=${tokenResponse}`);
+  async hasValidSession(): Promise<boolean> {
+    const jwt = localStorage.getItem('jwt') ?? '';
+    if (!jwt) return false;
+
+    const headers = { Authorization: `Bearer ${jwt}` };
+
+    try {
+      return await firstValueFrom(this.http.get<boolean>(`${this.baseUrl}/hasValidSession`, { headers }));
+    } catch (err) {
+      return false;
+    }
   }
 }
