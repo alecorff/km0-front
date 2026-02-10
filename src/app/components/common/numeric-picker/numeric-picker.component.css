@@ -43,15 +43,6 @@ button:hover {
     color: white;
 }
 
-/* .value {
-    font-size: 32px;
-    font-weight: bold;
-    margin: 8px 0;
-    min-width: 48px;
-    text-align: center;
-} */
-
-
 /* INPUT DESKTOP */
 .value-row {
     display: flex;
@@ -108,18 +99,6 @@ button:hover {
 .scroll-picker::-webkit-scrollbar {
     display: none;
 }
-
-/* .scroll-item {
-    height: 32px;
-    line-height: 32px;
-
-    text-align: center;
-    font-size: 32px;
-    font-weight: bold;
-    color: #777;
-
-    scroll-snap-align: center;
-} */
 
 .scroll-item {
     height: 32px;
