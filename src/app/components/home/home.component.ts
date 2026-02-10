@@ -73,6 +73,8 @@ export class HomeComponent implements AfterViewInit {
         this.currentPlan = null;
         this.pastPrepas = [];
 
+        const futurePlans: any[] = [];
+
         plans.forEach(plan => {
           const start = new Date(plan.startDate);
           const end = new Date(plan.endDate);
@@ -80,16 +82,30 @@ export class HomeComponent implements AfterViewInit {
           const isCurrent = today >= start && today <= end;
           if (isCurrent) {
             this.currentPlan = plan;
-
-            this.getNextSession(today);
-
-            // calcul de l'avancement
-            this.computeWeeks(plan);
-            this.weeksArray = Array.from({ length: plan.totalWeeks });
+          } else if (start > today) {
+            futurePlans.push(plan);
           } else {
             this.pastPrepas.push(plan);
           }
         });
+
+        if (!this.currentPlan && futurePlans.length > 0) {
+          futurePlans.sort(
+            (a, b) =>
+              new Date(a.startDate).getTime() -
+              new Date(b.startDate).getTime()
+          );
+
+          this.currentPlan = futurePlans[0];
+        }
+
+        if (this.currentPlan) {
+          this.getNextSession(today);
+          this.computeWeeks(this.currentPlan);
+          this.weeksArray = Array.from({
+            length: this.currentPlan.totalWeeks
+          });
+        }
       },
       complete: () => {
         this.isLoading = false;
