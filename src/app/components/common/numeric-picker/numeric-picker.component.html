@@ -1,13 +1,35 @@
 <div class="picker-container">
   <div class="picker-title">{{ 'i18n.page.numeric_picker.title.' + type | translate }}</div>
   <div class="picker-columns">
-    <div class="column" *ngFor="let col of getColumns(); let i = index">
-      <button (click)="updateValue(col.value, col.step)">▲</button>
-      <div class="value">
-        {{ getValue(col.value) | number:'2.0' }}
-        <span *ngIf="col.separator && i < getColumns().length - 1">{{ col.separator }}</span>
+    <div class="column" *ngFor="let col of columns; let i = index">
+      <button [class.disabled-arrow]="isMobile" [attr.aria-hidden]="isMobile" (click)="!isMobile && updateValue(col.value, col.step)">▲</button>
+
+      <!-- INPUT DESKTOP -->
+      <div class="value-row">
+        <input
+          *ngIf="!isMobile"
+          class="value-input"
+          type="number"
+          [step]="col.step"
+          [max]="col.max ?? null"
+          min="0"
+          [value]="getValue(col.value)"
+          (input)="onInputChange(col.value, $event)"
+        />
+
+        <!-- MOBILE SCROLL -->
+        <div *ngIf="isMobile" #scrollPicker class="scroll-picker" (scroll)="onScroll(col.value, $event, col)">
+          <div *ngFor="let v of getScrollValues(col)" class="scroll-item" [class.active]="v === getValue(col.value)">
+            {{ v | number:'2.0' }}
+          </div>
+        </div>  
+
+        <span class="separator">
+          {{ col.separator && i < columns.length - 1 ? col.separator : '' }}
+        </span>
       </div>
-      <button (click)="updateValue(col.value, -col.step)">▼</button>
+
+      <button [class.disabled-arrow]="isMobile" [attr.aria-hidden]="isMobile" (click)="!isMobile && updateValue(col.value, -col.step)">▼</button>
       <div class="label">{{ col.label }}</div>
     </div>
   </div>

@@ -28,6 +28,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 72px;
 }
 
 button {
@@ -42,12 +43,132 @@ button:hover {
     color: white;
 }
 
-.value {
+/* .value {
     font-size: 32px;
     font-weight: bold;
     margin: 8px 0;
     min-width: 48px;
     text-align: center;
+} */
+
+
+/* INPUT DESKTOP */
+.value-row {
+    display: flex;
+    justify-content: center;
+    margin: 8px 0;
+    min-height: 40px;
+}
+
+.value-row:hover .value-input {
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.25);
+}
+
+.value-input {
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+
+    width: 3.5rem;
+    text-align: center;
+
+    background: transparent;
+    border: none;
+    outline: none;
+
+    padding: 0;
+    margin: 8px 0;
+
+    appearance: textfield;
+
+    cursor: text;
+}
+
+.value-input::-webkit-inner-spin-button,
+.value-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.value-input,
+.separator {
+    line-height: 1;
+}
+
+/* SCROLL MOBILE */
+.scroll-picker {
+    height: 96px;
+    width: 3.5rem;
+    overflow-y: auto;
+
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+}
+
+.scroll-picker::-webkit-scrollbar {
+    display: none;
+}
+
+/* .scroll-item {
+    height: 32px;
+    line-height: 32px;
+
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #777;
+
+    scroll-snap-align: center;
+} */
+
+.scroll-item {
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 32px;
+    font-weight: bold;
+    color: #777;
+
+    scroll-snap-align: center;
+}
+
+
+.scroll-item.active {
+    color: white;
+    opacity: 1;
+}
+
+.scroll-item {
+    opacity: 0.4;
+    transition: opacity 0.15s ease;
+}
+
+.scroll-picker::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 32px;
+    transform: translateY(-100%);
+    border-top: 1px solid rgba(255,255,255,0.15);
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    pointer-events: none;
+}
+
+
+.separator {
+    display: inline-block;
+    width: 12px;
+    text-align: center;
+
+    font-size: 32px;
+    font-weight: bold;
+    margin-left: 2px;
+    color: white;
 }
 
 .label {
