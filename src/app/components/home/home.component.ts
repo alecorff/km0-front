@@ -98,7 +98,7 @@ export class HomeComponent implements AfterViewInit {
 
           this.currentPlan = futurePlans[0];
         }
-
+        
         if (this.currentPlan) {
           this.getNextSession(today);
           this.computeWeeks(this.currentPlan);

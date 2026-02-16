@@ -2,31 +2,47 @@
 
     <!-- PLAN D'ENTRAINEMENT ACTUEL -->
     <div class="current-prepa-card">
-        <div *ngIf="currentPlan; else noCurrentTraining" (click)="goToCurrentPlan()">
+        <div *ngIf="currentPlan; else noCurrentTraining" (click)="goToCurrentPlan()" class="premium-content">
+
             <div class="prepa-header">
-                <span class="prepa-title">{{ 'i18n.page.home.training.plan' | translate }}: {{ currentPlan.name
-                    }}</span>
-                <span class="prepa-date">{{ 'i18n.page.home.training.date' | translate }}: {{ currentPlan.endDate |
-                    date:'longDate' }}</span>
+                <div>
+                    <div class="prepa-label">{{ 'i18n.page.home.training.plan' | translate | uppercase }}</div>
+                    <div class="prepa-title">
+                        {{ currentPlan.name }}
+                    </div>
+                </div>
+
+                <div class="prepa-date">
+                    {{ currentPlan.endDate | date:'longDate' }}
+                </div>
             </div>
 
             <!-- Prochaine séance -->
             <div class="next-session">
                 <mat-icon>directions_run</mat-icon>
-                <span>{{ 'i18n.page.home.training.nextSession' | translate }}: {{ nextSession.day }} - {{
-                    nextSession.name }}</span>
+                <div>
+                    <div class="next-label">{{ 'i18n.page.home.training.nextSession' | translate }}</div>
+                    <div class="next-value">
+                        {{ nextSession.day }} - {{ nextSession.name }}
+                    </div>
+                </div>
             </div>
 
-            <!-- Avancement des semaines -->
+            <!-- Barre de progression principale -->
+            <div class="main-progress">
+                <div class="progress-text">
+                    {{ currentPlan.weeksDone }} / {{ currentPlan.totalWeeks }}
+                    {{ 'i18n.page.home.training.weeksCompleted' | translate }}
+                </div>
+            </div>
+
+            <!-- Visual weeks blocks améliorés -->
             <div class="weeks-progress">
                 <div *ngFor="let w of weeksArray; index as i" class="week-block"
                     [class.week-done]="i < currentPlan.weeksDone">
                 </div>
             </div>
-            <div class="weeks-label">
-                {{ currentPlan.weeksDone }} / {{ currentPlan.totalWeeks }} {{ 'i18n.page.home.training.weeksCompleted'
-                | translate }}
-            </div>
+
         </div>
 
         <!-- CREER UN PLAN D'ENTRAINEMENT -->

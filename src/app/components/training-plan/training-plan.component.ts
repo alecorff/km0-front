@@ -201,6 +201,8 @@ export class TrainingPlanComponent implements OnInit {
           }
 
           const plannedDate = new Date(p.scheduledDate);
+          console.log(plannedDate.toDateString())
+          console.log(day.date.toDateString())
           return plannedDate.toDateString() === day.date.toDateString();
         });
 
