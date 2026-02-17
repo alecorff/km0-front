@@ -69,7 +69,7 @@
 
     <!-- ANCIENS PLANS D'ENTRAINEMENT -->
     <!-- Message par défaut si pas encore de plans -->
-    <div *ngIf="pastPrepas.length === 0; else carouselBlock" class="no-past-prepas">
+    <div *ngIf="pastPrepas.length === 0; else carouselBlock" class="no-past-prepas" (click)="addPastPrepa()">
         <img class="no-icon" [src]="'assets/images/history-icon-200.svg'" />
         <div class="no-title">{{ 'i18n.page.home.noCarousel.title' | translate }}</div>
         <div class="no-subtitle">{{ 'i18n.page.home.noCarousel.subtitle' | translate }}</div>
@@ -121,7 +121,7 @@
                             <div class="carousel-card add-card" *ngIf="p.isAddCard" (click)="addPastPrepa()">
                                 <mat-icon>add_circle</mat-icon>
                                 <div class="add-text">
-                                {{ 'i18n.page.home.carousel.add_past_training_plan' | translate }}
+                                    {{ 'i18n.page.home.carousel.add_past_training_plan' | translate }}
                                 </div>
                             </div>
                         </div>

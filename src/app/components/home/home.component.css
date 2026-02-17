@@ -302,8 +302,9 @@
 }
 
 .carousel-card.add-card .add-text {
+    font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    font-size: 18px;
+    font-size: 1.3rem;
     color: #e0d9ff;
 }
 
@@ -378,6 +379,8 @@
     transition: 0.25s ease;
 
     margin-top: 100px;
+
+    cursor: pointer;
 }
 
 .no-past-prepas mat-icon {
