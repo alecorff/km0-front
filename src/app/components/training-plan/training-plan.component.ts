@@ -81,6 +81,8 @@ export class TrainingPlanComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    (window as any).trainingPlanComponent = this;
+
     const planId = this.route.snapshot.paramMap.get('id');
 
     Promise.resolve().then(() => {
@@ -201,8 +203,6 @@ export class TrainingPlanComponent implements OnInit {
           }
 
           const plannedDate = new Date(p.scheduledDate);
-          console.log(plannedDate.toDateString())
-          console.log(day.date.toDateString())
           return plannedDate.toDateString() === day.date.toDateString();
         });
 
