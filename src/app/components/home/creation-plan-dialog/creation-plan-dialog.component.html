@@ -1,4 +1,4 @@
-<h2 mat-dialog-title class="title">{{ 'i18n.page.home.create_dialog.title' | translate }}</h2>
+<h2 mat-dialog-title class="title">{{ title }}</h2>
 <mat-divider></mat-divider>
 
 <form [formGroup]="form" mat-dialog-content class="form-content">
@@ -104,9 +104,9 @@
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>{{ 'i18n.page.home.create_dialog.fields.date' | translate }}</mat-label>
 
-      <mat-date-range-input [rangePicker]="rangePicker">
-        <input matStartDate formControlName="startDate" placeholder="Début">
-        <input matEndDate formControlName="endDate" placeholder="Fin">
+      <mat-date-range-input [rangePicker]="rangePicker" [max]="maxEndDate">
+        <input matStartDate formControlName="startDate" placeholder="{{ 'i18n.page.home.create_dialog.fields.from' | translate }}">
+        <input matEndDate formControlName="endDate" placeholder="{{ 'i18n.page.home.create_dialog.fields.to' | translate }}">
       </mat-date-range-input>
 
       <mat-datepicker-toggle matSuffix [for]="rangePicker"></mat-datepicker-toggle>

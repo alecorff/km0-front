@@ -88,8 +88,8 @@
                 <div class="carousel-wrapper">
                     <div class="carousel" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
 
-                        <div class="carousel-item" *ngFor="let p of pastPrepas">
-                            <div class="carousel-card">
+                        <div class="carousel-item" *ngFor="let p of carouselItems; let i = index" [class.add-prepa-item]="p.isAddCard">
+                            <div *ngIf="!p.isAddCard" class="carousel-card" (click)="goToPastPrepa(p)">
                                 <div class="carousel-name">
                                     <img *ngIf="p.location" class="carousel-flag"
                                         [src]="'assets/images/flag/' + p.location + '.png'" />
@@ -117,7 +117,15 @@
                                 </div>
 
                             </div>
+
+                            <div class="carousel-card add-card" *ngIf="p.isAddCard" (click)="addPastPrepa()">
+                                <mat-icon>add_circle</mat-icon>
+                                <div class="add-text">
+                                {{ 'i18n.page.home.carousel.add_past_training_plan' | translate }}
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -128,7 +136,7 @@
 
             <!-- petits points sous le carousel -->
             <div class="carousel-dots">
-                <div *ngFor="let p of pastPrepas; let i = index" class="dot" [class.active]="i === currentIndex"
+                <div *ngFor="let p of carouselItems; let i = index" class="dot" [class.active]="i === currentIndex"
                     (click)="goToSlide(i)">
                 </div>
             </div>

@@ -79,7 +79,7 @@
 
         <!-- ===== SEMAINE SÉLECTIONNÉE ===== -->
         <div *ngIf="selectedWeek.length" class="week-header">
-            <button class="plan-session-link" (click)="planSession()">
+            <button *ngIf="!formerPlan" class="plan-session-link" (click)="planSession()">
                 <mat-icon>more_time</mat-icon>
                 <span>{{ 'i18n.page.plan.calendar.plan_activity' | translate }}</span>
             </button>

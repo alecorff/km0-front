@@ -89,6 +89,11 @@ export class HomeComponent implements AfterViewInit {
           }
         });
 
+        // On trie sur la date de fin
+        this.pastPrepas.sort((a, b) => 
+          new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+        );
+
         if (!this.currentPlan && futurePlans.length > 0) {
           futurePlans.sort(
             (a, b) =>
@@ -98,7 +103,7 @@ export class HomeComponent implements AfterViewInit {
 
           this.currentPlan = futurePlans[0];
         }
-        
+
         if (this.currentPlan) {
           this.getNextSession(today);
           this.computeWeeks(this.currentPlan);
@@ -171,8 +176,8 @@ export class HomeComponent implements AfterViewInit {
 
         // success message
         this.snackBar.open(
-          this.translateService.instant('i18n.page.home.create_dialog.successMessage.success'),
-          this.translateService.instant('i18n.page.home.create_dialog.successMessage.action'),
+          this.translateService.instant('i18n.page.home.create_dialog.messages.new_plan_success'),
+          this.translateService.instant('i18n.page.home.create_dialog.messages.action'),
           {
             duration: 3000,
             horizontalPosition: 'center',
@@ -187,7 +192,7 @@ export class HomeComponent implements AfterViewInit {
   }
 
   nextSlide() {
-    if (this.currentIndex < this.pastPrepas.length - 1) {
+    if (this.currentIndex < this.carouselItems.length - 1) {
       this.currentIndex++;
     }
   }
@@ -199,7 +204,9 @@ export class HomeComponent implements AfterViewInit {
   }
 
   goToSlide(i: number) {
-    this.currentIndex = i;
+    if (i >= 0 && i < this.carouselItems.length) {
+      this.currentIndex = i;
+    }
   }
 
   private computeWeeks(plan: any): void {
@@ -235,5 +242,59 @@ export class HomeComponent implements AfterViewInit {
     d.setDate(d.getDate() + diff);
     d.setHours(0, 0, 0, 0);
     return d;
+  }
+
+  get carouselItems() {
+    return [...this.pastPrepas, { isAddCard: true }];
+  }
+
+  addPastPrepa() {
+    const dialogRef = this.dialog.open(CreatePlanDialogComponent, {
+      data: {
+        pastPlan: true
+      },
+      disableClose: false,
+      width: '100%',
+      maxWidth: '600px',
+      height: '600px',
+      panelClass: 'primary-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.globalService.startLoading();
+        // ajout du plan d'entrainement
+        this.pastPrepas.push(result);
+        // On trie sur la date de fin
+        this.pastPrepas.sort((a, b) => 
+          new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+        );
+        // On affiche le plan d'entrainement dans le carousel
+        const index = this.carouselItems.findIndex(
+          plan => plan.planId === result.planId
+        );
+        if (index !== -1) {
+          this.currentIndex = index;
+        }
+
+        // success message
+        this.snackBar.open(
+          this.translateService.instant('i18n.page.home.create_dialog.messages.former_plan_success'),
+          this.translateService.instant('i18n.page.home.create_dialog.messages.action'),
+          {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['app-snackbar-info']
+          }
+        );
+
+        this.globalService.stopLoading();
+      }
+    });
+  }
+
+  goToPastPrepa(plan: any) {
+    this.router.navigate([`/plan/${plan.planId}`]);
   }
 }

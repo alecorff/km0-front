@@ -145,7 +145,7 @@ export class SearchComponent implements OnInit {
       return;
     }
 
-    this.activityService.getActivitiesForPlanPeriod(this.currentPlan.startDate).subscribe({
+    this.activityService.getActivitiesForPlanPeriod(this.currentPlan.startDate, this.currentPlan.endDate).subscribe({
       next: (result) => {
         this.activities = result;
         this.extractLocationsFromActivities();

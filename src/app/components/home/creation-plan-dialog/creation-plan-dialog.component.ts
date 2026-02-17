@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -34,6 +34,8 @@ import { map, startWith } from 'rxjs';
 })
 export class CreatePlanDialogComponent implements OnInit {
 
+  title: string = this.translateService.instant('i18n.page.home.create_dialog.new_plan_title');
+  maxEndDate: Date | null = null;
   form!: FormGroup;
 
   trainingTypes = [
@@ -64,10 +66,16 @@ export class CreatePlanDialogComponent implements OnInit {
     private fb: FormBuilder, 
     private translateService: TranslateService,
     private dialogRef: MatDialogRef<CreatePlanDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private trainingPlanService: TrainingPlanService
   ) { }
 
   ngOnInit(): void {
+    if (this.data.pastPlan) {
+      this.title = this.translateService.instant('i18n.page.home.create_dialog.former_plan_title');
+      this.maxEndDate = new Date();
+    }
+
     this.form = this.fb.group({
       name: ['', Validators.required],
       type: ['', Validators.required],

@@ -49,6 +49,7 @@ interface CalendarDay {
 export class TrainingPlanComponent implements OnInit {
 
   currentPlan: any = null;
+  formerPlan: boolean = false;
 
   activities: any[] = [];
   plannedActivities: any[] = [];
@@ -114,16 +115,35 @@ export class TrainingPlanComponent implements OnInit {
     const plannedObs = plannedActivities ? of(plannedActivities) : this.plannedActivityService.getPlannedActivitiesForPlan(this.currentPlan.planId);
 
     forkJoin({
-      activities: this.activityService.getActivitiesForPlanPeriod(this.currentPlan.startDate),
+      activities: this.activityService.getActivitiesForPlanPeriod(this.currentPlan.startDate, this.currentPlan.endDate),
       planned: plannedObs
     }).subscribe({
       next: ({ activities, planned }) => {
         this.activities = activities;
         this.plannedActivities = planned;
 
+        // si on est sur un ancien plan d'entrainement
+        // on bloque l'action de planification de séance
+        // on set le calendrier à la date de fin de plan d'entrainement
+        const today = new Date();
+        const end = new Date(this.currentPlan.endDate);
+        if (today > end) {
+          this.formerPlan = true;
+          this.selectedDate = end;
+
+          this.selectedMonth = new Date(
+            this.selectedDate.getFullYear(),
+            this.selectedDate.getMonth(),
+            1
+          );
+        } 
+        // sinon on set le calendrier à la date du jour
+        else {
+          this.selectedDate = new Date();
+        }
+
         this.computeTotals();
         this.generateMonth();
-        this.selectedDate = new Date();
         this.extractWeek(this.selectedDate);
       },
       complete: () => {

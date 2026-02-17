@@ -41,14 +41,16 @@
                     "title": "Vos accomplissements",
                     "date": "Date",
                     "km": "km",
-                    "elevation": "m D+"
+                    "elevation": "m D+",
+                    "add_past_training_plan": "Ajouter un ancien plan d'entraînement"
                 },
                 "noCarousel": {
                     "title": "Aucun plan terminé pour le moment",
                     "subtitle": "Vos anciens plans d'entraînement apparaîtront ici."
                 },
                 "create_dialog": {
-                    "title": "Nouveau plan d'entrainement",
+                    "new_plan_title": "Nouveau plan d'entrainement",
+                    "former_plan_title": "Ancien plan d'entrainement",
                     "fields": {
                         "name": "Nom du plan d'entrainement",
                         "type": "Type de préparation",
@@ -58,6 +60,8 @@
                         "location": "Lieu",
                         "fitnessGoal": "Objectif principal",
                         "date": "Période de préparation",
+                        "from": "Début",
+                        "to": "Fin",
                         "trainingTypes": {
                             "running": "Course à pied",
                             "trail": "Trail",
@@ -71,8 +75,9 @@
                             "loseWeight": "Perdre du poids"
                         }
                     },
-                    "successMessage": {
-                        "success": "Le plan d'entrainement vient d'être créé.",
+                    "messages": {
+                        "new_plan_success": "Le plan d'entrainement vient d'être créé.",
+                        "former_plan_success": "Le plan d'entrainement a été ajouté à votre historique.",
                         "action": "Fermer"
                     },
                     "errorMessage": {
