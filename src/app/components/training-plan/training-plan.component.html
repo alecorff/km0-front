@@ -42,22 +42,22 @@
         <div class="prepa-stats-row">
             <div class="stat-item">
                 <div class="stat-value">{{ activities.length }}</div>
-                <div class="stat-label">Séances complétées</div>
+                <div class="stat-label">{{ 'i18n.page.plan.activities_done' | translate }}</div>
             </div>
 
             <div class="stat-item">
                 <div class="stat-value">{{ totalDistance }} km</div>
-                <div class="stat-label">Distance parcourue</div>
+                <div class="stat-label">{{ 'i18n.page.plan.distance_done' | translate }}</div>
             </div>
 
             <div class="stat-item" *ngIf="currentPlan.type === 'TRAIL'">
                 <div class="stat-value">{{ totalElevation }} m D+</div>
-                <div class="stat-label">Dénivelé total</div>
+                <div class="stat-label">{{ 'i18n.page.plan.elevation_done' | translate }}</div>
             </div>
 
             <div class="stat-item">
                 <div class="stat-value">{{ totalTime }}</div>
-                <div class="stat-label">Temps d'activité</div>
+                <div class="stat-label">{{ 'i18n.page.plan.time_done' | translate }}</div>
             </div>
         </div>
     </div>
@@ -65,23 +65,23 @@
     <div class="section-actions">
         <button mat-raised-button class="button-actions" (click)="goToSearchPage()">
             <mat-icon>search</mat-icon>
-            Recherche
+            {{ 'i18n.page.plan.actions.search' | translate }}
         </button>
         <button mat-raised-button class="button-actions">
             <mat-icon>bar_chart</mat-icon>
-            Statistiques
+            {{ 'i18n.page.plan.actions.stats' | translate }}
         </button>
     </div>
 
     <!-- CALENDRIER -->
     <div class="calendar-container">
-        <h2 class="section-title">Plan d'entraînement</h2>
+        <h2 class="section-title">{{ 'i18n.page.plan.calendar.title' | translate }}</h2>
 
         <!-- ===== SEMAINE SÉLECTIONNÉE ===== -->
         <div *ngIf="selectedWeek.length" class="week-header">
             <button class="plan-session-link" (click)="planSession()">
                 <mat-icon>more_time</mat-icon>
-                <span>Planifier une séance</span>
+                <span>{{ 'i18n.page.plan.calendar.plan_activity' | translate }}</span>
             </button>
         </div>
 
@@ -122,7 +122,7 @@
 
                     <!-- Pas d'activité -->
                     <ng-template #noActivity>
-                        <div class="empty-msg">Aucune séance</div>
+                        <div class="empty-msg">{{ 'i18n.page.plan.calendar.no_activity' | translate }}</div>
                     </ng-template>
                 </div>
             </div>

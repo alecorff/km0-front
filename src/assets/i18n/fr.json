@@ -85,6 +85,19 @@
                 }
             },
             "plan": {
+                "activities_done": "Séances complétées",
+                "distance_done": "Distance parcourue",
+                "elevation_done": "Dénivelé total",
+                "time_done": "Temps d'activité",
+                "actions": {
+                    "search": "Recherche",
+                    "stats": "Statistiques"
+                },
+                "calendar": {
+                    "title": "Plan d'entraînement",
+                    "plan_activity": "Planifier une séance",
+                    "no_activity": "Aucune séance"
+                },
                 "create_planned_activity_dialog": {
                     "title": "Nouvelle séance",
                     "fields": {
