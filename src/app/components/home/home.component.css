@@ -491,7 +491,8 @@
 
     /* NO CAROUSEL */
     .no-past-prepas {
-        padding: 30px 15px;
+        padding: 20px !important;
+        margin: 40px !important;
     }
 
     .no-past-prepas mat-icon {
