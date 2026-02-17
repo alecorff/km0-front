@@ -81,8 +81,6 @@ export class TrainingPlanComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    (window as any).trainingPlanComponent = this;
-
     const planId = this.route.snapshot.paramMap.get('id');
 
     Promise.resolve().then(() => {
@@ -171,10 +169,6 @@ export class TrainingPlanComponent implements OnInit {
    * Ajouter les activités réelles à la semaine en cours
    */
   private attachActivitiesToWeek() {
-    // if (!this.activities?.length) {
-    //   return;
-    // }
-
     this.selectedWeek.forEach(day => {
       // Affichage des séances réelles
       const activitiesForDay = this.activities.filter(a => {
