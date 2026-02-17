@@ -196,14 +196,21 @@ export class TrainingPlanComponent implements OnInit {
           if (p.status !== 'PLANNED') {
             return false;
           }
-          const todayStr = new Date().toISOString().split('T')[0];
-          // Ne pas afficher les séances planifiées passées
-          if (p.scheduledDate < todayStr) {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0); // Normalise à minuit
+
+          // Convertit p.scheduledDate en Date si c'est une string
+          const scheduledDate = typeof p.scheduledDate === 'string'
+            ? new Date(p.scheduledDate)
+            : new Date(p.scheduledDate);
+
+          // Vérifie si la séance est passée
+          if (scheduledDate < today) {
             return false;
           }
 
-          const plannedDate = new Date(p.scheduledDate);
-          return plannedDate.toDateString() === day.date.toDateString();
+          // Compare les dates (sans l'heure)
+          return scheduledDate.toDateString() === day.date.toDateString();
         });
 
         if (plannedActivitiesForDay.length === 1) {
