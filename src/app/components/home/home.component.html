@@ -81,11 +81,7 @@
             <h2 class="section-title">{{ 'i18n.page.home.carousel.title' | translate }}</h2>
 
             <div class="carousel-container">
-                <button class="carousel-arrow left" (click)="prevSlide()">
-                    <mat-icon>chevron_left</mat-icon>
-                </button>
-
-                <div class="carousel-wrapper">
+                <div class="carousel-wrapper" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)" (wheel)="onWheel($event)">
                     <div class="carousel" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
 
                         <div class="carousel-item" *ngFor="let p of carouselItems; let i = index" [class.add-prepa-item]="p.isAddCard">
@@ -105,7 +101,6 @@
                                     </ng-container>
                                     <ng-template #running>
                                         <div *ngIf="p.distanceKm" class="info-item">
-                                            <!-- <mat-icon>straighten</mat-icon>  -->
                                             <img src="assets/images/distance-icon-18px.svg" />
                                             {{ p.distanceKm }} {{ 'i18n.page.home.carousel.km' | translate }}
                                         </div>
@@ -128,10 +123,6 @@
 
                     </div>
                 </div>
-
-                <button class="carousel-arrow right" (click)="nextSlide()">
-                    <mat-icon>chevron_right</mat-icon>
-                </button>
             </div>
 
             <!-- petits points sous le carousel -->

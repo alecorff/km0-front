@@ -276,13 +276,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 150px;
     border: 2px dashed #5e4a85;
     background-color: #1b1432;
     border-radius: 12px;
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    padding: 16px;
     text-align: center;
     color: #e0d9ff;
 }
@@ -306,36 +304,6 @@
     font-weight: 500;
     font-size: 1.3rem;
     color: #e0d9ff;
-}
-
-/* Flèches */
-.carousel-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    border: none;
-    background: white;
-    border-radius: 50%;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-    width: 38px;
-    height: 38px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    z-index: 10;
-}
-
-.carousel-arrow mat-icon {
-    font-size: 24px;
-}
-
-.carousel-arrow.left {
-    left: 5px;
-}
-
-.carousel-arrow.right {
-    right: 5px;
 }
 
 /* Dots */
@@ -484,11 +452,6 @@
         font-size: 0.85rem;
     }
 
-    .carousel-arrow {
-        width: 32px;
-        height: 32px;
-    }
-
     /* NO CAROUSEL */
     .no-past-prepas {
         padding: 20px !important;
@@ -528,13 +491,5 @@
     .carousel-flag {
         width: 36px;
         height: 24px;
-    }
-
-    .carousel-arrow.left {
-        left: calc(50% - 22% - 24px);
-    }
-
-    .carousel-arrow.right {
-        right: calc(50% - 22% - 24px);
     }
 }

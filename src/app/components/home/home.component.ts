@@ -37,6 +37,9 @@ export class HomeComponent implements AfterViewInit {
   pastPrepas: any[] = [];
 
   currentIndex = 0;
+  startX = 0;
+  endX = 0;
+  wheelTimeout: any = null;
 
   nextSession = { day: '', name: '' };
 
@@ -189,6 +192,44 @@ export class HomeComponent implements AfterViewInit {
         this.globalService.stopLoading();
       }
     });
+  }
+
+  onTouchStart(event: TouchEvent) {
+    this.startX = event.touches[0].clientX;
+  }
+
+  onTouchEnd(event: TouchEvent) {
+    this.endX = event.changedTouches[0].clientX;
+    this.handleSwipe();
+  }
+
+  onWheel(event: WheelEvent) {
+    event.preventDefault();
+
+    // on ignore les events pendant 200ms pour éviter trop de sauts
+    if (this.wheelTimeout) return;
+
+    if (event.deltaY > 0) {
+      this.nextSlide();
+    } else if (event.deltaY < 0) {
+      this.prevSlide();
+    }
+
+    this.wheelTimeout = setTimeout(() => {
+      this.wheelTimeout = null;
+    }, 200);
+  }
+
+  handleSwipe() {
+    const diff = this.startX - this.endX;
+
+    if (Math.abs(diff) < 30) return;
+
+    if (diff > 0) {
+      this.nextSlide();
+    } else {
+      this.prevSlide();
+    }
   }
 
   nextSlide() {
