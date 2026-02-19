@@ -232,6 +232,7 @@ export class ActivityDialogComponent implements AfterViewInit {
         // enregistrement
         this.plannedActivityService.linkPlannedActivity(this.currentActivity.activityId, plannedActivity).subscribe(() => {
           this.currentActivity.sessionType = plannedActivity.sessionType;
+          this.currentActivity.plannedActivityId = plannedActivity.plannedActivityId;
         })
 
         // success message
