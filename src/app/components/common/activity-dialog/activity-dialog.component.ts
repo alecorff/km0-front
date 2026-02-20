@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, HostListener, Inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Inject, LOCALE_ID, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -25,6 +25,7 @@ import { ActivityService } from 'src/app/services/activity.service';
     MatDividerModule,
     MatMenuModule
   ],
+  providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
   templateUrl: './activity-dialog.component.html',
   styleUrl: './activity-dialog.component.css'
 })
