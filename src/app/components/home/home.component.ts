@@ -41,6 +41,8 @@ export class HomeComponent implements AfterViewInit {
   endX = 0;
   wheelTimeout: any = null;
 
+  carouselItems: any[] = [];
+
   nextSession = { day: '', name: '' };
 
   plannedActivities: any[] = [];
@@ -96,6 +98,7 @@ export class HomeComponent implements AfterViewInit {
         this.pastPrepas.sort((a, b) => 
           new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
         );
+        this.updateCarousel();
 
         if (!this.currentPlan && futurePlans.length > 0) {
           futurePlans.sort(
@@ -223,7 +226,7 @@ export class HomeComponent implements AfterViewInit {
   handleSwipe() {
     const diff = this.startX - this.endX;
 
-    if (Math.abs(diff) < 30) return;
+    if (Math.abs(diff) < 50) return;
 
     if (diff > 0) {
       this.nextSlide();
@@ -248,6 +251,10 @@ export class HomeComponent implements AfterViewInit {
     if (i >= 0 && i < this.carouselItems.length) {
       this.currentIndex = i;
     }
+  }
+
+  private updateCarousel() {
+    this.carouselItems = [...this.pastPrepas, { isAddCard: true }];
   }
 
   private computeWeeks(plan: any): void {
@@ -285,10 +292,6 @@ export class HomeComponent implements AfterViewInit {
     return d;
   }
 
-  get carouselItems() {
-    return [...this.pastPrepas, { isAddCard: true }];
-  }
-
   addPastPrepa() {
     const dialogRef = this.dialog.open(CreatePlanDialogComponent, {
       data: {
@@ -310,6 +313,7 @@ export class HomeComponent implements AfterViewInit {
         this.pastPrepas.sort((a, b) => 
           new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
         );
+        this.updateCarousel();
         // On affiche le plan d'entrainement dans le carousel
         const index = this.carouselItems.findIndex(
           plan => plan.planId === result.planId
