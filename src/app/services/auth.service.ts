@@ -29,6 +29,7 @@ export class AuthService {
     try {
       return await firstValueFrom(this.http.get<boolean>(`${this.baseUrl}/hasValidSession`, { headers }));
     } catch (err) {
+      localStorage.removeItem('jwt');
       return false;
     }
   }

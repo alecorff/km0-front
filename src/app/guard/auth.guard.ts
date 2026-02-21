@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateChildFn, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateChildFn, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,7 +8,6 @@ import { firstValueFrom } from 'rxjs';
 export const AuthGuard: CanActivateChildFn = async (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> => {
 
   const authService = inject(AuthService);
-  const router = inject(Router);
   const translateService = inject(TranslateService);
   const snackBar = inject(MatSnackBar);
 
@@ -30,6 +29,6 @@ export const AuthGuard: CanActivateChildFn = async (next: ActivatedRouteSnapshot
     panelClass: ['app-snackbar-error']
   });
 
-  router.navigate(['/login']);
+  authService.login();
   return false;
 };

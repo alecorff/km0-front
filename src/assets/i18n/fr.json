@@ -1,6 +1,37 @@
 {
     "i18n": {
         "page": {
+            "landing": {
+                "title": "Kilomètre zéro",
+                "actions": {
+                    "login": "Se connecter",
+                    "navigate": "Accéder à mon espace",
+                    "begin": "Commencer maintenant"
+                },
+                "plan": "Planifie.",
+                "execute": "Exécute.",
+                "improve": "Progresse.",
+                "info": "Crée ton plan d'entraînement, lie automatiquement tes activités importées depuis Strava et analyse tes performances avec précision.",
+                "card": {
+                    "week": "Semaine 6",
+                    "session1": "Fractionné 10x400m",
+                    "session2": "Sortie longue 20km",
+                    "achieve": "réalisé",
+                    "achieve_number": "87%",
+                    "volume": "volume",
+                    "volume_number": "42km"
+                },
+                "features": {
+                    "feature1_title": "Plan structuré",
+                    "feature1_subtitle": "Organise ton entraînement semaine après semaine.",
+                    "feature2_title": "Connexion automatique",
+                    "feature2_subtitle": "Synchronisation intelligente avec Strava.",
+                    "feature3_title": "Statistiques avancées",
+                    "feature3_subtitle": "Analyse précise entre planifié et réalisé."
+                },
+                "question": "Prêt à structurer ta progression ?",
+                "legals": "© 2026 Kilomètre Zéro - Mentions légales"
+            },
             "menu": {
                 "title": "Kilomètre zéro",
                 "items": {
