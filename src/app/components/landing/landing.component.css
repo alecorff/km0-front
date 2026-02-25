@@ -5,6 +5,11 @@
   font-family: 'Inter', sans-serif;
 }
 
+.scroll-container {
+  height: 100vh;
+  overflow: auto;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -16,7 +21,7 @@
   left: 0;
   right: 0;
   
-  padding: 20px 8%;
+  padding: 20px 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,10 +31,14 @@
   z-index: 100;
 }
 
+.navbar button {
+  margin-right: 3%;
+}
+
 .logo-title-container {
   display: flex;
   align-items: center;
-  margin-left: 20px;
+  margin-left: 8%;
 
   .logo {
     width: 40px;
@@ -218,5 +227,66 @@
   
   .btn-primary {
     font-size: 0.75rem;
+  }
+}
+
+/* ULTRA LARGE SCREENS */
+@media (min-width: 1600px) {
+
+  .hero {
+    padding: 200px 12% 140px 12%;
+    gap: 120px;
+  }
+
+  .hero-left {
+    max-width: 720px;
+  }
+
+  .hero h1 {
+    font-size: 72px;
+  }
+
+  .hero p {
+    font-size: 22px;
+  }
+
+  .glass-card {
+    width: 420px;
+    padding: 50px;
+  }
+
+  .session {
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  .stats span {
+    font-size: 28px;
+  }
+
+  .features {
+    padding: 160px 12%;
+    gap: 80px;
+  }
+
+  .feature h3 {
+    font-size: 22px;
+  }
+
+  .feature p {
+    font-size: 18px;
+  }
+
+  .cta {
+    padding: 160px 12%;
+  }
+
+  .cta h2 {
+    font-size: 36px;
+  }
+
+  .large {
+    padding: 22px 60px;
+    font-size: 20px;
   }
 }

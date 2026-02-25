@@ -129,6 +129,10 @@ export class LayoutComponent implements OnInit {
   logout() {
     localStorage.removeItem('jwt');
     localStorage.removeItem('user');
+    this.goToLandingPage();
+  }
+
+  goToLandingPage() {
     this.router.navigate(['/']);
   }
 
