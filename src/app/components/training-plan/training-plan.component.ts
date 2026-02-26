@@ -16,6 +16,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { PlannedActivityDialogComponent } from './planned-activity-dialog/planned-activity-dialog.component';
 import { PlannedActivityService } from 'src/app/services/planned-activity.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TrainingPlanResumeComponent } from '../common/training-plan-resume/training-plan-resume.component';
 
 registerLocaleData(localeFr);
 
@@ -38,7 +39,8 @@ interface CalendarDay {
     TranslateModule,
     MatIconModule,
     MatButtonModule,
-    MatBadgeModule
+    MatBadgeModule,
+    TrainingPlanResumeComponent
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'fr-FR' }

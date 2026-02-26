@@ -3,7 +3,7 @@ import { Component, HostListener, LOCALE_ID, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { ActivityService } from 'src/app/services/activity.service';
@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ActivityDialogComponent } from '../common/activity-dialog/activity-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { TrainingPlanResumeComponent } from '../common/training-plan-resume/training-plan-resume.component';
 
 @Component({
   selector: 'app-search',
@@ -39,7 +40,8 @@ import { MatDialog } from '@angular/material/dialog';
     MatBadgeModule,
     MatSelectModule,
     ScrollingModule,
-    PolylinePreviewComponent
+    PolylinePreviewComponent,
+    TrainingPlanResumeComponent
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
   templateUrl: './search.component.html',
@@ -103,7 +105,6 @@ export class SearchComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private activityService: ActivityService,
     public globalService: GlobalService,
     private trainingPlanService: TrainingPlanService,
@@ -192,10 +193,6 @@ export class SearchComponent implements OnInit {
 
   onSearch() {
     this.applyFilters();
-  }
-
-  goToTrainingPlan() {
-    this.router.navigate([`/plan/${this.currentPlan.planId}`]);
   }
 
   toggleTag(code: string): void {

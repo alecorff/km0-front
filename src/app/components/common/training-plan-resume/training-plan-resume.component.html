@@ -1,0 +1,61 @@
+<div class="current-prepa-card">
+    <!-- Infos principales -->
+    <div class="prepa-header-line" (click)="navigateToPlan()">
+        <div class="prepa-info-bubble">
+
+            <div class="info-item">
+                <mat-icon>flag</mat-icon>
+                <span>{{ currentPlan.name }}</span>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="info-item">
+                <mat-icon>event</mat-icon>
+                <span>{{ currentPlan.endDate | date:'longDate' }}</span>
+            </div>
+
+            <div class="separator"></div>
+
+            <div class="info-item">
+                <img src="assets/images/distance-icon-22px.svg" />
+                <span>{{ currentPlan.distanceKm }} km</span>
+            </div>
+
+            <div class="separator" *ngIf="currentPlan.elevationGain"></div>
+            <div class="info-item" *ngIf="currentPlan.elevationGain">
+                <mat-icon>terrain</mat-icon>
+                <span>{{ currentPlan.elevationGain }} m D+</span>
+            </div>
+
+            <div class="separator" *ngIf="currentPlan.goal"></div>
+            <div class="info-item" *ngIf="currentPlan.goal">
+                <mat-icon>radar</mat-icon>
+                <span>{{ currentPlan.goal }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="prepa-stats-row">
+        <div class="stat-item">
+            <div class="stat-value">{{ activities.length }}</div>
+            <div class="stat-label">{{ 'i18n.page.plan.activities_done' | translate }}</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-value">{{ totalDistance }} km</div>
+            <div class="stat-label">{{ 'i18n.page.plan.distance_done' | translate }}</div>
+        </div>
+
+        <div class="stat-item" *ngIf="currentPlan.type === 'TRAIL'">
+            <div class="stat-value">{{ totalElevation }} m D+</div>
+            <div class="stat-label">{{ 'i18n.page.plan.elevation_done' | translate }}</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-value">{{ totalTime }}</div>
+            <div class="stat-label">{{ 'i18n.page.plan.time_done' | translate }}</div>
+        </div>
+    </div>
+</div>
