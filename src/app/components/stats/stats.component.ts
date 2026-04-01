@@ -231,10 +231,12 @@ export class StatsComponent implements OnInit {
     ? new Date(this.currentPlan.startDate)
     : new Date(Math.min(...this.activities.map(a => new Date(a.startDateLocal).getTime())));
 
-    const today = new Date();
+    const endDate = this.currentPlan
+    ? new Date(this.currentPlan.endDate)
+    : new Date();
 
     let current = new Date(startDate);
-    const currentKey = this.getPeriodKey(today);
+    const currentKey = this.getPeriodKey(endDate);
 
     // Génération des périodes
     while (true) {

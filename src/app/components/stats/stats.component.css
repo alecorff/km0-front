@@ -90,3 +90,10 @@
   background-color: #8b5cf6;
   color: #fff;
 }
+
+@media (max-width: 768px) {
+  .selector-panel {
+    left: 0;
+    right: auto;
+  }
+}

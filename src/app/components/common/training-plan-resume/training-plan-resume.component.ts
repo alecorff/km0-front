@@ -41,8 +41,7 @@ export class TrainingPlanResumeComponent implements OnInit {
       .toFixed(2);
 
     if (this.currentPlan?.type === 'TRAIL') {
-      this.totalElevation = this.activities
-        .reduce((sum, a) => sum + (a.totalElevationGain ?? 0), 0);
+      this.totalElevation = Math.round(this.activities.reduce((sum, a) => sum + (a.totalElevationGain ?? 0), 0) * 100) / 100;
     }
 
     const totalTimeSeconds = this.activities
