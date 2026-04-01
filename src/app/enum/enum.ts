@@ -290,3 +290,21 @@ export const TRAINING_SESSION_TYPES: TrainingSessionType[] = [
   { code: 'STRENGTH', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'renfo' },
   { code: 'PPG', allowedPlans: ['RUNNING', 'TRAIL', 'FITNESS', 'OTHER'], category: 'renfo' },
 ];
+
+export interface MetricType {
+  code: string;
+  category: string;
+}
+
+export const STATS_METRICS: MetricType[] = [
+  // Volume
+  { code: 'sessions', category: 'volume' },
+  { code: 'distance', category: 'volume' },
+  { code: 'elevation', category: 'volume' },
+  { code: 'time', category: 'volume' },
+
+  // Métriques
+  { code: 'heartrate', category: 'metric' },
+  { code: 'cadence', category: 'metric' },
+  { code: 'pace', category: 'metric' }
+];

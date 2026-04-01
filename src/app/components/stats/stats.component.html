@@ -1,0 +1,51 @@
+<div class="stats-page" cdkScrollable>
+    <!-- Contrôles pour le graphique -->
+    <div class="chart-card">
+        <div class="chart-header">
+            <h2 class="chart-title">
+                {{ 'i18n.page.stats.title.' + currentMetric | translate }}
+                <ng-container *ngIf="showScale">
+                    {{ 'i18n.page.stats.title.scale.' + currentScale | translate }}
+                </ng-container>
+            </h2>
+
+            <div class="selector-wrapper" #chartMetricWrapper>
+                <div class="selector clickable" (click)="toggleMetricPanel()">
+                    <span class="selector-current-label">
+                        {{ 'i18n.page.stats.select.' + currentMetricLabel | translate }}
+                    </span>
+
+                    <mat-icon class="expand-icon">expand_more</mat-icon>
+                </div>
+
+                <div class="selector-panel" *ngIf="isMetricPanelOpen">
+
+                    <ng-container *ngFor="let category of statCategories">
+
+                        <div class="selector-category">
+                            {{ 'i18n.page.stats.select.category.' + category | translate }}
+                        </div>
+
+                        <div class="selector-option" *ngFor="let metric of statByCategory[category]"
+                            (click)="selectMetric(metric.code)">
+                            <span class="selector-option-label">{{ 'i18n.page.stats.select.' + metric.code | translate
+                                }}</span>
+                            <mat-icon *ngIf="metric.code === currentMetric">check</mat-icon>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas #sessionsChart></canvas>
+        </div>
+
+        <div *ngIf="showScale" class="scale-selector">
+            <div class="scale-option" [class.active]="currentScale === 'day'" (click)="setScale('day')">Jour</div>
+            <div class="scale-option" [class.active]="currentScale === 'week'" (click)="setScale('week')">Semaine</div>
+            <div class="scale-option" [class.active]="currentScale === 'month'" (click)="setScale('month')">Mois</div>
+            <div class="scale-option" [class.active]="currentScale === 'year'"(click)="setScale('year')">Année</div>
+        </div>
+    </div>
+</div>

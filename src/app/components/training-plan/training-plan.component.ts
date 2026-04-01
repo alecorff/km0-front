@@ -607,4 +607,8 @@ export class TrainingPlanComponent implements OnInit {
     this.router.navigate([`/search/${this.currentPlan.planId}`]);
   }
 
+  goToStatsPage() {
+    this.router.navigate([`/stats/${this.currentPlan.planId}`]);
+  }
+
 }

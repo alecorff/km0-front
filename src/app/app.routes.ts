@@ -6,6 +6,8 @@ import { TrainingPlanComponent } from './components/training-plan/training-plan.
 import { SearchComponent } from './components/search/search.component';
 import { AuthGuard } from './guard/auth.guard';
 import { LandingComponent } from './components/landing/landing.component';
+import { StatsComponent } from './components/stats/stats.component';
+import { LayoutFiltersComponent } from './components/layout-filters/layout-filters.component';
 
 export const routes: Routes = [
   {
@@ -30,13 +32,27 @@ export const routes: Routes = [
         component: TrainingPlanComponent
       },
       {
-        path: 'search',
-        component: SearchComponent
+        path: '',
+        component: LayoutFiltersComponent,
+        children: [
+          {
+            path: 'search',
+            component: SearchComponent
+          },
+          {
+            path: 'search/:id',
+            component: SearchComponent
+          },
+          {
+            path: 'stats',
+            component: StatsComponent
+          },
+          {
+            path: 'stats/:id',
+            component: StatsComponent
+          }
+        ]
       },
-      {
-        path: 'search/:id',
-        component: SearchComponent
-      }
     ]
   }
 ];

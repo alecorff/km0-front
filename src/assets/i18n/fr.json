@@ -208,6 +208,37 @@
                     "subtitle": "Aucune activité ne correspond à tes critères actuels. Vérifie tes filtres ou importe une nouvelle séance."
                 }
             },
+            "stats": {
+                "title": {
+                    "sessions": "Nombre de séances",
+                    "distance": "Kilomètres parcourus",
+                    "elevation": "Dénivelé gravi",
+                    "time": "Heures d'entraînement",
+                    "heartrate": "Fréquence cardiaque",
+                    "cadence": "Cadence",
+                    "pace": "Allure",
+                    "scale": {
+                        "day": "par jour",
+                        "week": "par semaine",
+                        "month": "par mois",
+                        "year": "par année"
+                    }
+                },
+                "select": {
+                    "category": {
+                        "volume": "Volume",
+                        "metric": "Métriques"
+                    },
+                    "sessions": "Volume de séances",
+                    "distance": "Volume de kilomètres",
+                    "elevation": "Volume de dénivelé",
+                    "time": "Volume d'heures d'activité",
+                    "heartrate": "Fréquence cardiaque (bpm)",
+                    "cadence": "Cadence (ppm)",
+                    "pace": "Allure"
+                },
+                "no_data": "Aucune donnée disponible."
+            },
             "activity_dialog": {
                 "metrics": {
                     "distance": "km",

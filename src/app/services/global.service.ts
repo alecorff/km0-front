@@ -8,6 +8,9 @@ export class GlobalService {
   private loadingSubject = new BehaviorSubject<boolean>(false);
   loading$ = this.loadingSubject.asObservable();
 
+  private filteredActivitiesSubject = new BehaviorSubject<any[]>([]);
+  filteredActivities$ = this.filteredActivitiesSubject.asObservable();
+
   readonly apiUrl = environment.apiUrl;
 
   constructor() {}
@@ -25,6 +28,10 @@ export class GlobalService {
     const m = Math.floor((seconds % 3600) / 60);
     const s = seconds % 60;
     return `${h > 0 ? h + 'h ' : ''}${m}m ${s}s`;
+  }
+
+  setFilteredActivities(activities: any[]) {
+    this.filteredActivitiesSubject.next(activities);
   }
 
 }
